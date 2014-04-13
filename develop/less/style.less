@@ -5,6 +5,9 @@ body {
   background-color: #f6f6f6;
   font-family: '微软雅黑';
 }
+.hidden {
+  display: none;
+}
 @keyframes display_ {
   0%   {opacity:0.0;filter:alpha(opacity=0);}
   100% {opacity:1.0;filter:alpha(opacity=100);}
@@ -30,9 +33,7 @@ body {
 
 //menu
 .menu {
-  width: 20%;
-  min-width: 100px;
-  max-width: 140px;
+  width: 120px;
   min-height: 100%;
   box-shadow: 0px 1px 5px #aaa;
   position: absolute;
@@ -56,4 +57,9 @@ body {
       background-color: #ccc;
     }
   }
+}
+
+//edit
+.editarea {
+  margin-left: 120px;
 }
