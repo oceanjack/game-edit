@@ -11,7 +11,6 @@ goog.scope(function() {
 
 
   exports.OnlineAI.prototype.init = function() {
-    alert('init success!');
   };
 
 
