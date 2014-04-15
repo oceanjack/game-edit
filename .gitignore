@@ -1,3 +1,3 @@
 *.soy.js
-release/js
-release/css
+/release/js/onlineAI.min.js
+/release/css/style.css
