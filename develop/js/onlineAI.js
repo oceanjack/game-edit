@@ -11,7 +11,7 @@ goog.scope(function() {
 
 
   exports.OnlineAI = function() {
-    this.init();
+    goog.events.listen(window, 'load', this.init, false, this);
   };
 
 
@@ -71,7 +71,7 @@ goog.scope(function() {
     e = e.event_;
     e.stopPropagation();
     e.preventDefault();
-    e['dataTransfer']['dropEffect'] = 'copy';
+    e.dataTransfer.dropEffect = 'copy';
   };
 
 
@@ -81,10 +81,8 @@ goog.scope(function() {
     var el = this.elements_;
     var onImageRendered = function(e) {
       var img = e.target || e.srcElement;
-      var width = window.getComputedStyle(el.mapImgDiv_)['width'];
-      var height = window.getComputedStyle(el.mapImgDiv_)['height'];
-      width = width.substr(width, width.length - 2);
-      height = height.substr(height, height.length - 2);
+      var width = 600;
+      var height = 800;
       el.mapImg_.width = width;
       el.mapImg_.src = img.src;
       el.canvas_.width = width;

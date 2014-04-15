@@ -2,17 +2,39 @@
 <html>
 <head>
   <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no" />
   <title>Edit</title>
   <script src="../js/onlineAI.min.js"></script>
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-  <div class="header"></div>
-  <div class="area">
-    <div class="menu">菜单</div>
-    <div class="editarea">
-      <canvas id="canvas"></canvas>
+<div class="header"></div>
+<div class="area">
+  <div class="menu">
+    <ul class="menulist">
+      <li>创建地图</li>
+    </ul>
+    <ul class="hidden menulist">
+      <li>添加人物</li>
+      <li>添加属性</li>
+      <li>添加行为</li>
+      <li>添加事件</li>
+      <li>添加策略</li>
+    </ul>
+  </div>
+  <div class="editarea">
+    <div class="size">
+      <p>尺寸：</p>
+      <input class="defsize" type="number" value="20" />
+      <p>*</p>
+      <input class="defsize" type="number" value="15" />
+      <button type="button" id="defsize">确定</button>
+    </div>
+    <canvas class="hidden" id="canvas"></canvas>
+    <div class="mapimgdiv">
+      <img class="mapimg" src="" alt="" />
     </div>
   </div>
+</div>
 </body>
 </html>
