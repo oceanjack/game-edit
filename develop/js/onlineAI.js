@@ -21,6 +21,7 @@ goog.scope(function() {
   exports.OnlineAI.prototype.init = function() {
     this.initVar();
     this.getElements();
+    this.settings();
     this.addEvents();
   };
 
@@ -36,6 +37,7 @@ goog.scope(function() {
     this.elements_.defsizeX_ = goog.dom.getElementsByClass('defsize')[0];
     this.elements_.defsizeY_ = goog.dom.getElementsByClass('defsize')[1];
     this.elements_.sizeArea_ = goog.dom.getElementByClass('size');
+    this.elements_.mapImg_ = goog.dom.getElementByClass('mapimg');
     this.elements_.menuList_ = goog.dom.getElementsByClass('menulist');
   };
 
@@ -55,6 +57,11 @@ goog.scope(function() {
     goog.style.setStyle(el.menuList_[0], 'display', 'none');
     goog.style.setStyle(el.sizeArea_, 'display', 'none');
     goog.style.setStyle(el.menuList_[1], 'display', 'block');
+  };
+
+
+  exports.OnlineAI.prototype.settings = function() {
+    var el = this.elements_;
   };
 
 
