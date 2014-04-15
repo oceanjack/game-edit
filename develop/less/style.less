@@ -11,6 +11,20 @@ body {
 .boxshadow {
   box-shadow: 0px 1px 5px #aaa;
 }
+a {
+  text-decoration: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+
+*,*:before,*:after {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box
+}
 @keyframes display_ {
   0%   {opacity:0.0;filter:alpha(opacity=0);}
   100% {opacity:1.0;filter:alpha(opacity=100);}
@@ -83,13 +97,34 @@ body {
     }
   }
   .mapimgdiv, #canvas {
-    margin: auto;
-    margin-top: 10px;
     background-color: #fff;
-    width: 90%;
-    max-width: 600px;
-    height: 500px;
+  }
+  .mapimgdiv, #canvas, .mapArea {
+    margin: auto;
+    margin-top: 20px;
+    width: 800px;
+    height: 600px;
     overflow: hidden;
     .boxshadow;
+  }
+  #canvas, .mapArea {
+    position: absolute;
+    top: 0;
+    margin-left: 5%;
+  }
+  .mapArea {
+    .mapBlock {
+      animation: none;
+      -moz-animation: none;
+      -webkit-animation: none;
+      -o-animation: none;
+      float: left;
+      background-color: #aaa;
+      opacity: 0.3;
+      border: 1px solid #fff;
+    }
+    .mapBlock:hover {
+      opacity: 0.8;
+    }
   }
 }

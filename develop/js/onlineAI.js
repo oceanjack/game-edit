@@ -4,6 +4,7 @@ goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.style');
 
+goog.require('ocean.onlineAI.MapSetting');
 
 goog.scope(function() {
   var exports = ocean.onlineAI;
@@ -15,7 +16,6 @@ goog.scope(function() {
 
 
   exports.OnlineAI.prototype.elements_ = null;
-  exports.OnlineAI.prototype.size_ = null;
 
 
   exports.OnlineAI.prototype.init = function() {
@@ -28,7 +28,6 @@ goog.scope(function() {
 
   exports.OnlineAI.prototype.initVar = function() {
     this.elements_ = {};
-    this.size_ = [20, 20];
   };
 
 
@@ -59,15 +58,12 @@ goog.scope(function() {
 
   exports.OnlineAI.prototype.defsize = function() {
     var el = this.elements_;
-    this.size_ = [
-      el.defsizeX_.value,
-      el.defsizeY_.value
-    ];
     goog.style.setStyle(el.menuList_[0], 'display', 'none');
     goog.style.setStyle(el.sizeArea_, 'display', 'none');
     goog.style.setStyle(el.mapImgDiv_, 'display', 'none');
     goog.style.setStyle(el.canvas_, 'display', 'block');
     goog.style.setStyle(el.menuList_[1], 'display', 'block');
+    new exports.MapSetting(el.defsizeX_.value, el.defsizeY_.value);
   };
 
 
@@ -105,7 +101,7 @@ goog.scope(function() {
     };
     e.stopPropagation();
     e.preventDefault();
-    var container = e.dataTransfer || e.target;	//选择文件和拖放的差别
+    var container = e.dataTransfer || e.target;
     var file = container.files[0];
     if (!/image/.test(file.type)) {
       alert('That\'s not an image file!');

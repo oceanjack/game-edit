@@ -5,6 +5,9 @@ body {
 .hidden {
   display: none;
 }
+.boxshadow {
+  box-shadow: 0px 1px 5px #aaa;
+}
 @keyframes display_ {
   0% {
     opacity: 0.0;
@@ -54,12 +57,12 @@ body {
 .menu {
   width: 120px;
   min-height: 100%;
-  box-shadow: 0px 1px 5px #aaa;
   position: absolute;
   margin: 0;
   left: 0;
   top: 0;
   background-color: #eee;
+  box-shadow: 0px 1px 5px #aaa;
 }
 .menu ul {
   list-style: none;
@@ -81,7 +84,7 @@ body {
   margin-left: 120px;
 }
 .editarea .size {
-  width: 250px;
+  width: 220px;
   margin: auto;
 }
 .editarea .size > * {
@@ -97,4 +100,15 @@ body {
 }
 .editarea .size button {
   width: 50px;
+}
+.editarea .mapimgdiv,
+.editarea #canvas {
+  margin: auto;
+  margin-top: 10px;
+  background-color: #fff;
+  width: 90%;
+  max-width: 600px;
+  height: 500px;
+  overflow: hidden;
+  box-shadow: 0px 1px 5px #aaa;
 }
