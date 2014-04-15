@@ -8,6 +8,9 @@ body {
 .hidden {
   display: none;
 }
+.boxshadow {
+  box-shadow: 0px 1px 5px #aaa;
+}
 @keyframes display_ {
   0%   {opacity:0.0;filter:alpha(opacity=0);}
   100% {opacity:1.0;filter:alpha(opacity=100);}
@@ -35,12 +38,12 @@ body {
 .menu {
   width: 120px;
   min-height: 100%;
-  box-shadow: 0px 1px 5px #aaa;
   position: absolute;
   margin: 0;
   left: 0;
   top: 0;
   background-color: #eee;
+  .boxshadow;
   ul {
     list-style: none;
     padding-left: 0;
@@ -63,8 +66,7 @@ body {
 .editarea {
   margin-left: 120px;
   .size {
-    width: 80%;
-    height: 500px;
+    width: 220px;
     margin: auto;
     > * {
       display: inline-block;
@@ -79,12 +81,15 @@ body {
     button {
       width: 50px;
     }
-    .mapimg {
-      margin-top: 10px;
-      box-shadow: 0px 1px 5px #aaa;
-      background-color: #fff;
-      width: 100%;
-      height: 60%;
-    }
+  }
+  .mapimgdiv, #canvas {
+    margin: auto;
+    margin-top: 10px;
+    background-color: #fff;
+    width: 90%;
+    max-width: 600px;
+    height: 500px;
+    overflow: hidden;
+    .boxshadow;
   }
 }
