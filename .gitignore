@@ -1,1 +1,3 @@
 *.soy.js
+release/js
+release/css
