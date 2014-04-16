@@ -91,7 +91,7 @@ goog.scope(function() {
 
       var context = el.canvas_.getContext('2d');
       context.clearRect(0, 0, width, height);
-      context.drawImage(img, 0, 0, img.width, img.height);
+      context.drawImage(el.mapImg_, 0, 0, el.mapImg_.width, el.mapImg_.height);
     };
     var onFileReaded = function(e) {
       var img = new Image();
