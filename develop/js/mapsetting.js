@@ -36,7 +36,7 @@ goog.scope(function() {
   exports.MapSetting.prototype.getElements = function() {
     this.elements_.canvas_ = goog.dom.getElement('canvas');
     this.elements_.map_ = goog.dom.htmlToDocumentFragment(templates.mapArea());
-    this.elements_.editarea_ = goog.dom.getElementByClass('map');
+    this.elements_.mapimgdiv_ = goog.dom.getElementByClass('mapimgdiv');
   };
 
 
@@ -61,7 +61,7 @@ goog.scope(function() {
         goog.dom.appendChild(el.map_, tmp);
       }
     }
-    goog.dom.appendChild(el.editarea_, el.map_);
+    goog.dom.appendChild(el.mapimgdiv_, el.map_);
   };
 
 

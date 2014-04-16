@@ -52,7 +52,7 @@ a {
 .menu {
   width: 120px;
   min-height: 100%;
-  position: absolute;
+  position: fixed;
   margin: 0;
   left: 0;
   top: 0;
@@ -76,9 +76,42 @@ a {
   }
 }
 
+//product
+.product {
+  width: 120px;
+  min-height: 100%;
+  position: fixed;
+  margin: 0;
+  right: 0;
+  top: 0;
+  background-color: #eee;
+  .boxshadow;
+  ul {
+    list-style: none;
+    padding-left: 0;
+    li {
+      padding-right: 20%;
+      padding-top: 7px;
+      padding-bottom: 7px;
+      color: #333;
+      cursor: pointer;
+      text-shadow: 1px 2px 2px #aaa;
+    }
+    li:hover {
+      color: #444;
+      background-color: #ccc;
+    }
+  }
+}
+
 //edit
 .editarea {
-  margin-left: 120px;
+  position: absolute;
+  min-width: 99%;
+  min-height: 98%;
+  > * {
+    margin: auto;
+  }
   .size {
     width: 220px;
     margin: auto;
@@ -97,13 +130,18 @@ a {
     }
   }
   .map {
-    margin: auto;
+    position: relative;
+    min-width: 800px;
+    min-height: 600px;
+    .mapimgdiv {
+      margin-top: 20px;
+    }
     .mapimgdiv, #canvas {
       background-color: #fff;
     }
     .mapimgdiv, #canvas, .mapArea {
-      margin: auto;
-      margin-top: 20px;
+      margin-left: auto;
+      margin-right: auto;
       width: 800px;
       height: 600px;
       overflow: hidden;
@@ -111,7 +149,6 @@ a {
     }
     #canvas, .mapArea {
       position: absolute;
-      margin-left: 7%;
     }
     .mapArea {
       .mapBlock {

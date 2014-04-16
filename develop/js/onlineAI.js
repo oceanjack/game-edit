@@ -60,7 +60,7 @@ goog.scope(function() {
     var el = this.elements_;
     goog.style.setStyle(el.menuList_[0], 'display', 'none');
     goog.style.setStyle(el.sizeArea_, 'display', 'none');
-    goog.style.setStyle(el.mapImgDiv_, 'display', 'none');
+    goog.style.setStyle(el.mapImg_, 'display', 'none');
     goog.style.setStyle(el.canvas_, 'display', 'block');
     goog.style.setStyle(el.menuList_[1], 'display', 'block');
     new exports.MapSetting(el.defsizeX_.value, el.defsizeY_.value);
