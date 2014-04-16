@@ -96,35 +96,40 @@ a {
       width: 50px;
     }
   }
-  .mapimgdiv, #canvas {
-    background-color: #fff;
-  }
-  .mapimgdiv, #canvas, .mapArea {
+  .map {
     margin: auto;
-    margin-top: 20px;
-    width: 800px;
-    height: 600px;
-    overflow: hidden;
-    .boxshadow;
-  }
-  #canvas, .mapArea {
-    position: absolute;
-    top: 0;
-    margin-left: 5%;
-  }
-  .mapArea {
-    .mapBlock {
-      animation: none;
-      -moz-animation: none;
-      -webkit-animation: none;
-      -o-animation: none;
-      float: left;
-      background-color: #aaa;
-      opacity: 0.3;
-      border: 1px solid #fff;
+    .mapimgdiv, #canvas {
+      background-color: #fff;
     }
-    .mapBlock:hover {
-      opacity: 0.8;
+    .mapimgdiv, #canvas, .mapArea {
+      margin: auto;
+      margin-top: 20px;
+      width: 800px;
+      height: 600px;
+      overflow: hidden;
+      .boxshadow;
+    }
+    #canvas, .mapArea {
+      position: absolute;
+      margin-left: 7%;
+    }
+    .mapArea {
+      .mapBlock {
+        animation: none;
+        -moz-animation: none;
+        -webkit-animation: none;
+        -o-animation: none;
+        float: left;
+        background-color: #aaa;
+        opacity: 0.3;
+        border: 1px solid #fff;
+      }
+      .mapBlock:hover {
+        opacity: 0.8;
+      }
+      .selected {
+        opacity: 0.8 !important;
+      }
     }
   }
 }

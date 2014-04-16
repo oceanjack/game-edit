@@ -81,16 +81,17 @@ goog.scope(function() {
     var el = this.elements_;
     var onImageRendered = function(e) {
       var img = e.target || e.srcElement;
-      var width = 600;
-      var height = 800;
+      var width = 800;
+      var height = 600;
       el.mapImg_.width = width;
       el.mapImg_.src = img.src;
+      img.width = width;
       el.canvas_.width = width;
       el.canvas_.height = height;
 
       var context = el.canvas_.getContext('2d');
       context.clearRect(0, 0, width, height);
-      context.drawImage(el.mapImg_, 0, 0, el.mapImg_.width, el.mapImg_.height);
+      context.drawImage(img, 0, 0, img.width, img.height);
     };
     var onFileReaded = function(e) {
       var img = new Image();
