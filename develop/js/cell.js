@@ -37,7 +37,7 @@ goog.scope(function() {
 
   exports.Cell.prototype.runAction = function(key, opt_var) {
     if(this.actions_[key]) {
-      return this.actions_[key](opt_var);
+      return this.actions_[key](this, opt_var);
     } else {
       return null;
     }
@@ -55,8 +55,9 @@ goog.scope(function() {
 
 
   exports.Cell.prototype.checkEvent = function() {
+    var this_ = this;
     for(var key in this.events_) {
-      this.events_[key];
+      this.events_[key](this_);
     }
   };
 });
