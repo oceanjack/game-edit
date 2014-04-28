@@ -39,6 +39,7 @@ goog.scope(function() {
     this.elements_.canvas_ = goog.dom.getElement('canvas');
     this.elements_.map_ = goog.dom.htmlToDocumentFragment(templates.mapArea());
     this.elements_.mapimgdiv_ = goog.dom.getElementByClass('mapimgdiv');
+    this.elements_.makeSure_ = goog.dom.getElementByClass('makeSure');
   };
 
 
