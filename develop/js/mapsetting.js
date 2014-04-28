@@ -51,6 +51,9 @@ goog.scope(function() {
     this.elements_.map_ = goog.dom.htmlToDocumentFragment(templates.mapArea());
     this.elements_.mapimgdiv_ = goog.dom.getElementByClass('mapimgdiv');
     this.elements_.makeSure_ = goog.dom.getElementByClass('makeSure');
+    this.elements_.cellName_ = goog.dom.getElementByClass('cellName');
+    this.elements_.message_ = goog.dom.getElementByClass('message');
+    this.elements_.productList_ = goog.dom.getElementByClass('productlist');
   };
 
 
@@ -78,6 +81,8 @@ goog.scope(function() {
       }
     }
     goog.dom.appendChild(el.mapimgdiv_, el.map_);
+  
+    el.message_.style.display = 'block';
   };
 
 
@@ -90,32 +95,22 @@ goog.scope(function() {
 
 
   exports.MapSetting.prototype.setData = function(img) {
-    var tmpMap = [];
-    for(var j = 0, l = this.map_.length; j < l; ++j) {
-      for(var i = 0, ll = this.map_[j].length; i < ll; ++i) {
-        if(goog.dom.classes.has(this.map_[j][i], 'selected'))
-          tmpMap.push([j, i]);
-      }
-    }
     var blockWidth = window.getComputedStyle(this.map_[0][0])['width'];
     var blockHeight = window.getComputedStyle(this.map_[0][0])['height'];
     blockWidth = parseFloat(blockWidth.substr(blockWidth, blockWidth.length - 2));
     blockHeight = parseFloat(blockHeight.substr(blockHeight, blockHeight.length - 2));
-    if(tmpMap.length > 0) {
-      img.posX = tmpMap[0][1];
-      img.posY = tmpMap[0][0];
-      img.width = (tmpMap[tmpMap.length - 1][1] - tmpMap[0][1] + 1);
-      img.height = (tmpMap[tmpMap.length - 1][0] - tmpMap[0][0] + 1);
+    var size = this.getSize();
+    if(size.length > 0) {
+      img.posX = size[0];
+      img.posY = size[1];
+      img.width = size[2];
+      img.height = size[3];
     } else {
       img.posX = 0;
       img.posY = 0;
       img.width = 0;
       img.height = 0;
     }
-    this.tmpData_.posX = img.posX;
-    this.tmpData_.posY = img.posY;
-    this.tmpData_.width = img.width;
-    this.tmpData_.height = img.height;
     this.tmpData_.src = img.src;
     img.posX *= blockWidth;
     img.posY *= blockHeight;
@@ -130,10 +125,21 @@ goog.scope(function() {
     switch(this.mode_) {
       case 1:
         var t = this.tmpData_;
+        var size = this.getSize();
+        this.tmpData_.posX = size[0];
+        this.tmpData_.posY = size[1];
+        this.tmpData_.width = size[2];
+        this.tmpData_.height = size[3];
         if(this.cellSet_[this.cellIndex_]) {
           this.cellSet_[this.cellIndex_].setData(dataModel.setCharacter(t.width, t.height, t.src, t.posX, t.posY));
         } else {
           this.cellSet_[this.cellIndex_] = new exports.Cell(dataModel.setCharacter(t.width, t.height, t.src, t.posX, t.posY));
+          var node = goog.dom.createElement('li');
+          goog.dom.setTextContent(node, this.elements_.cellName_.value);
+          node.index_ = this.cellIndex_;
+          this.elements_.productList_.appendChild(node);
+          goog.events.listen(node, 'click', this.reBuild, false, this);
+          ++this.cellIndex_;
         }
         break;
       case 2:
@@ -147,6 +153,46 @@ goog.scope(function() {
       default:
         break;
     };
+  };
+
+
+  exports.MapSetting.prototype.getSize = function() {
+    var tmpMap = [];
+    for(var j = 0, l = this.map_.length; j < l; ++j) {
+      for(var i = 0, ll = this.map_[j].length; i < ll; ++i) {
+        if(goog.dom.classes.has(this.map_[j][i], 'selected'))
+          tmpMap.push([j, i]);
+      }
+    }
+    if(tmpMap.length > 0) {
+      return [tmpMap[0][1], tmpMap[0][0], (tmpMap[tmpMap.length - 1][1] - tmpMap[0][1] + 1), (tmpMap[tmpMap.length - 1][0] - tmpMap[0][0] + 1)];
+    } else {
+      return [];
+    }
+  };
+
+
+  exports.MapSetting.prototype.clear = function() {
+    for(var j = 0, l = this.map_.length; j < l; ++j) {
+      for(var i = 0, ll = this.map_[j].length; i < ll; ++i) {
+        if(goog.dom.classes.has(this.map_[j][i], 'selected')) {
+          goog.dom.classes.remove(this.map_[j][i], 'selected');
+        }
+      }
+    }
+  };
+
+
+  exports.MapSetting.prototype.reBuild = function(e) {
+    e = e.event_;
+    e = e.target || e.srcElement;
+    this.clear();
+    this.cellIndex_ = e.index_;
+    var data = dataModel.getCharacter(this.cellSet_[this.cellIndex_].getData());
+    var nodeOne = this.map_[data.opt_posY][data.opt_posX];
+    var nodeTwo = this.map_[data.opt_posY + data.height - 1][data.opt_posX + data.width - 1];
+    goog.dom.classes.add(nodeOne, 'selected');
+    goog.dom.classes.add(nodeTwo, 'selected');
   };
 
 
