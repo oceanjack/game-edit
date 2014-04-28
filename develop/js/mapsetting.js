@@ -4,10 +4,13 @@ goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.style');
 
+goog.require('ocean.onlineAI.Data');
+goog.require('ocean.onlineAI.Cell');
 goog.require('ocean.onlineAI.OnlineAI.templates');
 
 goog.scope(function() {
   var exports = ocean.onlineAI;
+  var dataModel = exports.Data;
   var templates = ocean.onlineAI.OnlineAI.templates;
 
 
@@ -22,6 +25,10 @@ goog.scope(function() {
   exports.MapSetting.prototype.size_ = null;
   exports.MapSetting.prototype.elements_ = null;
   exports.MapSetting.prototype.map_ = null;
+  exports.MapSetting.prototype.mode_ = null;
+  exports.MapSetting.prototype.cellSet_ = null;
+  exports.MapSetting.prototype.cellIndex_ = null;
+  exports.MapSetting.prototype.tmpData_ = null;
 
 
   exports.MapSetting.prototype.init = function(x, y) {
@@ -29,9 +36,13 @@ goog.scope(function() {
     y = parseInt(y);
     x == 'NaN' && (x = 20);
     y == 'NaN' && (y = 15);
+    this.cellSet_ = [];
+    this.cellIndex_ = 0;
     this.size_ = [x, y];
     this.elements_ = {};
+    this.tmpData_ = {};
     this.map_ = [];
+    this.mode_ = 1; // 1 人物 2 属性 3 行为 4 事件 5 策略 default 1
   };
 
 
@@ -72,8 +83,9 @@ goog.scope(function() {
 
   exports.MapSetting.prototype.addEvents = function() {
     var el = this.elements_;
-    goog.events.listen(el.map_, 'dragover', this.onDragOver, false ,this);
-    goog.events.listen(el.map_, 'drop', this.onFileSelect, false ,this);
+    goog.events.listen(el.map_, 'dragover', this.onDragOver, false , this);
+    goog.events.listen(el.map_, 'drop', this.onFileSelect, false , this);
+    goog.events.listen(el.makeSure_, 'click', this.makeSure, false, this);
   };
 
 
@@ -90,17 +102,51 @@ goog.scope(function() {
     blockWidth = parseFloat(blockWidth.substr(blockWidth, blockWidth.length - 2));
     blockHeight = parseFloat(blockHeight.substr(blockHeight, blockHeight.length - 2));
     if(tmpMap.length > 0) {
-      img.posX = blockWidth * tmpMap[0][1];
-      img.posY = blockHeight * tmpMap[0][0];
-      img.width = blockWidth * (tmpMap[tmpMap.length - 1][1] - tmpMap[0][1] + 1);
-      img.height = blockHeight * (tmpMap[tmpMap.length - 1][0] - tmpMap[0][0] + 1);
+      img.posX = tmpMap[0][1];
+      img.posY = tmpMap[0][0];
+      img.width = (tmpMap[tmpMap.length - 1][1] - tmpMap[0][1] + 1);
+      img.height = (tmpMap[tmpMap.length - 1][0] - tmpMap[0][0] + 1);
     } else {
       img.posX = 0;
       img.posY = 0;
       img.width = 0;
       img.height = 0;
     }
+    this.tmpData_.posX = img.posX;
+    this.tmpData_.posY = img.posY;
+    this.tmpData_.width = img.width;
+    this.tmpData_.height = img.height;
+    this.tmpData_.src = img.src;
+    img.posX *= blockWidth;
+    img.posY *= blockHeight;
+    img.width *= blockWidth;
+    img.height *= blockHeight;
     return img;
+  };
+
+
+  exports.MapSetting.prototype.makeSure = function(e) {
+    e = e.event_;
+    switch(this.mode_) {
+      case 1:
+        var t = this.tmpData_;
+        if(this.cellSet_[this.cellIndex_]) {
+          this.cellSet_[this.cellIndex_].setData(dataModel.setCharacter(t.width, t.height, t.src, t.posX, t.posY));
+        } else {
+          this.cellSet_[this.cellIndex_] = new exports.Cell(dataModel.setCharacter(t.width, t.height, t.src, t.posX, t.posY));
+        }
+        break;
+      case 2:
+        break;
+      case 3:
+        break;
+      case 4:
+        break;
+      case 5:
+        break;
+      default:
+        break;
+    };
   };
 
 

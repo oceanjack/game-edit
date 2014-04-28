@@ -8,16 +8,28 @@ goog.scope(function() {
   var exports = ocean.onlineAI;
 
 
-  exports.Cell = function() {
+  exports.Cell = function(data) {
+    this.data_ = data;
     this.attributes_ = {};
     this.actions_ = {};
     this.events_ = {};
   };
 
 
+  exports.Cell.prototype.data_ = null;
   exports.Cell.prototype.attributes_ = null;
   exports.Cell.prototype.actions_ = null;
   exports.Cell.prototype.events_ = null;
+
+  
+  exports.Cell.prototype.setData = function(data) {
+    this.data_ = data;
+  };
+
+
+  exports.Cell.prototype.getData = function() {
+    return this.data_;
+  };
 
 
   exports.Cell.prototype.setAttribute = function(key, val) {
