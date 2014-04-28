@@ -1,3 +1,4 @@
+*.swp
 *.soy.js
 /release/js/onlineAI.min.js
 /release/css/style.css
