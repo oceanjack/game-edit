@@ -165,6 +165,10 @@ goog.scope(function() {
     var onImageRendered = function(e) {
       var img = e.target || e.srcElement;
       img = this_.setData(img);
+      if(el.canvas_.width != 800) {
+        el.canvas_.width = 800;
+        el.canvas_.height = 600;
+      }
       var context = el.canvas_.getContext('2d');
       context.drawImage(img, img.posX, img.posY, img.width, img.height);
     };
