@@ -14,8 +14,8 @@ goog.scope(function() {
   var templates = ocean.onlineAI.OnlineAI.templates;
 
 
-  exports.MapSetting = function(x, y) {
-    this.init(x, y);
+  exports.MapSetting = function(x, y, background) {
+    this.init(x, y, background);
     this.getElements();
     this.settings();
     this.addEvents();
@@ -29,9 +29,10 @@ goog.scope(function() {
   exports.MapSetting.prototype.cellSet_ = null;
   exports.MapSetting.prototype.cellIndex_ = null;
   exports.MapSetting.prototype.tmpData_ = null;
+  exports.MapSetting.prototype.background_ = null;
 
 
-  exports.MapSetting.prototype.init = function(x, y) {
+  exports.MapSetting.prototype.init = function(x, y, background) {
     x = parseInt(x);
     y = parseInt(y);
     x == 'NaN' && (x = 20);
@@ -42,6 +43,7 @@ goog.scope(function() {
     this.elements_ = {};
     this.tmpData_ = {};
     this.map_ = [];
+    this.background_ = background;
     this.mode_ = 1; // 1 人物 2 属性 3 行为 4 事件 5 策略 default 1
   };
 
@@ -111,7 +113,7 @@ goog.scope(function() {
       img.width = 0;
       img.height = 0;
     }
-    this.tmpData_.src = img.src;
+    this.tmpData_.src = img;
     img.posX *= blockWidth;
     img.posY *= blockHeight;
     img.width *= blockWidth;
@@ -180,6 +182,9 @@ goog.scope(function() {
         }
       }
     }
+    var context = this.elements_.canvas_.getContext('2d');
+    context.clearRect(0, 0, 800, 600);
+    this.background_ && context.drawImage(this.background_, 0, 0, this.background_.width, this.background_.height);
   };
 
 
@@ -193,6 +198,12 @@ goog.scope(function() {
     var nodeTwo = this.map_[data.opt_posY + data.height - 1][data.opt_posX + data.width - 1];
     goog.dom.classes.add(nodeOne, 'selected');
     goog.dom.classes.add(nodeTwo, 'selected');
+    var context = this.elements_.canvas_.getContext('2d');
+    var blockWidth = window.getComputedStyle(this.map_[0][0])['width'];
+    var blockHeight = window.getComputedStyle(this.map_[0][0])['height'];
+    blockWidth = parseFloat(blockWidth.substr(blockWidth, blockWidth.length - 2));
+    blockHeight = parseFloat(blockHeight.substr(blockHeight, blockHeight.length - 2));
+    data.src && context.drawImage(data.src, data.opt_posX * blockWidth, data.opt_posY * blockHeight, data.width * blockWidth, data.height * blockHeight);
   };
 
 

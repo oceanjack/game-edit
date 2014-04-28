@@ -16,6 +16,7 @@ goog.scope(function() {
 
 
   exports.OnlineAI.prototype.elements_ = null;
+  exports.OnlineAI.prototype.background_ = null;
 
 
   exports.OnlineAI.prototype.init = function() {
@@ -63,7 +64,7 @@ goog.scope(function() {
     goog.style.setStyle(el.mapImg_, 'display', 'none');
     goog.style.setStyle(el.canvas_, 'display', 'block');
     goog.style.setStyle(el.menuList_[1], 'display', 'block');
-    new exports.MapSetting(el.defsizeX_.value, el.defsizeY_.value);
+    new exports.MapSetting(el.defsizeX_.value, el.defsizeY_.value, this.background_);
   };
 
 
@@ -85,9 +86,11 @@ goog.scope(function() {
       var height = 600;
       el.mapImg_.width = width;
       el.mapImg_.src = img.src;
+      el.mapImg_.height = el.mapImg_.height;
       img.width = width;
       el.canvas_.width = width;
       el.canvas_.height = height;
+      this_.background_ = el.mapImg_;
 
       var context = el.canvas_.getContext('2d');
       context.clearRect(0, 0, width, height);
