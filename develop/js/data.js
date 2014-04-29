@@ -23,4 +23,32 @@ goog.scope(function() {
       opt_posY: data['y']
     };
   };
+
+
+  exports.Data.setAttribute = function(posX, posY, dir, speed, visiable, status, belong, others) {
+    return {
+      'x': posX,
+      'y': posY,
+      'd': dir,
+      'p': speed,
+      'v': visiable,
+      's': status,
+      'b': belong,
+      'o': others
+    };
+  };
+
+
+  exports.Data.getAttribute = function(data) {
+    return {
+      posX: data['x'],
+      posY: data['y'],
+      dir: data['d'],
+      speed: data['p'],
+      visiable: data['v'],
+      status: data['s'],
+      belong: data['b'],
+      others: data['o']
+    };
+  };
 });
