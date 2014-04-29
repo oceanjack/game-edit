@@ -28,8 +28,10 @@ goog.scope(function() {
   exports.MapSetting.prototype.mode_ = null;
   exports.MapSetting.prototype.cellSet_ = null;
   exports.MapSetting.prototype.cellIndex_ = null;
+  exports.MapSetting.prototype.totleIndex_ = null;
   exports.MapSetting.prototype.tmpData_ = null;
   exports.MapSetting.prototype.background_ = null;
+  exports.MapSetting.prototype.count_ = null;
 
 
   exports.MapSetting.prototype.init = function(x, y, background) {
@@ -37,6 +39,8 @@ goog.scope(function() {
     y = parseInt(y);
     x == 'NaN' && (x = 20);
     y == 'NaN' && (y = 15);
+    this.count_ = 0;
+    this.totleIndex_ = 0;
     this.cellSet_ = [];
     this.cellIndex_ = 0;
     this.size_ = [x, y];
@@ -56,11 +60,13 @@ goog.scope(function() {
     this.elements_.cellName_ = goog.dom.getElementByClass('cellName');
     this.elements_.message_ = goog.dom.getElementByClass('message');
     this.elements_.productList_ = goog.dom.getElementByClass('productlist');
+    this.elements_.addCharacter_ = goog.dom.getElementByClass('addCharacter');
   };
 
 
   exports.MapSetting.prototype.settings = function() {
     var el = this.elements_;
+    var this_ = this;
     var widthPercent = 100 / this.size_[0] + '%';
     var heightPercent = 100 / this.size_[1] + '%';
     for(var j = 0; j < this.size_[1]; ++j) {
@@ -73,8 +79,13 @@ goog.scope(function() {
             goog.events.listen(node, 'click', function() {
               if(goog.dom.classes.has(node, 'selected')) {
                 goog.dom.classes.remove(node, 'selected');
+                if(--this_.count_ <= 0) {
+                  this_.elements_.makeSure_.style.display = 'none';
+                }
               } else {
                 goog.dom.classes.add(node, 'selected');
+                ++this_.count_;
+                this_.elements_.makeSure_.style.display = 'inline-block';
               }
             });
         })(tmp);
@@ -93,6 +104,7 @@ goog.scope(function() {
     goog.events.listen(el.map_, 'dragover', this.onDragOver, false , this);
     goog.events.listen(el.map_, 'drop', this.onFileSelect, false , this);
     goog.events.listen(el.makeSure_, 'click', this.makeSure, false, this);
+    goog.events.listen(el.addCharacter_, 'click', this.createCharacter, false, this);
   };
 
 
@@ -134,14 +146,18 @@ goog.scope(function() {
         this.tmpData_.height = size[3];
         if(this.cellSet_[this.cellIndex_]) {
           this.cellSet_[this.cellIndex_].setData(dataModel.setCharacter(t.width, t.height, t.src, t.posX, t.posY));
+          var list = goog.dom.getElementsByClass('ch', this.elements_.productList_);
+          var node = list[this.cellIndex_];
+          goog.dom.setTextContent(node, (this.elements_.cellName_.value != '' ? this.elements_.cellName_.value : '空'));
         } else {
           this.cellSet_[this.cellIndex_] = new exports.Cell(dataModel.setCharacter(t.width, t.height, t.src, t.posX, t.posY));
           var node = goog.dom.createElement('li');
-          goog.dom.setTextContent(node, this.elements_.cellName_.value);
+          goog.dom.setTextContent(node, (this.elements_.cellName_.value != '' ? this.elements_.cellName_.value : '空'));
+          goog.dom.classes.add(node, 'ch');
           node.index_ = this.cellIndex_;
           this.elements_.productList_.appendChild(node);
           goog.events.listen(node, 'click', this.reBuild, false, this);
-          ++this.cellIndex_;
+          ++this.totleIndex_;
         }
         break;
       case 2:
@@ -185,6 +201,13 @@ goog.scope(function() {
     var context = this.elements_.canvas_.getContext('2d');
     context.clearRect(0, 0, 800, 600);
     this.background_ && context.drawImage(this.background_, 0, 0, this.background_.width, this.background_.height);
+    this.elements_.cellName_.value = '';
+  };
+
+
+  exports.MapSetting.prototype.createCharacter = function() {
+    this.clear();
+    this.cellIndex_ = this.totleIndex_;
   };
 
 
@@ -204,6 +227,7 @@ goog.scope(function() {
     blockWidth = parseFloat(blockWidth.substr(blockWidth, blockWidth.length - 2));
     blockHeight = parseFloat(blockHeight.substr(blockHeight, blockHeight.length - 2));
     data.src && context.drawImage(data.src, data.opt_posX * blockWidth, data.opt_posY * blockHeight, data.width * blockWidth, data.height * blockHeight);
+    this.elements_.cellName_.value = goog.dom.getTextContent(e);
   };
 
 

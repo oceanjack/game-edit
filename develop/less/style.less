@@ -20,6 +20,17 @@ a {
   user-select: none;
 }
 
+input, button {
+  border-radius: 4px;
+  margin: auto;
+  height: 20px;
+  width: 40px;
+  margin-top: 20px;
+}
+button {
+  width: 50px;
+}
+
 *,*:before,*:after {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -118,16 +129,6 @@ a {
     > * {
       display: inline-block;
     }
-    input, button {
-      border-radius: 4px;
-      margin: auto;
-      height: 20px;
-      width: 40px;
-      margin-top: 20px;
-    }
-    button {
-      width: 50px;
-    }
   }
   .map {
     position: relative;
@@ -171,8 +172,11 @@ a {
     .message, .makeSure, .cellName {
       margin: auto;
       text-align: center;
+      input {
+        width: 120px;
+      }
     }
-    .makeSure, .cellName {
+    .cellName {
       display: inline-block;
     }
   }
