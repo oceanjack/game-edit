@@ -25,30 +25,41 @@ goog.scope(function() {
   };
 
 
+  exports.Data.attributeSet = {
+    posX: 'posX',
+    posY: 'posY',
+    dir: 'dir',
+    speed: 'speed',
+    visiable: 'visiable',
+    belong: 'belog',
+    others: 'others'
+  };
+
+
   exports.Data.setAttribute = function(posX, posY, dir, speed, visiable, status, belong, others) {
     return {
-      'x': posX,
-      'y': posY,
-      'd': dir,
-      'p': speed,
-      'v': visiable,
-      's': status,
-      'b': belong,
-      'o': others
+      'posX': posX,
+      'posY': posY,
+      'dir': dir,
+      'speed': speed,
+      'visiable': visiable,
+      'status': status,
+      'belong': belong,
+      'others': others
     };
   };
 
 
   exports.Data.getAttribute = function(data) {
     return {
-      posX: data['x'],
-      posY: data['y'],
-      dir: data['d'],
-      speed: data['p'],
-      visiable: data['v'],
-      status: data['s'],
-      belong: data['b'],
-      others: data['o']
+      posX: data['posX'],
+      posY: data['posY'],
+      dir: data['dir'],
+      speed: data['speed'],
+      visiable: data['visiable'],
+      status: data['status'],
+      belong: data['belong'],
+      others: data['others']
     };
   };
 });

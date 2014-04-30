@@ -10,9 +10,6 @@ goog.scope(function() {
 
   exports.Cell = function(data) {
     this.data_ = data;
-    this.attributes_ = {};
-    this.actions_ = {};
-    this.events_ = {};
   };
 
 
@@ -39,6 +36,16 @@ goog.scope(function() {
 
   exports.Cell.prototype.getAttribute = function(key, val) {
     return this.attributes_[key] ? this.attributes_[key] : null;
+  };
+
+
+  exports.Cell.prototype.getAllAttribute = function() {
+    return this.attributes_;
+  };
+
+
+  exports.Cell.prototype.setAllAttribute = function(data) {
+    this.attributes_ = data;
   };
 
 

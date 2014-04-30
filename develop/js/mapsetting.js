@@ -178,10 +178,12 @@ goog.scope(function() {
         break;
       case 2:
         var node = goog.dom.createElement('li');
+        goog.dom.classes.add(node, 'at');
         if(this.elements_.cellName_.value != '') {
           goog.dom.setTextContent(node, this.elements_.cellName_.value);
           goog.dom.appendChild(this.elements_.attributeList_, node);
         }
+        goog.events.listen(node, 'click', this.changeAttribute, false, this);
         break;
       case 3:
         break;
@@ -275,25 +277,39 @@ goog.scope(function() {
 
 
   /*
-   * 重建人物
+   * 重建相关属性
    */
   exports.MapSetting.prototype.reBuild = function(e) {
     e = e.event_;
     e = e.target || e.srcElement;
     this.clear();
-    this.cellIndex_ = e.index_;
-    var data = dataModel.getCharacter(this.cellSet_[this.cellIndex_].getData());
-    var nodeOne = this.map_[data.opt_posY][data.opt_posX];
-    var nodeTwo = this.map_[data.opt_posY + data.height - 1][data.opt_posX + data.width - 1];
-    goog.dom.classes.add(nodeOne, 'selected');
-    goog.dom.classes.add(nodeTwo, 'selected');
-    var context = this.elements_.canvas_.getContext('2d');
-    var blockWidth = window.getComputedStyle(this.map_[0][0])['width'];
-    var blockHeight = window.getComputedStyle(this.map_[0][0])['height'];
-    blockWidth = parseFloat(blockWidth.substr(blockWidth, blockWidth.length - 2));
-    blockHeight = parseFloat(blockHeight.substr(blockHeight, blockHeight.length - 2));
-    data.src && context.drawImage(data.src, data.opt_posX * blockWidth, data.opt_posY * blockHeight, data.width * blockWidth, data.height * blockHeight);
-    this.elements_.cellName_.value = goog.dom.getTextContent(e);
+    switch(this.mode_) {
+      case 1:
+        this.cellIndex_ = e.index_;
+        var data = dataModel.getCharacter(this.cellSet_[this.cellIndex_].getData());
+        var nodeOne = this.map_[data.opt_posY][data.opt_posX];
+        var nodeTwo = this.map_[data.opt_posY + data.height - 1][data.opt_posX + data.width - 1];
+        goog.dom.classes.add(nodeOne, 'selected');
+        goog.dom.classes.add(nodeTwo, 'selected');
+        var context = this.elements_.canvas_.getContext('2d');
+        var blockWidth = window.getComputedStyle(this.map_[0][0])['width'];
+        var blockHeight = window.getComputedStyle(this.map_[0][0])['height'];
+        blockWidth = parseFloat(blockWidth.substr(blockWidth, blockWidth.length - 2));
+        blockHeight = parseFloat(blockHeight.substr(blockHeight, blockHeight.length - 2));
+        data.src && context.drawImage(data.src, data.opt_posX * blockWidth, data.opt_posY * blockHeight, data.width * blockWidth, data.height * blockHeight);
+        this.elements_.cellName_.value = goog.dom.getTextContent(e);
+        break;
+      case 2:
+        this.cellIndex_ = e.index_;
+        var data = this.cellSet_[this.cellIndex_].getAllAttribute();
+        if(data == null) {
+          this.cellSet_[this.cellIndex_].setAllAttribute(dataModel.setAttribute(
+            -1, -1, -1, 0, true, -1, -1, {}
+          ));
+        }
+        data = dataModel.getAttribute(this.cellSet_[this.cellIndex_].getAllAttribute());
+        break;
+    }
   };
 
 
