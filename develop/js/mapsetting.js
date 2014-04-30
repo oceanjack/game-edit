@@ -22,16 +22,16 @@ goog.scope(function() {
   };
 
 
-  exports.MapSetting.prototype.size_ = null;
-  exports.MapSetting.prototype.elements_ = null;
-  exports.MapSetting.prototype.map_ = null;
-  exports.MapSetting.prototype.mode_ = null;
-  exports.MapSetting.prototype.cellSet_ = null;
-  exports.MapSetting.prototype.cellIndex_ = null;
-  exports.MapSetting.prototype.totleIndex_ = null;
-  exports.MapSetting.prototype.tmpData_ = null;
-  exports.MapSetting.prototype.background_ = null;
-  exports.MapSetting.prototype.count_ = null;
+  exports.MapSetting.prototype.size_ = null; //网格尺寸
+  exports.MapSetting.prototype.elements_ = null; //元素集
+  exports.MapSetting.prototype.map_ = null; //网格
+  exports.MapSetting.prototype.mode_ = null; //模式
+  exports.MapSetting.prototype.cellSet_ = null; //模型集合
+  exports.MapSetting.prototype.cellIndex_ = null; //当前模型id
+  exports.MapSetting.prototype.totleIndex_ = null; //总模型id
+  exports.MapSetting.prototype.tmpData_ = null; //临时数据
+  exports.MapSetting.prototype.background_ = null; //背景图片
+  exports.MapSetting.prototype.count_ = null; //选中格数量
 
 
   exports.MapSetting.prototype.init = function(x, y, background) {
@@ -64,6 +64,9 @@ goog.scope(function() {
   };
 
 
+  /*
+   * 生成网格
+   */
   exports.MapSetting.prototype.settings = function() {
     var el = this.elements_;
     var this_ = this;
@@ -99,6 +102,9 @@ goog.scope(function() {
   };
 
 
+  /*
+   * 添加元素监听事件
+   */
   exports.MapSetting.prototype.addEvents = function() {
     var el = this.elements_;
     goog.events.listen(el.map_, 'dragover', this.onDragOver, false , this);
@@ -108,6 +114,9 @@ goog.scope(function() {
   };
 
 
+  /*
+   * 设置图片数据
+   */
   exports.MapSetting.prototype.setData = function(img) {
     var blockWidth = window.getComputedStyle(this.map_[0][0])['width'];
     var blockHeight = window.getComputedStyle(this.map_[0][0])['height'];
@@ -134,6 +143,9 @@ goog.scope(function() {
   };
 
 
+  /*
+   * 确定按钮处理
+   */
   exports.MapSetting.prototype.makeSure = function(e) {
     e = e.event_;
     switch(this.mode_) {
@@ -174,6 +186,9 @@ goog.scope(function() {
   };
 
 
+  /*
+   * 获取网格内所选格子尺寸（左上和右下来确定尺寸）
+   */
   exports.MapSetting.prototype.getSize = function() {
     var tmpMap = [];
     for(var j = 0, l = this.map_.length; j < l; ++j) {
@@ -190,6 +205,9 @@ goog.scope(function() {
   };
 
 
+  /*
+   * 清除
+   */
   exports.MapSetting.prototype.clear = function() {
     for(var j = 0, l = this.map_.length; j < l; ++j) {
       for(var i = 0, ll = this.map_[j].length; i < ll; ++i) {
@@ -202,15 +220,23 @@ goog.scope(function() {
     context.clearRect(0, 0, 800, 600);
     this.background_ && context.drawImage(this.background_, 0, 0, this.background_.width, this.background_.height);
     this.elements_.cellName_.value = '';
+    this.tmpData_ = null;
+    this.tmpData_ = {};
   };
 
 
+  /*
+   * 添加人物
+   */
   exports.MapSetting.prototype.createCharacter = function() {
     this.clear();
     this.cellIndex_ = this.totleIndex_;
   };
 
 
+  /*
+   * 重建人物
+   */
   exports.MapSetting.prototype.reBuild = function(e) {
     e = e.event_;
     e = e.target || e.srcElement;
@@ -231,6 +257,9 @@ goog.scope(function() {
   };
 
 
+  /*
+   * 处理拖动
+   */
   exports.MapSetting.prototype.onDragOver = function(e) {
     e = e.event_;
     e.stopPropagation();
@@ -239,6 +268,9 @@ goog.scope(function() {
   };
 
 
+  /*
+   * 处理图片文件加载
+   */
   exports.MapSetting.prototype.onFileSelect = function(e) {
     e = e.event_;
     var this_ = this;
