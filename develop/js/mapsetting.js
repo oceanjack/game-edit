@@ -56,11 +56,13 @@ goog.scope(function() {
     this.elements_.canvas_ = goog.dom.getElement('canvas');
     this.elements_.map_ = goog.dom.htmlToDocumentFragment(templates.mapArea());
     this.elements_.mapimgdiv_ = goog.dom.getElementByClass('mapimgdiv');
+    this.elements_.attributeList_ = goog.dom.getElementByClass('attributeList');
     this.elements_.makeSure_ = goog.dom.getElementByClass('makeSure');
     this.elements_.cellName_ = goog.dom.getElementByClass('cellName');
     this.elements_.message_ = goog.dom.getElementByClass('message');
     this.elements_.productList_ = goog.dom.getElementByClass('productlist');
     this.elements_.addCharacter_ = goog.dom.getElementByClass('addCharacter');
+    this.elements_.addAttribute_ = goog.dom.getElementByClass('addAttribute');
   };
 
 
@@ -111,6 +113,7 @@ goog.scope(function() {
     goog.events.listen(el.map_, 'drop', this.onFileSelect, false , this);
     goog.events.listen(el.makeSure_, 'click', this.makeSure, false, this);
     goog.events.listen(el.addCharacter_, 'click', this.createCharacter, false, this);
+    goog.events.listen(el.addAttribute_, 'click', this.createAttribute, false, this);
   };
 
 
@@ -226,11 +229,42 @@ goog.scope(function() {
 
 
   /*
+   * 元素显示控制
+   */
+  exports.MapSetting.prototype.display_ = function() {
+    this.elements_.mapimgdiv_.style.display = 'none';
+    this.elements_.attributeList_.style.display = 'none';
+    this.elements_.makeSure_.style.display = 'none';
+    switch(this.mode_) {
+      case 0:
+        this.elements_.mapimgdiv_.style.display = 'block';
+        break;
+      case 1:
+        this.elements_.attributeList_.style.display = 'block';
+        this.elements_.makeSure_.style.display = 'inline-block';
+        break;
+    };
+  };
+
+
+  /*
    * 添加人物
    */
   exports.MapSetting.prototype.createCharacter = function() {
+    this.mode_ = 0;
+    this.display_();
     this.clear();
     this.cellIndex_ = this.totleIndex_;
+  };
+
+
+  /*
+   * 添加属性
+   */
+  exports.MapSetting.prototype.createAttribute = function() {
+    this.mode_ = 1;
+    this.display_();
+    this.clear();
   };
 
 
