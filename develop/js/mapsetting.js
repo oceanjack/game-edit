@@ -56,11 +56,12 @@ goog.scope(function() {
     this.elements_.canvas_ = goog.dom.getElement('canvas');
     this.elements_.map_ = goog.dom.htmlToDocumentFragment(templates.mapArea());
     this.elements_.mapimgdiv_ = goog.dom.getElementByClass('mapimgdiv');
-    this.elements_.attributeList_ = goog.dom.getElementByClass('attributeList');
+    this.elements_.attribute_ = goog.dom.getElementByClass('attribute');
     this.elements_.makeSure_ = goog.dom.getElementByClass('makeSure');
     this.elements_.cellName_ = goog.dom.getElementByClass('cellName');
     this.elements_.message_ = goog.dom.getElementByClass('message');
     this.elements_.productList_ = goog.dom.getElementByClass('productlist');
+    this.elements_.attributeList_ = goog.dom.getElementByClass('attributeList');
     this.elements_.addCharacter_ = goog.dom.getElementByClass('addCharacter');
     this.elements_.addAttribute_ = goog.dom.getElementByClass('addAttribute');
   };
@@ -176,6 +177,11 @@ goog.scope(function() {
         }
         break;
       case 2:
+        var node = goog.dom.createElement('li');
+        if(this.elements_.cellName_.value != '') {
+          goog.dom.setTextContent(node, this.elements_.cellName_.value);
+          goog.dom.appendChild(this.elements_.attributeList_, node);
+        }
         break;
       case 3:
         break;
@@ -233,14 +239,14 @@ goog.scope(function() {
    */
   exports.MapSetting.prototype.display_ = function() {
     this.elements_.mapimgdiv_.style.display = 'none';
-    this.elements_.attributeList_.style.display = 'none';
+    this.elements_.attribute_.style.display = 'none';
     this.elements_.makeSure_.style.display = 'none';
     switch(this.mode_) {
-      case 0:
+      case 1:
         this.elements_.mapimgdiv_.style.display = 'block';
         break;
-      case 1:
-        this.elements_.attributeList_.style.display = 'block';
+      case 2:
+        this.elements_.attribute_.style.display = 'block';
         this.elements_.makeSure_.style.display = 'inline-block';
         break;
     };
@@ -251,7 +257,7 @@ goog.scope(function() {
    * 添加人物
    */
   exports.MapSetting.prototype.createCharacter = function() {
-    this.mode_ = 0;
+    this.mode_ = 1;
     this.display_();
     this.clear();
     this.cellIndex_ = this.totleIndex_;
@@ -262,7 +268,7 @@ goog.scope(function() {
    * 添加属性
    */
   exports.MapSetting.prototype.createAttribute = function() {
-    this.mode_ = 1;
+    this.mode_ = 2;
     this.display_();
     this.clear();
   };
