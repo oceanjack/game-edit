@@ -34,7 +34,7 @@ goog.scope(function() {
   };
 
 
-  exports.Cell.prototype.getAttribute = function(key, val) {
+  exports.Cell.prototype.getAttribute = function(key) {
     return this.attributes_[key] ? this.attributes_[key] : null;
   };
 

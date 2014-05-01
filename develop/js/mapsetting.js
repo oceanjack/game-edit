@@ -198,6 +198,31 @@ goog.scope(function() {
 
 
   /*
+   * 改变属性
+   */
+  exports.MapSetting.prototype.changeAttribute = function(e) {
+    e = e.event_;
+    e = e.target || e.srcElement;
+    var data = this.cellSet_[this.cellIndex_];
+    if(goog.dom.classes.has(e, 'selected')) {
+      goog.dom.classes.remove(e, 'selected');
+      if(data.getAllAttribute()) {
+        var tmp = data.getAttribute(dataModel.attributeSet.others);
+        tmp[goog.dom.getTextContent(e)] = null;
+        data.setAttribute(dataModel.attributeSet.others, tmp);
+      }
+    } else {
+      goog.dom.classes.add(e, 'selected');
+      if(data.getAllAttribute()) {
+        var tmp = data.getAttribute(dataModel.attributeSet.others);
+        tmp[goog.dom.getTextContent(e)] = 0;
+        data.setAttribute(dataModel.attributeSet.others, tmp);
+      }
+    }
+  };
+
+
+  /*
    * 获取网格内所选格子尺寸（左上和右下来确定尺寸）
    */
   exports.MapSetting.prototype.getSize = function() {
@@ -307,7 +332,14 @@ goog.scope(function() {
             -1, -1, -1, 0, true, -1, -1, {}
           ));
         }
-        data = dataModel.getAttribute(this.cellSet_[this.cellIndex_].getAllAttribute());
+        var tmp = this.cellSet_[this.cellIndex_].getAttribute(dataModel.attributeSet.others);
+        var node = goog.dom.getElementsByClass('at', this.elements_.attributeList_);
+        for(var i = 0, l = node.length; i < l; ++i) {
+          goog.dom.classes.remove(node[i], 'selected'); 
+          if(tmp[goog.dom.getTextContent(node[i])] != undefined && tmp[goog.dom.getTextContent(node[i])] != null) {
+            goog.dom.classes.add(node[i], 'selected'); 
+          }
+        }
         break;
     }
   };
