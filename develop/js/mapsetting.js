@@ -208,6 +208,9 @@ goog.scope(function() {
   exports.MapSetting.prototype.changeAttribute = function(e) {
     e = e.event_;
     e = e.target || e.srcElement;
+    while(!goog.dom.classes.has(e, 'at')) {
+      e = e.parentNode;
+    }
     var data = this.cellSet_[this.cellIndex_];
     if(goog.dom.classes.has(e, 'selected')) {
       goog.dom.classes.remove(e, 'selected');
