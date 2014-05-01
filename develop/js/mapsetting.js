@@ -178,9 +178,14 @@ goog.scope(function() {
         break;
       case 2:
         var node = goog.dom.createElement('li');
+        var p = goog.dom.createElement('p');
         goog.dom.classes.add(node, 'at');
         if(this.elements_.cellName_.value != '') {
-          goog.dom.setTextContent(node, this.elements_.cellName_.value);
+          goog.dom.setTextContent(p, this.elements_.cellName_.value);
+          var editbox = goog.dom.htmlToDocumentFragment(templates.selectInput());
+          goog.dom.classes.add(p, 'val');
+          goog.dom.appendChild(node, p);
+          goog.dom.appendChild(node, editbox);
           goog.dom.appendChild(this.elements_.attributeList_, node);
         }
         goog.events.listen(node, 'click', this.changeAttribute, false, this);
@@ -208,14 +213,14 @@ goog.scope(function() {
       goog.dom.classes.remove(e, 'selected');
       if(data.getAllAttribute()) {
         var tmp = data.getAttribute(dataModel.attributeSet.others);
-        tmp[goog.dom.getTextContent(e)] = null;
+        tmp[goog.dom.getTextContent(goog.dom.getElementByClass('val', e))] = null;
         data.setAttribute(dataModel.attributeSet.others, tmp);
       }
     } else {
       goog.dom.classes.add(e, 'selected');
       if(data.getAllAttribute()) {
         var tmp = data.getAttribute(dataModel.attributeSet.others);
-        tmp[goog.dom.getTextContent(e)] = 0;
+        tmp[goog.dom.getTextContent(goog.dom.getElementByClass('val', e))] = 0;
         data.setAttribute(dataModel.attributeSet.others, tmp);
       }
     }
@@ -299,6 +304,14 @@ goog.scope(function() {
     this.mode_ = 2;
     this.display_();
     this.clear();
+    var tmp = goog.dom.getElementsByClass('atd', this.elements_.attributeList_);
+    for(var i = 0, l = tmp.length; i < l; ++i) {
+      if(goog.dom.getElementsByClass('editbox', tmp[i]).length) {
+        continue;
+      }
+      var editbox = goog.dom.htmlToDocumentFragment(templates.selectInput());
+      goog.dom.appendChild(tmp[i], editbox);
+    }
   };
 
 
