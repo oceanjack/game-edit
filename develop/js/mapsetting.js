@@ -187,6 +187,9 @@ goog.scope(function() {
           goog.dom.appendChild(node, p);
           goog.dom.appendChild(node, editbox);
           goog.dom.appendChild(this.elements_.attributeList_, node);
+          var input = goog.dom.getElementByClass('editboxinput', editbox);
+          var select = goog.dom.getElementByClass('editboxselect', editbox);
+          this.valChange(select, input);
         }
         goog.events.listen(node, 'click', this.changeAttribute, false, this);
         break;
@@ -281,7 +284,6 @@ goog.scope(function() {
         this.elements_.mapimgdiv_.style.display = 'block';
         break;
       case 2:
-        this.elements_.mapimgdiv_.style.display = 'block';
         this.elements_.attribute_.style.display = 'block';
         this.elements_.makeSure_.style.display = 'inline-block';
         break;
@@ -309,12 +311,108 @@ goog.scope(function() {
     this.clear();
     var tmp = goog.dom.getElementsByClass('atd', this.elements_.attributeList_);
     for(var i = 0, l = tmp.length; i < l; ++i) {
+      tmp[i].attrIndex_ = i;
       if(goog.dom.getElementsByClass('editbox', tmp[i]).length) {
         continue;
       }
       var editbox = goog.dom.htmlToDocumentFragment(templates.selectInput());
+      var input = goog.dom.getElementByClass('editboxinput', editbox);
+      var select = goog.dom.getElementByClass('editboxselect', editbox)
+      switch(i) {
+        case 0:
+          input.value = -1;
+          break;
+        case 1:
+          input.value = -1;
+          break;
+        case 2:
+          input.value = -1;
+          break;
+        case 3:
+          input.value = 0;
+          break;
+        case 4:
+          input.value = 1;
+          var op = goog.dom.createElement('option');
+          var op2 = goog.dom.createElement('option');
+          goog.dom.setTextContent(op, 0);
+          goog.dom.setTextContent(op2, 1);
+          goog.dom.appendChild(select, op2);
+          goog.dom.appendChild(select, op);
+          break;
+        case 5:
+          input.value = -1;
+          break;
+        case 6:
+          input.value = -1;
+          break;
+      };
       goog.dom.appendChild(tmp[i], editbox);
+      this.valChange(select, input);
     }
+  };
+
+
+  /*
+   * 检测属性值变化
+   */
+  exports.MapSetting.prototype.valChange = function(select, input) {
+    var this_ = this;
+    goog.events.listen(select, 'change', function() {
+      var index = select.options.selectedIndex;
+      (index >= 0) && (input.value = select.options[index].value);
+    }, false, this);
+    goog.events.listen(select, 'mousedown', function() {
+      var tag = 1;
+      for(var i = 0, l = select.options.length; i < l; ++i) {
+        if(input.value == select.options[i].value) {
+          tag = 0;
+          break;
+        }
+      }
+      if(tag) {
+        var node = goog.dom.createElement('option');
+        goog.dom.setTextContent(node, input.value);
+        goog.dom.appendChild(select, node);
+      }
+    }, false, this);
+    goog.events.listen(input, 'change', function() {
+      var e = input;
+      while(!goog.dom.classes.has(e, 'at') && !goog.dom.classes.has(e, 'atd')) {
+        e = e.parentNode;
+      }
+      var index = this_.cellIndex_;
+      var data = this_.cellSet_[index];
+      if(goog.dom.classes.has(e, 'atd')) {
+        switch(e.attrIndex_) {
+          case 0:
+            data.setAttribute(dataModel.attributeSet.posX, input.value);
+            break;
+          case 1:
+            data.setAttribute(dataModel.attributeSet.posY, input.value);
+            break;
+          case 2:
+            data.setAttribute(dataModel.attributeSet.dir, input.value);
+            break;
+          case 3:
+            data.setAttribute(dataModel.attributeSet.speed, input.value);
+            break;
+          case 4:
+            data.setAttribute(dataModel.attributeSet.visiable, input.value);
+            break;
+          case 5:
+            data.setAttribute(dataModel.attributeSet.status, input.value);
+            break;
+          case 6:
+            data.setAttribute(dataModel.attributeSet.belong, input.value);
+            break;
+        };
+      } else {
+        var tmp = data.getAttribute(dataModel.attributeSet.others);
+        tmp[goog.dom.getTextContent(goog.dom.getElementByClass('val', e))] = input.value;
+        data.setAttribute(dataModel.attributeSet.others, tmp);
+      }
+    }, false, this);
   };
 
 
@@ -346,15 +444,29 @@ goog.scope(function() {
         var data = this.cellSet_[this.cellIndex_].getAllAttribute();
         if(data == null) {
           this.cellSet_[this.cellIndex_].setAllAttribute(dataModel.setAttribute(
-            -1, -1, -1, 0, true, -1, -1, {}
+            '-1', '-1', '-1', '0', '1', '-1', '-1', {}
           ));
         }
+        data = this.cellSet_[this.cellIndex_].getAllAttribute();
         var tmp = this.cellSet_[this.cellIndex_].getAttribute(dataModel.attributeSet.others);
         var node = goog.dom.getElementsByClass('at', this.elements_.attributeList_);
         for(var i = 0, l = node.length; i < l; ++i) {
           goog.dom.classes.remove(node[i], 'selected'); 
-          if(tmp[goog.dom.getTextContent(node[i])] != undefined && tmp[goog.dom.getTextContent(node[i])] != null) {
+          if(tmp[goog.dom.getTextContent(goog.dom.getElementByClass('val', node[i]))] != undefined && tmp[goog.dom.getTextContent(goog.dom.getElementByClass('val', node[i]))] != null) {
             goog.dom.classes.add(node[i], 'selected'); 
+          }
+        }
+        var line = [dataModel.attributeSet.posX, dataModel.attributeSet.posY, dataModel.attributeSet.dir, dataModel.attributeSet.speed, dataModel.attributeSet.visiable, dataModel.attributeSet.status, dataModel.attributeSet.belong, dataModel.attributeSet.others];
+        var noded = goog.dom.getElementsByClass('atd', this.elements_.attributeList_);
+        for(var i = 0, l = noded.length; i < l; ++i) {
+          goog.dom.getElementByClass('editboxinput', noded[i]).value = data[line[i]];
+        }
+        for(var i = 0, l = node.length; i < l; ++i) { 
+          var t = tmp[goog.dom.getTextContent(goog.dom.getElementByClass('val', node[i]))];
+          if(t != undefined && t != null) {   
+            goog.dom.getElementByClass('editboxinput', node[i]).value = t;
+          } else {
+            goog.dom.getElementByClass('editboxinput', node[i]).value = '';
           }
         }
         break;

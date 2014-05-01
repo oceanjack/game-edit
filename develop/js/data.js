@@ -31,7 +31,8 @@ goog.scope(function() {
     dir: 'dir',
     speed: 'speed',
     visiable: 'visiable',
-    belong: 'belog',
+    status: 'status',
+    belong: 'belong',
     others: 'others'
   };
 
