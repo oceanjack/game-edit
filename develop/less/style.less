@@ -20,12 +20,11 @@ a {
   user-select: none;
 }
 
-input, button {
+input, button, select {
   border-radius: 4px;
   margin: auto;
   height: 20px;
   width: 40px;
-  margin-top: 20px;
 }
 button {
   width: 50px;
@@ -179,6 +178,24 @@ button {
     .cellName {
       display: inline-block;
     }
+    .editbox {
+      text-align: center;
+      margin: auto;
+      width: 70px;
+      height: 20px;
+      line-height: 20px;
+      > * {
+        display:inline-block;
+      }
+      .editboxinput {
+        position: absolute;
+        width: 50px;
+      }
+      .editboxselect {
+        position: absolute;
+        width: 70px;
+      }
+    }
     .attribute {
       margin:auto;
       text-align: center;
@@ -193,6 +210,7 @@ button {
         margin-right: 10px;
         padding: 3px 5px;
         display: inline-block;
+        margin-bottom: 10px;
       }
       ul li:hover {
         color: #23a;

@@ -273,6 +273,7 @@ goog.scope(function() {
         this.elements_.mapimgdiv_.style.display = 'block';
         break;
       case 2:
+        this.elements_.mapimgdiv_.style.display = 'block';
         this.elements_.attribute_.style.display = 'block';
         this.elements_.makeSure_.style.display = 'inline-block';
         break;
