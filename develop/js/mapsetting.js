@@ -48,7 +48,7 @@ goog.scope(function() {
     this.tmpData_ = {};
     this.map_ = [];
     this.background_ = background;
-    this.mode_ = 1; // 1 人物 2 属性 3 行为 4 事件 5 策略 default 1
+    this.mode_ = 1; // 1 人物 2 属性 3 地图 4 行为 5 事件 6 策略 default 1
   };
 
 
@@ -64,6 +64,7 @@ goog.scope(function() {
     this.elements_.attributeList_ = goog.dom.getElementByClass('attributeList');
     this.elements_.addCharacter_ = goog.dom.getElementByClass('addCharacter');
     this.elements_.addAttribute_ = goog.dom.getElementByClass('addAttribute');
+    this.elements_.addWorld_ = goog.dom.getElementByClass('addWorld');
   };
 
 
@@ -115,6 +116,7 @@ goog.scope(function() {
     goog.events.listen(el.makeSure_, 'click', this.makeSure, false, this);
     goog.events.listen(el.addCharacter_, 'click', this.createCharacter, false, this);
     goog.events.listen(el.addAttribute_, 'click', this.createAttribute, false, this);
+    goog.events.listen(el.addWorld_, 'click', this.editWorld, false, this);
   };
 
 
@@ -287,6 +289,9 @@ goog.scope(function() {
         this.elements_.attribute_.style.display = 'block';
         this.elements_.makeSure_.style.display = 'inline-block';
         break;
+      case 3:
+        this.elements_.mapimgdiv_.style.display = 'block';
+        break;
     };
   };
 
@@ -354,6 +359,16 @@ goog.scope(function() {
 
 
   /*
+   * 编辑世界
+   */
+  exports.MapSetting.prototype.editWorld = function() {
+    this.mode_ = 3;
+    this.display_();
+    this.clear();
+  };
+
+
+  /*
    * 检测属性值变化
    */
   exports.MapSetting.prototype.valChange = function(select, input) {
@@ -376,7 +391,7 @@ goog.scope(function() {
         goog.dom.appendChild(select, node);
       }
     }, false, this);
-    goog.events.listen(input, 'change', function() {
+    goog.events.listen(input, 'blur', function() {
       var e = input;
       while(!goog.dom.classes.has(e, 'at') && !goog.dom.classes.has(e, 'atd')) {
         e = e.parentNode;
@@ -460,6 +475,7 @@ goog.scope(function() {
         var noded = goog.dom.getElementsByClass('atd', this.elements_.attributeList_);
         for(var i = 0, l = noded.length; i < l; ++i) {
           goog.dom.getElementByClass('editboxinput', noded[i]).value = data[line[i]];
+          goog.dom.getElementByClass('editboxselect', noded[i]).options.selectedIndex = -1;
         }
         for(var i = 0, l = node.length; i < l; ++i) { 
           var t = tmp[goog.dom.getTextContent(goog.dom.getElementByClass('val', node[i]))];
