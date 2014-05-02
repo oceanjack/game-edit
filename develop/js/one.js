@@ -1,4 +1,4 @@
-goog.provide('ocean.onlineAI.one');
+goog.provide('ocean.onlineAI.One');
 
 goog.require('goog.dom');
 goog.require('goog.events');
@@ -12,10 +12,11 @@ goog.scope(function() {
   var dataModel = exports.Data;
 
 
-  exports.One = function(data) {
+  exports.One = function(data, opt_node) {
     this.data_ = data;
     this.attribute_ = {};
     this.attrLink_ = {};
+    opt_node && (this.node_ = opt_node);
     this.initLink();
   };
 
@@ -23,13 +24,15 @@ goog.scope(function() {
   exports.One.prototype.data_ = null;
   exports.One.prototype.attribute_ = null;
   exports.One.prototype.attrLink_ = null;
+  exports.One.prototype.node_ = null;
 
 
   exports.One.prototype.initLink = function() {
-    var attr = this.data.getAllAttribute();
+    var attr = this.data_.getAllAttribute();
     for(key in attr) {
       this.attrLink_[key] = -1;
       if(key == dataModel.attributeSet.others) {
+        this.attrLink_[key] = {};
         for(okey in attr[key]) {
           this.attrLink_[key][okey] = -1;
         }
@@ -69,4 +72,8 @@ goog.scope(function() {
     }
   };
 
+
+  exports.One.prototype.getNode = function() {
+    return this.node_;
+  };
 });

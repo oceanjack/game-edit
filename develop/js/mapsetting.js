@@ -6,6 +6,7 @@ goog.require('goog.style');
 
 goog.require('ocean.onlineAI.Data');
 goog.require('ocean.onlineAI.Cell');
+goog.require('ocean.onlineAI.One');
 goog.require('ocean.onlineAI.OnlineAI.templates');
 
 goog.scope(function() {
@@ -32,6 +33,7 @@ goog.scope(function() {
   exports.MapSetting.prototype.tmpData_ = null; //临时数据
   exports.MapSetting.prototype.background_ = null; //背景图片
   exports.MapSetting.prototype.count_ = null; //选中格数量
+  exports.MapSetting.prototype.realWorld_ = null; //编辑的地图
 
 
   exports.MapSetting.prototype.init = function(x, y, background) {
@@ -47,6 +49,7 @@ goog.scope(function() {
     this.elements_ = {};
     this.tmpData_ = {};
     this.map_ = [];
+    this.realWorld_ = [];
     this.background_ = background;
     this.mode_ = 1; // 1 人物 2 属性 3 地图 4 行为 5 事件 6 策略 default 1
   };
@@ -78,21 +81,42 @@ goog.scope(function() {
     var heightPercent = 100 / this.size_[1] + '%';
     for(var j = 0; j < this.size_[1]; ++j) {
       this.map_[j] = [];
+      this.realWorld_[j] = [];
       for(var i = 0; i < this.size_[0]; ++i) {
         var tmp = goog.dom.htmlToDocumentFragment(templates.mapBlock());
         goog.style.setStyle(tmp, 'width', widthPercent);
         goog.style.setStyle(tmp, 'height', heightPercent);
+        tmp.posX_ = i;
+        tmp.posY_ = j;
         (function(node) {
             goog.events.listen(node, 'click', function() {
               if(goog.dom.classes.has(node, 'selected')) {
                 goog.dom.classes.remove(node, 'selected');
-                if(--this_.count_ <= 0) {
-                  this_.elements_.makeSure_.style.display = 'none';
-                }
+                switch(this_.mode_) {
+                  case 1:
+                    if(--this_.count_ <= 0) {
+                      this_.elements_.makeSure_.style.display = 'none';
+                    }
+                    break;
+                  case 3:
+                    this_.realWorld_[node.posY_][node.posX_] = null;
+                    this_.drawWorld();
+                    break;
+                };
               } else {
                 goog.dom.classes.add(node, 'selected');
-                ++this_.count_;
-                this_.elements_.makeSure_.style.display = 'inline-block';
+                switch(this_.mode_) {
+                  case 1:
+                    ++this_.count_;
+                    this_.elements_.makeSure_.style.display = 'inline-block';
+                    break;
+                  case 3:
+                    this_.realWorld_[node.posY_][node.posX_] = new exports.One(this_.cellSet_[this_.cellIndex_], node);
+                    this_.realWorld_[node.posY_][node.posX_].setAttribute(dataModel.attributeSet.posX, node.posX_);
+                    this_.realWorld_[node.posY_][node.posX_].setAttribute(dataModel.attributeSet.posY, node.posY_);
+                    this_.drawWorld();
+                    break;
+                };
               }
             });
         })(tmp);
@@ -365,6 +389,22 @@ goog.scope(function() {
     this.mode_ = 3;
     this.display_();
     this.clear();
+    for(var j = 0; j < this.realWorld_.length; ++j) {
+      for(var i = 0; i < this.realWorld_[j].length; ++i) {
+        if(this.realWorld_[j][i]) {
+          goog.dom.classes.add(this.realWorld_[j][i].getNode(), 'selected');
+        }
+      }
+    }
+    this.drawWorld();
+  };
+
+
+  /*
+   * 绘图
+   */
+  exports.MapSetting.prototype.drawWorld = function() {
+    
   };
 
 
@@ -437,9 +477,9 @@ goog.scope(function() {
   exports.MapSetting.prototype.reBuild = function(e) {
     e = e.event_;
     e = e.target || e.srcElement;
-    this.clear();
     switch(this.mode_) {
       case 1:
+        this.clear();
         this.cellIndex_ = e.index_;
         var data = dataModel.getCharacter(this.cellSet_[this.cellIndex_].getData());
         var nodeOne = this.map_[data.opt_posY][data.opt_posX];
@@ -485,6 +525,9 @@ goog.scope(function() {
             goog.dom.getElementByClass('editboxinput', node[i]).value = '';
           }
         }
+        break;
+      case 3:
+        this.cellIndex_ = e.index_;
         break;
     }
   };
