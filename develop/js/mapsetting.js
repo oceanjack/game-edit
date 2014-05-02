@@ -404,7 +404,21 @@ goog.scope(function() {
    * 绘图
    */
   exports.MapSetting.prototype.drawWorld = function() {
-    
+    var c = this.elements_.canvas_.getContext('2d');
+    var blockWidth = window.getComputedStyle(this.map_[0][0])['width'];
+    var blockHeight = window.getComputedStyle(this.map_[0][0])['height'];
+    blockWidth = parseFloat(blockWidth.substr(blockWidth, blockWidth.length - 2));
+    blockHeight = parseFloat(blockHeight.substr(blockHeight, blockHeight.length - 2));
+    for(var j = 0; j < this.realWorld_.length; ++j) {
+      for(var i = 0; i < this.realWorld_[j].length; ++i) {
+        if(this.realWorld_[j][i]) {
+          var posX = this.realWorld_[j][i].getAttribute(dataModel.attributeSet.posX);
+          var posY = this.realWorld_[j][i].getAttribute(dataModel.attributeSet.posY);
+          var img = dataModel.getCharacter(this.realWorld_[j][i].getImgData());
+          img.src && c.drawImage(img.src, posX * blockWidth, posY * blockHeight, img.width * blockWidth, img.height * blockHeight);
+        }
+      }
+    }
   };
 
 

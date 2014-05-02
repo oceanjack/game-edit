@@ -73,6 +73,11 @@ goog.scope(function() {
   };
 
 
+  exports.One.prototype.getImgData = function() {
+    return this.data_.getData();
+  };
+
+
   exports.One.prototype.getNode = function() {
     return this.node_;
   };
