@@ -409,6 +409,7 @@ goog.scope(function() {
     var blockHeight = window.getComputedStyle(this.map_[0][0])['height'];
     blockWidth = parseFloat(blockWidth.substr(blockWidth, blockWidth.length - 2));
     blockHeight = parseFloat(blockHeight.substr(blockHeight, blockHeight.length - 2));
+    c.clearRect(0, 0, 800, 600);
     for(var j = 0; j < this.realWorld_.length; ++j) {
       for(var i = 0; i < this.realWorld_[j].length; ++i) {
         if(this.realWorld_[j][i]) {
