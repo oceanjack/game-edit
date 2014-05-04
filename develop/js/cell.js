@@ -54,20 +54,6 @@ goog.scope(function() {
   };
 
 
-  exports.Cell.prototype.runAction = function(key, opt_var) {
-    if(this.actions_[key]) {
-      return this.actions_[key](this, opt_var);
-    } else {
-      return null;
-    }
-  };
-
-
-  exports.Cell.prototype.clearAction = function(key) {
-    this.actions_[key] && (this.actions_[key] == null);
-  };
-
-
   exports.Cell.prototype.setEvent = function(key, func) {
     this.events_[key] = func;
   };
