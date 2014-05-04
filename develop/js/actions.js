@@ -66,6 +66,11 @@ goog.scope(function() {
   };
 
 
+  exports.Actions.KillOne = function(data) {
+    data = null;
+  };
+
+
   exports.Actions.ChangeAttr = function(data, key, val, opt_key) {
     data.setAttribute(key, val, opt_key);
   };
