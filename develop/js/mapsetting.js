@@ -349,31 +349,58 @@ goog.scope(function() {
       var select = goog.dom.getElementByClass('editboxselect', editbox)
       switch(i) {
         case 0:
-          input.value = -1;
-          break;
-        case 1:
-          input.value = -1;
-          break;
-        case 2:
-          input.value = -1;
-          break;
-        case 3:
-          input.value = 0;
-          break;
-        case 4:
-          input.value = 1;
+          input.value = '无';
           var op = goog.dom.createElement('option');
-          var op2 = goog.dom.createElement('option');
-          goog.dom.setTextContent(op, 0);
-          goog.dom.setTextContent(op2, 1);
-          goog.dom.appendChild(select, op2);
+          goog.dom.setTextContent(op, '无');
           goog.dom.appendChild(select, op);
           break;
+        case 1:
+          input.value = '无';
+          var op = goog.dom.createElement('option');
+          goog.dom.setTextContent(op, '无');
+          goog.dom.appendChild(select, op);
+          break;
+        case 2:
+          input.value = '上';
+          var op = goog.dom.createElement('option');
+          var op2 = goog.dom.createElement('option');
+          var op3 = goog.dom.createElement('option');
+          var op4 = goog.dom.createElement('option');
+          goog.dom.setTextContent(op, '上');
+          goog.dom.setTextContent(op2, '下');
+          goog.dom.setTextContent(op3, '左');
+          goog.dom.setTextContent(op4, '右');
+          goog.dom.appendChild(select, op);
+          goog.dom.appendChild(select, op2);
+          goog.dom.appendChild(select, op3);
+          goog.dom.appendChild(select, op4);
+          break;
+        case 3:
+          input.value = '1';
+          var op = goog.dom.createElement('option');
+          goog.dom.setTextContent(op, '1');
+          goog.dom.appendChild(select, op);
+          break;
+        case 4:
+          input.value = '否';
+          var op = goog.dom.createElement('option');
+          var op2 = goog.dom.createElement('option');
+          goog.dom.setTextContent(op, '否');
+          goog.dom.setTextContent(op2, '是');
+          goog.dom.appendChild(select, op);
+          goog.dom.appendChild(select, op2);
+          break;
         case 5:
-          input.value = -1;
+          input.value = '无';
+          var op = goog.dom.createElement('option');
+          goog.dom.setTextContent(op, '无');
+          goog.dom.appendChild(select, op);
           break;
         case 6:
-          input.value = -1;
+          input.value = '无';
+          var op = goog.dom.createElement('option');
+          goog.dom.setTextContent(op, '无');
+          goog.dom.appendChild(select, op);
           break;
       };
       goog.dom.appendChild(tmp[i], editbox);
@@ -431,6 +458,7 @@ goog.scope(function() {
     goog.events.listen(select, 'change', function() {
       var index = select.options.selectedIndex;
       (index >= 0) && (input.value = select.options[index].value);
+      this_.inputChange(input, select);
     }, false, this);
     goog.events.listen(select, 'mousedown', function() {
       var tag = 1;
@@ -446,43 +474,52 @@ goog.scope(function() {
         goog.dom.appendChild(select, node);
       }
     }, false, this);
-    goog.events.listen(input, 'blur', function() {
-      var e = input;
-      while(!goog.dom.classes.has(e, 'at') && !goog.dom.classes.has(e, 'atd')) {
-        e = e.parentNode;
-      }
-      var index = this_.cellIndex_;
-      var data = this_.cellSet_[index];
-      if(goog.dom.classes.has(e, 'atd')) {
-        switch(e.attrIndex_) {
-          case 0:
-            data.setAttribute(dataModel.attributeSet.posX, input.value);
-            break;
-          case 1:
-            data.setAttribute(dataModel.attributeSet.posY, input.value);
-            break;
-          case 2:
-            data.setAttribute(dataModel.attributeSet.dir, input.value);
-            break;
-          case 3:
-            data.setAttribute(dataModel.attributeSet.speed, input.value);
-            break;
-          case 4:
-            data.setAttribute(dataModel.attributeSet.visiable, input.value);
-            break;
-          case 5:
-            data.setAttribute(dataModel.attributeSet.status, input.value);
-            break;
-          case 6:
-            data.setAttribute(dataModel.attributeSet.belong, input.value);
-            break;
-        };
-      } else {
-        var tmp = data.getAttribute(dataModel.attributeSet.others);
-        tmp[goog.dom.getTextContent(goog.dom.getElementByClass('val', e))] = input.value;
-        data.setAttribute(dataModel.attributeSet.others, tmp);
-      }
+    goog.events.listen(input, 'change', function() {
+      this_.inputChange(input, select);
     }, false, this);
+  };
+
+
+  /*
+   * 属性输入框发生变化
+   */
+  exports.MapSetting.prototype.inputChange = function(input, select) {
+    var this_ = this;
+    var e = input;
+    while(!goog.dom.classes.has(e, 'at') && !goog.dom.classes.has(e, 'atd')) {
+      e = e.parentNode;
+    }
+    var index = this_.cellIndex_;
+    var data = this_.cellSet_[index];
+    if(goog.dom.classes.has(e, 'atd')) {
+      switch(e.attrIndex_) {
+        case 0:
+          data.setAttribute(dataModel.attributeSet.posX, input.value);
+          break;
+        case 1:
+          data.setAttribute(dataModel.attributeSet.posY, input.value);
+          break;
+        case 2:
+          data.setAttribute(dataModel.attributeSet.dir, input.value);
+          break;
+        case 3:
+          data.setAttribute(dataModel.attributeSet.speed, input.value);
+          break;
+        case 4:
+          data.setAttribute(dataModel.attributeSet.visiable, input.value);
+          break;
+        case 5:
+          data.setAttribute(dataModel.attributeSet.status, input.value);
+          break;
+        case 6:
+          data.setAttribute(dataModel.attributeSet.belong, input.value);
+          break;
+      };
+    } else {
+      var tmp = data.getAttribute(dataModel.attributeSet.others);
+      tmp[goog.dom.getTextContent(goog.dom.getElementByClass('val', e))] = input.value;
+      data.setAttribute(dataModel.attributeSet.others, tmp);
+    }
   };
 
 
@@ -514,7 +551,7 @@ goog.scope(function() {
         var data = this.cellSet_[this.cellIndex_].getAllAttribute();
         if(data == null) {
           this.cellSet_[this.cellIndex_].setAllAttribute(dataModel.setAttribute(
-            '-1', '-1', '-1', '0', '1', '-1', '-1', {}
+            '无', '无', '上', '1', '否', '无', '无', {}
           ));
         }
         data = this.cellSet_[this.cellIndex_].getAllAttribute();
