@@ -58,8 +58,11 @@ goog.scope(function() {
   };
 
 
-  exports.Actions.CreateOne = function(data) {
-    return new exports.One(data);
+  exports.Actions.CreateOne = function(posX, posY, data) {
+    var one = new exports.One(data);
+    one.setAttribute(dataModel.attributeSet.posX, posX);
+    one.setAttribute(dataModel.attributeSet.posY, posY);
+    return one;
   };
 
 
