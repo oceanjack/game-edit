@@ -69,4 +69,9 @@ goog.scope(function() {
   exports.Actions.ChangeAttr = function(data, key, val, opt_key) {
     data.setAttribute(key, val, opt_key);
   };
+
+
+  exports.Action.End = function(status) {
+    status.end && (status.end = true);
+  };
 });
