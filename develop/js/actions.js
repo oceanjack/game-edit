@@ -71,7 +71,21 @@ goog.scope(function() {
   };
 
 
-  exports.Action.End = function(status) {
+  exports.Actions.End = function(status) {
     status.end && (status.end = true);
+  };
+
+
+  exports.Actions.AddNum = function(data, key, val, opt_key) {
+    var tmp = data.getAttribute(key, opt_key);
+    tmp = parseInt(tmp) + parseInt(val);
+    data.setAttribute(key, tmp, opt_key);
+  };
+
+
+  exports.Actions.ReduceNum = function(data, key, val, opt_key) {
+    var tmp = data.getAttribute(key, opt_key);
+    tmp = parseInt(tmp) - parseInt(val);
+    data.setAttribute(key, tmp, opt_key);
   };
 });
