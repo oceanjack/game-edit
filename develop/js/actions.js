@@ -18,17 +18,52 @@ goog.scope(function() {
     var posY = data.getAttribute(dataModel.attributeSet.posY);
     var speed = data.getAttribute(dataModel.attributeSet.speed);
     var dir = data.getAttribute(dataModel.attributeSet.dir);
+    posX = parseInt(posX);
+    posY = parseInt(posY);
+    speed = parseInt(speed);
     switch(dir) {
       case '上':
+        posY -= speed;
         break;
       case '下':
+        posY += speed;
         break;
       case '左':
+        posX -= speed;
         break;
       case '右':
+        posX += speed;
         break;
       default:
         break;
     }
+    data.setAttribute(dataModel.attributeSet.posX, posX);
+    data.setAttribute(dataModel.attributeSet.posY, posY);
+  };
+
+
+  exports.Actions.SwapPos = function(data, data2) {
+    var posX = data.getAttribute(dataModel.attributeSet.posX);
+    var posY = data.getAttribute(dataModel.attributeSet.posY);
+    var posX2 = data2.getAttribute(dataModel.attributeSet.posX);
+    var posY2 = data2.getAttribute(dataModel.attributeSet.posY);
+    posX = parseInt(posX);
+    posY = parseInt(posY);
+    posX2 = parseInt(posX2);
+    posY2 = parseInt(posY2);
+    data.setAttribute(dataModel.attributeSet.posX, posX2);
+    data.setAttribute(dataModel.attributeSet.posY, posY2);
+    data2.setAttribute(dataModel.attributeSet.posX, posX);
+    data2.setAttribute(dataModel.attributeSet.posY, posY);
+  };
+
+
+  exports.Actions.CreateOne = function(data) {
+    return new exports.One(data);
+  };
+
+
+  exports.Actions.ChangeAttr = function(data, key, val, opt_key) {
+    data.setAttribute(key, val, opt_key);
   };
 });

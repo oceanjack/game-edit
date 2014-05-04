@@ -7,6 +7,7 @@ goog.require('goog.style');
 goog.require('ocean.onlineAI.Data');
 goog.require('ocean.onlineAI.Cell');
 goog.require('ocean.onlineAI.One');
+goog.require('ocean.onlineAI.Actions');
 goog.require('ocean.onlineAI.OnlineAI.templates');
 
 goog.scope(function() {
