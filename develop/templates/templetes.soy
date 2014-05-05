@@ -12,11 +12,58 @@
 <div class="mapArea"></div>
 {/template}
 /** 
- *
+ * OnlineAI selectInput.
  */
 {template .selectInput}
 <div class="editbox">
   <select class="editboxselect"></select>
   <input type="text" class="editboxinput" />
+</div>
+{/template}
+/**
+  * OnlineAI cellAttr.
+  */
+{template .cellAttr}
+<div class="cellAttr">
+  <select>
+    <option>任意</option>
+  </select>
+  <p>的</p>
+  <select>
+    <option>横坐标</option>
+    <option>纵坐标</option>
+    <option>方向</option>
+    <option>速度</option>
+    <option>可穿透</option>
+    <option>状态</option>
+    <option>属于</option>
+  </select>
+</div>
+{/template}
+/**
+  * OnlineAI operation.
+  */
+{template .operation}
+<div class="operation">
+  <select>
+    <option>大于</option>
+    <option>小于</option>
+    <option>等于</option>
+    <option>不等于</option>
+    <option>大于等于</option>
+    <option>小于等于</option>
+  </select>
+</div>
+{/template}
+/**
+  * OnlineAI logic.
+  */
+{template .logic}
+<div class="logic">
+  <select>
+    <option>并且</option>
+    <option>或者</option>
+    <option>不是</option>
+  </select>
 </div>
 {/template}
