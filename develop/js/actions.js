@@ -42,19 +42,11 @@ goog.scope(function() {
   };
 
 
-  exports.Actions.SwapPos = function(data, data2) {
-    var posX = data.getAttribute(dataModel.attributeSet.posX);
-    var posY = data.getAttribute(dataModel.attributeSet.posY);
-    var posX2 = data2.getAttribute(dataModel.attributeSet.posX);
-    var posY2 = data2.getAttribute(dataModel.attributeSet.posY);
-    posX = parseInt(posX);
-    posY = parseInt(posY);
-    posX2 = parseInt(posX2);
-    posY2 = parseInt(posY2);
-    data.setAttribute(dataModel.attributeSet.posX, posX2);
-    data.setAttribute(dataModel.attributeSet.posY, posY2);
-    data2.setAttribute(dataModel.attributeSet.posX, posX);
-    data2.setAttribute(dataModel.attributeSet.posY, posY);
+  exports.Actions.Swap = function(data, data2, key, opt_key) {
+    var val = data.getAttribute(key, opt_key);
+    var val2 = data2.getAttribute(key, opt_key);
+    data.setAttribute(key, val2, opt_key);
+    data2.setAttribute(key, val, opt_key);
   };
 
 
