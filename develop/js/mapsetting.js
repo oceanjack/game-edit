@@ -61,6 +61,7 @@ goog.scope(function() {
     this.elements_.map_ = goog.dom.htmlToDocumentFragment(templates.mapArea());
     this.elements_.mapimgdiv_ = goog.dom.getElementByClass('mapimgdiv');
     this.elements_.attribute_ = goog.dom.getElementByClass('attribute');
+    this.elements_.chooseAction_ = goog.dom.getElementByClass('chooseAction');
     this.elements_.makeSure_ = goog.dom.getElementByClass('makeSure');
     this.elements_.cellName_ = goog.dom.getElementByClass('cellName');
     this.elements_.message_ = goog.dom.getElementByClass('message');
@@ -308,19 +309,24 @@ goog.scope(function() {
     this.elements_.mapimgdiv_.style.display = 'none';
     this.elements_.attribute_.style.display = 'none';
     this.elements_.makeSure_.style.display = 'none';
+    this.elements_.chooseAction_.style.display = 'none';
+    this.elements_.message_.style.display = 'none';
     switch(this.mode_) {
       case 1:
         this.elements_.mapimgdiv_.style.display = 'block';
+        this.elements_.message_.style.display = 'block';
         break;
       case 2:
         this.elements_.attribute_.style.display = 'block';
         this.elements_.makeSure_.style.display = 'inline-block';
+        this.elements_.message_.style.display = 'block';
         break;
       case 3:
         this.elements_.mapimgdiv_.style.display = 'block';
         break;
       case 5:
         this.elements_.mapimgdiv_.style.display = 'block';
+        this.elements_.chooseAction_.style.display = 'block';
         break;
     };
   };
