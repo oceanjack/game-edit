@@ -81,6 +81,10 @@ goog.scope(function() {
   };
 
 
+  exports.Actions.Nothing = function() {
+  };
+
+
   exports.Actions.AddNum = function(data, key, val, opt_key) {
     var tmp = data.getAttribute(key, opt_key);
     tmp = parseInt(tmp) + parseInt(val);

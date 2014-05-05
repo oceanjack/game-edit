@@ -69,6 +69,7 @@ goog.scope(function() {
     this.elements_.addCharacter_ = goog.dom.getElementByClass('addCharacter');
     this.elements_.addAttribute_ = goog.dom.getElementByClass('addAttribute');
     this.elements_.addWorld_ = goog.dom.getElementByClass('addWorld');
+    this.elements_.addEvent_ = goog.dom.getElementByClass('addEvent');
   };
 
 
@@ -142,6 +143,7 @@ goog.scope(function() {
     goog.events.listen(el.addCharacter_, 'click', this.createCharacter, false, this);
     goog.events.listen(el.addAttribute_, 'click', this.createAttribute, false, this);
     goog.events.listen(el.addWorld_, 'click', this.editWorld, false, this);
+    goog.events.listen(el.addEvent_, 'click', this.editEvent, false, this);
   };
 
 
@@ -317,6 +319,9 @@ goog.scope(function() {
       case 3:
         this.elements_.mapimgdiv_.style.display = 'block';
         break;
+      case 5:
+        this.elements_.mapimgdiv_.style.display = 'block';
+        break;
     };
   };
 
@@ -425,6 +430,16 @@ goog.scope(function() {
       }
     }
     this.drawWorld();
+  };
+  
+  
+  /*
+   * 编辑事件
+   */
+  exports.MapSetting.prototype.editEvent = function() {
+    this.mode_ = 5;
+    this.display_();
+    this.clear();
   };
 
 
