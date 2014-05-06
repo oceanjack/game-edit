@@ -35,6 +35,9 @@ goog.scope(function() {
   exports.MapSetting.prototype.background_ = null; //背景图片
   exports.MapSetting.prototype.count_ = null; //选中格数量
   exports.MapSetting.prototype.realWorld_ = null; //编辑的地图
+  exports.MapSetting.prototype.eventSet_ = null; //事件集合
+  exports.MapSetting.prototype.eventIndex_ = null; //当前事件id
+  exports.MapSetting.prototype.eTotleIndex_ = null; //总事件
 
 
   exports.MapSetting.prototype.init = function(x, y, background) {
@@ -46,6 +49,9 @@ goog.scope(function() {
     this.totleIndex_ = 0;
     this.cellSet_ = [];
     this.cellIndex_ = 0;
+    this.eTotleIndex_ = 0;
+    this.eventSet_ = [];
+    this.eventIndex_ = 0;
     this.size_ = [x, y];
     this.elements_ = {};
     this.tmpData_ = {};
@@ -68,6 +74,7 @@ goog.scope(function() {
     this.elements_.checkOptions_ = goog.dom.getElementsByClass('cpt', this.elements_.checkOption_);
     this.elements_.message_ = goog.dom.getElementByClass('message');
     this.elements_.productList_ = goog.dom.getElementByClass('productlist');
+    this.elements_.eventList_ = goog.dom.getElementByClass('eventList');
     this.elements_.attributeList_ = goog.dom.getElementByClass('attributeList');
     this.elements_.addCharacter_ = goog.dom.getElementByClass('addCharacter');
     this.elements_.addAttribute_ = goog.dom.getElementByClass('addAttribute');
@@ -254,6 +261,13 @@ goog.scope(function() {
       case 4:
         break;
       case 5:
+        var node = goog.dom.createElement('li');
+        goog.dom.setTextContent(node, (this.elements_.cellName_.value != '' ? this.elements_.cellName_.value : '空'));
+        goog.dom.classes.add(node, 'me');
+        node.index_ = this.eventIndex_;
+        this.elements_.eventList_.appendChild(node);
+        goog.events.listen(node, 'click', this.reBuild, false, this);
+        ++this.eTotleIndex_;
         break;
       default:
         break;
@@ -317,6 +331,18 @@ goog.scope(function() {
         if(goog.dom.classes.has(this.map_[j][i], 'selected')) {
           goog.dom.classes.remove(this.map_[j][i], 'selected');
         }
+        if(goog.dom.classes.has(this.map_[j][i], 'selectedNo')) {
+          goog.dom.classes.remove(this.map_[j][i], 'selectedNo');
+        }
+        if(goog.dom.classes.has(this.map_[j][i], 'selectedNone')) {
+          goog.dom.classes.remove(this.map_[j][i], 'selectedNone');
+        }
+        if(goog.dom.classes.has(this.map_[j][i], 'selectedHave')) {
+          goog.dom.classes.remove(this.map_[j][i], 'selectedHave');
+        }
+        if(goog.dom.classes.has(this.map_[j][i], 'selectedEffect')) {
+          goog.dom.classes.remove(this.map_[j][i], 'selectedEffect');
+        }
       }
     }
     var context = this.elements_.canvas_.getContext('2d');
@@ -338,23 +364,31 @@ goog.scope(function() {
     this.elements_.chooseAction_.style.display = 'none';
     this.elements_.message_.style.display = 'none';
     this.elements_.checkOption_.style.display = 'none';
+    this.elements_.productList_.style.display = 'none';
+    this.elements_.eventList_.style.display = 'none';
     switch(this.mode_) {
       case 1:
         this.elements_.mapimgdiv_.style.display = 'block';
         this.elements_.message_.style.display = 'block';
+        this.elements_.productList_.style.display = 'block';
         break;
       case 2:
         this.elements_.attribute_.style.display = 'block';
         this.elements_.makeSure_.style.display = 'inline-block';
         this.elements_.message_.style.display = 'block';
+        this.elements_.productList_.style.display = 'block';
         break;
       case 3:
         this.elements_.mapimgdiv_.style.display = 'block';
+        this.elements_.productList_.style.display = 'block';
         break;
       case 5:
         this.elements_.mapimgdiv_.style.display = 'block';
         this.elements_.chooseAction_.style.display = 'block';
         this.elements_.checkOption_.style.display = 'block';
+        this.elements_.makeSure_.style.display = 'inline-block';
+        this.elements_.message_.style.display = 'block';
+        this.elements_.eventList_.style.display = 'block';
         break;
     };
   };
@@ -487,6 +521,7 @@ goog.scope(function() {
     blockWidth = parseFloat(blockWidth.substr(blockWidth, blockWidth.length - 2));
     blockHeight = parseFloat(blockHeight.substr(blockHeight, blockHeight.length - 2));
     c.clearRect(0, 0, 800, 600);
+    this.background_ && c.drawImage(this.background_, 0, 0, this.background_.width, this.background_.height);
     for(var j = 0; j < this.realWorld_.length; ++j) {
       for(var i = 0; i < this.realWorld_[j].length; ++i) {
         if(this.realWorld_[j][i]) {
@@ -630,6 +665,9 @@ goog.scope(function() {
         break;
       case 3:
         this.cellIndex_ = e.index_;
+        break;
+      case 5:
+        this.eventIndex_ = e.index_;
         break;
     }
   };
