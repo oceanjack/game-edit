@@ -134,7 +134,7 @@ button {
     min-width: 800px;
     min-height: 600px;
     .mapimgdiv {
-      margin-top: 20px;
+      margin-top: 10px;
     }
     .mapimgdiv, #canvas {
       background-color: #fff;
@@ -176,6 +176,10 @@ button {
       }
       .selectedNone:before {
         content: '禁';
+      }
+      .selectedEffect {
+        background-color: #cc2 !important;
+        opacity: 0.8 !important;
       }
     }
     .message, .makeSure, .cellName {
@@ -233,11 +237,21 @@ button {
         border: 1px solid #3b3;
       }
     }
+    .checkOption {
+      text-align:center;
+      margin: auto;
+      p {
+        display: inline-block;
+      }
+    }
     .chooseAction {
       margin: auto;
       text-align: center;
       .actionList {
         width: 150px;
+      }
+      p {
+        display: inline-block;
       }
     }
   }

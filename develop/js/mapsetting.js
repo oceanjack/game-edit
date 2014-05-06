@@ -64,6 +64,8 @@ goog.scope(function() {
     this.elements_.chooseAction_ = goog.dom.getElementByClass('chooseAction');
     this.elements_.makeSure_ = goog.dom.getElementByClass('makeSure');
     this.elements_.cellName_ = goog.dom.getElementByClass('cellName');
+    this.elements_.checkOption_ = goog.dom.getElementByClass('checkOption');
+    this.elements_.checkOptions_ = goog.dom.getElementsByClass('cpt', this.elements_.checkOption_);
     this.elements_.message_ = goog.dom.getElementByClass('message');
     this.elements_.productList_ = goog.dom.getElementByClass('productlist');
     this.elements_.attributeList_ = goog.dom.getElementByClass('attributeList');
@@ -93,6 +95,14 @@ goog.scope(function() {
         tmp.posY_ = j;
         (function(node) {
             goog.events.listen(node, 'click', function() {
+              if(this_.mode_ == 5 && this_.elements_.checkOptions_[2].checked) {
+                if(goog.dom.classes.has(node, 'selectedEffect')) {
+                  goog.dom.classes.remove(node, 'selectedEffect');
+                } else {
+                  goog.dom.classes.add(node, 'selectedEffect');
+                }
+                return;
+              }
               if(goog.dom.classes.has(node, 'selected')) {
                 goog.dom.classes.remove(node, 'selected');
                 switch(this_.mode_) {
@@ -327,6 +337,7 @@ goog.scope(function() {
     this.elements_.makeSure_.style.display = 'none';
     this.elements_.chooseAction_.style.display = 'none';
     this.elements_.message_.style.display = 'none';
+    this.elements_.checkOption_.style.display = 'none';
     switch(this.mode_) {
       case 1:
         this.elements_.mapimgdiv_.style.display = 'block';
@@ -343,6 +354,7 @@ goog.scope(function() {
       case 5:
         this.elements_.mapimgdiv_.style.display = 'block';
         this.elements_.chooseAction_.style.display = 'block';
+        this.elements_.checkOption_.style.display = 'block';
         break;
     };
   };
