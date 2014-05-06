@@ -105,6 +105,19 @@ goog.scope(function() {
                     this_.realWorld_[node.posY_][node.posX_] = null;
                     this_.drawWorld();
                     break;
+                  case 5:
+                    if(goog.dom.classes.has(node, 'selectedNo')) {
+                      goog.dom.classes.remove(node, 'selectedNo');
+                      goog.dom.classes.add(node, 'selected');
+                      goog.dom.classes.add(node, 'selectedHave');
+                    } else if(goog.dom.classes.has(node, 'selectedHave')) {
+                      goog.dom.classes.remove(node, 'selectedHave');
+                      goog.dom.classes.add(node, 'selected');
+                      goog.dom.classes.add(node, 'selectedNone');
+                    } else if(goog.dom.classes.has(node, 'selectedNone')) {
+                      goog.dom.classes.remove(node, 'selectedNone');
+                    }
+                    break;
                 };
               } else {
                 goog.dom.classes.add(node, 'selected');
@@ -118,6 +131,9 @@ goog.scope(function() {
                     this_.realWorld_[node.posY_][node.posX_].setAttribute(dataModel.attributeSet.posX, node.posX_);
                     this_.realWorld_[node.posY_][node.posX_].setAttribute(dataModel.attributeSet.posY, node.posY_);
                     this_.drawWorld();
+                    break;
+                  case 5:
+                    goog.dom.classes.add(node, 'selectedNo');
                     break;
                 };
               }
