@@ -38,6 +38,7 @@ goog.scope(function() {
   exports.MapSetting.prototype.eventSet_ = null; //事件集合
   exports.MapSetting.prototype.eventIndex_ = null; //当前事件id
   exports.MapSetting.prototype.eTotleIndex_ = null; //总事件
+  exports.MapSetting.prototype.modefive_ = null;
 
 
   exports.MapSetting.prototype.init = function(x, y, background) {
@@ -58,6 +59,7 @@ goog.scope(function() {
     this.map_ = [];
     this.realWorld_ = [];
     this.background_ = background;
+    this.modefive_ = true;
     this.mode_ = 1; // 1 人物 2 属性 3 地图 4 行为 5 事件 6 策略 default 1
   };
 
@@ -73,6 +75,7 @@ goog.scope(function() {
     this.elements_.checkOption_ = goog.dom.getElementByClass('checkOption');
     this.elements_.checkOptions_ = goog.dom.getElementsByClass('cpt', this.elements_.checkOption_);
     this.elements_.message_ = goog.dom.getElementByClass('message');
+    this.elements_.selectAttr_ = goog.dom.getElementByClass('selectAttr');
     this.elements_.productList_ = goog.dom.getElementByClass('productlist');
     this.elements_.eventList_ = goog.dom.getElementByClass('eventList');
     this.elements_.attributeList_ = goog.dom.getElementByClass('attributeList');
@@ -366,6 +369,7 @@ goog.scope(function() {
     this.elements_.checkOption_.style.display = 'none';
     this.elements_.productList_.style.display = 'none';
     this.elements_.eventList_.style.display = 'none';
+    this.elements_.selectAttr_.style.display = 'none';
     switch(this.mode_) {
       case 1:
         this.elements_.mapimgdiv_.style.display = 'block';
@@ -383,12 +387,11 @@ goog.scope(function() {
         this.elements_.productList_.style.display = 'block';
         break;
       case 5:
-        this.elements_.mapimgdiv_.style.display = 'block';
         this.elements_.chooseAction_.style.display = 'block';
-        this.elements_.checkOption_.style.display = 'block';
         this.elements_.makeSure_.style.display = 'inline-block';
         this.elements_.message_.style.display = 'block';
         this.elements_.eventList_.style.display = 'block';
+        this.elements_.selectAttr_.style.display = 'block';
         break;
     };
   };
@@ -506,8 +509,44 @@ goog.scope(function() {
    */
   exports.MapSetting.prototype.editEvent = function() {
     this.mode_ = 5;
+    if(this.modefive_) {
+      this.editAttr();
+      this.modefive_ = false;
+    }
     this.display_();
     this.clear();
+  };
+
+
+  /*
+   * 属性单元
+   */
+  exports.MapSetting.prototype.editAttr = function() {
+    var this_ = this;
+    var node =  goog.dom.htmlToDocumentFragment(templates.cellAttr());
+    var one = goog.dom.getElementByClass('cellAttro', node);
+    var attr = goog.dom.getElementByClass('cellAttrv', node);
+    var oneList = goog.dom.getElementsByClass('ch', this.elements_.productList_);
+    for(var i = 0, l = oneList.length; i < l; ++i) {
+      var option = goog.dom.createElement('option');
+      goog.dom.setTextContent(option, goog.dom.getTextContent(oneList[i]));
+      goog.dom.appendChild(one, option);
+    }
+    var attrList = goog.dom.getElementsByClass('at', this.elements_.attributeList_);
+    for(var i = 0, l = attrList.length; i < l; ++i) {  
+      var option = goog.dom.createElement('option');
+      goog.dom.setTextContent(option, goog.dom.getTextContent(goog.dom.getElementByClass('val', attrList[i])));
+      goog.dom.appendChild(attr, option);
+    }
+    goog.dom.appendChild(this.elements_.selectAttr_, node);
+    goog.events.listen(attr, 'change', function() {
+      this_.elements_.mapimgdiv_.style.display = 'none';
+      this_.elements_.checkOption_.style.display = 'none';
+      if(attr.options.selectedIndex == 7) {
+        this_.elements_.mapimgdiv_.style.display = 'block';
+        this_.elements_.checkOption_.style.display = 'block';
+      }
+    } , false, this);
   };
 
 
