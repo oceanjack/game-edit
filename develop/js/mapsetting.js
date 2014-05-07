@@ -266,13 +266,16 @@ goog.scope(function() {
       case 4:
         break;
       case 5:
-        var node = goog.dom.createElement('li');
-        goog.dom.setTextContent(node, (this.elements_.cellName_.value != '' ? this.elements_.cellName_.value : '空'));
-        goog.dom.classes.add(node, 'me');
-        node.index_ = this.eventIndex_;
-        this.elements_.eventList_.appendChild(node);
-        goog.events.listen(node, 'click', this.reBuild, false, this);
-        ++this.eTotleIndex_;
+        if(this.eventSet_[this.eventIndex_]) {
+        } else {
+          var node = goog.dom.createElement('li');
+          goog.dom.setTextContent(node, (this.elements_.cellName_.value != '' ? this.elements_.cellName_.value : '空'));
+          goog.dom.classes.add(node, 'me');
+          node.index_ = this.eventIndex_;
+          this.elements_.eventList_.appendChild(node);
+          goog.events.listen(node, 'click', this.reBuild, false, this);
+          ++this.eTotleIndex_;
+        }
         break;
       default:
         break;
@@ -519,6 +522,7 @@ goog.scope(function() {
     }
     this.display_();
     this.clear();
+    this.eventIndex_ = this.eTotleIndex_;
   };
 
 
