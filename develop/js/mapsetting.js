@@ -83,6 +83,7 @@ goog.scope(function() {
     this.elements_.addAttribute_ = goog.dom.getElementByClass('addAttribute');
     this.elements_.addWorld_ = goog.dom.getElementByClass('addWorld');
     this.elements_.addEvent_ = goog.dom.getElementByClass('addEvent');
+    this.elements_.addActionBtn_ = goog.dom.getElementByClass('addActionBtn');
   };
 
 
@@ -181,6 +182,7 @@ goog.scope(function() {
     goog.events.listen(el.addAttribute_, 'click', this.createAttribute, false, this);
     goog.events.listen(el.addWorld_, 'click', this.editWorld, false, this);
     goog.events.listen(el.addEvent_, 'click', this.editEvent, false, this);
+    goog.events.listen(el.addActionBtn_, 'click', this.addActionBtn, false, this);
   };
 
 
@@ -513,7 +515,6 @@ goog.scope(function() {
     this.mode_ = 5;
     if(this.modefive_) {
       this.editJudge();
-      this.editAction();
       this.modefive_ = false;
     }
     this.display_();
@@ -584,7 +585,7 @@ goog.scope(function() {
     goog.dom.setTextContent(p2, '作用于');
     var actionList = goog.dom.htmlToDocumentFragment(templates.actionList());
     var btn = goog.dom.createElement('button');
-    goog.dom.setTextContent(btn, '添加');
+    goog.dom.setTextContent(btn, '删除');
     goog.dom.appendChild(div, p1);
     goog.dom.appendChild(div, actionList);
     goog.dom.appendChild(div, p2);
@@ -593,7 +594,7 @@ goog.scope(function() {
     goog.dom.appendChild(div, btn);
     goog.dom.appendChild(this.elements_.chooseAction_, div);
     goog.events.listen(btn, 'click', function() {
-      this_.editAction();
+      goog.dom.removeNode(div);
     }, false, this);
   };
 
@@ -646,6 +647,14 @@ goog.scope(function() {
         }
       }
     }
+  };
+
+
+  /*
+   * 添加动作
+   */
+  exports.MapSetting.prototype.addActionBtn = function() {
+    this.editAction();
   };
 
 
