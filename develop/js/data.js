@@ -147,4 +147,20 @@ goog.scope(function() {
       status: data['s']
     };
   };
+
+
+  exports.Data.setEventMapConfig = function(rotate, turn) {
+    return {
+      'r': rotate,
+      't': turn
+    };
+  };
+
+
+  exports.Data.getEventMapConfig = function(rotate, turn) {
+    return {
+      rotate: data['r'],
+      turn: data['t']
+    };
+  };
 });
