@@ -65,11 +65,12 @@ goog.scope(function() {
   };
 
 
-  exports.Data.setEventData = function(eventJudge, eventAction, eventMap) {
+  exports.Data.setEventData = function(eventJudge, eventAction, eventMap, eventMapConfig) {
     return {
       'ej': eventJudge,
       'ea': eventAction ,
-      'em': eventMap
+      'em': eventMap,
+      'mc': eventMapConfig
     };
   };
 
@@ -78,7 +79,8 @@ goog.scope(function() {
     return {
       eventJudge: data['ej'],
       eventAction: data['ea'] ,
-      eventMap: data['em']
+      eventMap: data['em'],
+      eventMap: data['mc']
     };
   };
 
