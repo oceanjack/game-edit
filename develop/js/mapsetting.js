@@ -38,7 +38,7 @@ goog.scope(function() {
   exports.MapSetting.prototype.eventSet_ = null; //事件集合
   exports.MapSetting.prototype.eventIndex_ = null; //当前事件id
   exports.MapSetting.prototype.eTotleIndex_ = null; //总事件
-  exports.MapSetting.prototype.modefive_ = null;
+  exports.MapSetting.prototype.modefive_ = null; //是否首次进入模式5
 
 
   exports.MapSetting.prototype.init = function(x, y, background) {
