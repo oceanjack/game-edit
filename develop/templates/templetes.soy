@@ -20,17 +20,12 @@
   <input type="text" class="editboxinput" />
 </div>
 {/template}
-/**
-  * OnlineAI cellAttr.
-  */
-{template .cellAttr}
-<div class="cellAttr">
-  <p>如果</p>
-  <select class="cellAttro">
-    <option>任意</option>
-  </select>
-  <p>的</p>
-  <select class="cellAttrv">
+/** 
+ * OnlineAI selectInputV.
+ */
+{template .selectInputV}
+<div class="editbox">
+  <select class="editboxselect cellAttrv">
     <option>横坐标</option>
     <option>纵坐标</option>
     <option>方向</option>
@@ -38,7 +33,20 @@
     <option>可穿透</option>
     <option>状态</option>
     <option>属于</option>
-    <option>形状</option>
+    <option>形状</option> 
+  </select>
+  <input type="text" class="editboxinput" />
+</div>
+{/template}
+/**
+  * OnlineAI cellAttr.
+  */
+{template .cellAttr}
+<div class="cellAttr">
+  <select class="cellAttro">
+    <option>任意</option>
+    <option>结果</option>
+    <option></option>
   </select>
 </div>
 {/template}
@@ -55,6 +63,10 @@
     <option>不等于</option>
     <option>大于等于</option>
     <option>小于等于</option>
+    <option>减去</option>
+    <option>加上</option>
+    <option>乘以</option>
+    <option>除以</option>
   </select>
 </div>
 {/template}

@@ -510,7 +510,7 @@ goog.scope(function() {
   exports.MapSetting.prototype.editEvent = function() {
     this.mode_ = 5;
     if(this.modefive_) {
-      this.editAttr();
+      this.editJudge();
       this.modefive_ = false;
     }
     this.display_();
@@ -524,9 +524,17 @@ goog.scope(function() {
   exports.MapSetting.prototype.editAttr = function() {
     var this_ = this;
     var node =  goog.dom.htmlToDocumentFragment(templates.cellAttr());
+    var selectInput = goog.dom.htmlToDocumentFragment(templates.selectInputV());
+    var select = goog.dom.getElementByClass('editboxselect', selectInput);
+    var input = goog.dom.getElementByClass('editboxinput', selectInput);
+    goog.dom.appendChild(node, selectInput);
+    input.value = '横坐标';
+    goog.events.listen(select, 'change', function() {
+      var index = select.options.selectedIndex;
+      (index >= 0) && (input.value = select.options[index].value);
+    }, false, this);
     var one = goog.dom.getElementByClass('cellAttro', node);
-    var attr = goog.dom.getElementByClass('cellAttrv', node);
-    goog.dom.appendChild(this.elements_.selectAttr_, node);
+    var attr = goog.dom.getElementByClass('cellAttrv', node); 
     goog.events.listen(one, 'mousedown', function() {
       var clearList = goog.dom.getElementsByClass('new', one);
       for(var i = clearList.length - 1; i >= 0; --i) {
@@ -565,6 +573,34 @@ goog.scope(function() {
         this_.elements_.checkOption_.style.display = 'block';
       }
     } , false, this);
+    return node;
+  };
+
+
+  /*
+   * 逻辑单元
+   */
+  exports.MapSetting.prototype.editJudge = function() {
+    var this_ = this;
+    var father = goog.dom.createElement('div');
+    goog.dom.classes.add(father, 'attr');
+    var operation =  goog.dom.htmlToDocumentFragment(templates.operation());
+    var inputSelect =  goog.dom.htmlToDocumentFragment(templates.selectInput());
+    var logic =  goog.dom.htmlToDocumentFragment(templates.logic());
+    goog.dom.appendChild(father, this_.editAttr());
+    goog.dom.appendChild(father, operation);
+    goog.dom.appendChild(father, this_.editAttr());
+    goog.dom.appendChild(father, logic);
+    goog.dom.appendChild(this.elements_.selectAttr_, father);
+    var newJudge = null;
+    goog.events.listen(logic, 'change', function() {
+      if(logic.childNodes[0].options.selectedIndex == 0) {
+        newJudge && goog.dom.removeNode(newJudge);
+      } else {
+        newJudge = this_.editJudge();
+      }
+    }, false, this);
+    return father;
   };
 
 
