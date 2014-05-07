@@ -526,19 +526,37 @@ goog.scope(function() {
     var node =  goog.dom.htmlToDocumentFragment(templates.cellAttr());
     var one = goog.dom.getElementByClass('cellAttro', node);
     var attr = goog.dom.getElementByClass('cellAttrv', node);
-    var oneList = goog.dom.getElementsByClass('ch', this.elements_.productList_);
-    for(var i = 0, l = oneList.length; i < l; ++i) {
-      var option = goog.dom.createElement('option');
-      goog.dom.setTextContent(option, goog.dom.getTextContent(oneList[i]));
-      goog.dom.appendChild(one, option);
-    }
-    var attrList = goog.dom.getElementsByClass('at', this.elements_.attributeList_);
-    for(var i = 0, l = attrList.length; i < l; ++i) {  
-      var option = goog.dom.createElement('option');
-      goog.dom.setTextContent(option, goog.dom.getTextContent(goog.dom.getElementByClass('val', attrList[i])));
-      goog.dom.appendChild(attr, option);
-    }
     goog.dom.appendChild(this.elements_.selectAttr_, node);
+    goog.events.listen(one, 'mousedown', function() {
+      var clearList = goog.dom.getElementsByClass('new', one);
+      for(var i = clearList.length - 1; i >= 0; --i) {
+        if(goog.dom.classes.has(clearList[i], 'new')) {
+          goog.dom.removeNode(clearList[i]);
+        }
+      }
+      var oneList = goog.dom.getElementsByClass('ch', this_.elements_.productList_);
+      for(var i = 0, l = oneList.length; i < l; ++i) {
+        var option = goog.dom.createElement('option');
+        goog.dom.classes.add(option, 'new');
+        goog.dom.setTextContent(option, goog.dom.getTextContent(oneList[i]));
+        goog.dom.appendChild(one, option);
+      }
+    }, false, this);
+    goog.events.listen(attr, 'mousedown', function() {
+      var clearList = goog.dom.getElementsByClass('new', attr);
+      for(var i = clearList.length - 1; i >= 0; --i) {
+        if(goog.dom.classes.has(clearList[i], 'new')) {
+          goog.dom.removeNode(clearList[i]);
+        }
+      }
+      var attrList = goog.dom.getElementsByClass('at', this_.elements_.attributeList_);
+      for(var i = 0, l = attrList.length; i < l; ++i) {  
+        var option = goog.dom.createElement('option');
+        goog.dom.classes.add(option, 'new');
+        goog.dom.setTextContent(option, goog.dom.getTextContent(goog.dom.getElementByClass('val', attrList[i])));
+        goog.dom.appendChild(attr, option);
+      }
+    }, false. this);
     goog.events.listen(attr, 'change', function() {
       this_.elements_.mapimgdiv_.style.display = 'none';
       this_.elements_.checkOption_.style.display = 'none';
