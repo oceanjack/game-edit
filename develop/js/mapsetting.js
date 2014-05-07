@@ -266,8 +266,30 @@ goog.scope(function() {
       case 4:
         break;
       case 5:
-        if(this.eventSet_[this.eventIndex_]) {
-        } else {
+        var eventJudge = [];
+        var eventAction = [];
+        var eventMap = [];
+        var eventMapConfig = dataModel.setEventMapConfig(
+          goog.dom.getElementsByClass('cpt', this.elements_.checkOption_)[0].checked,
+          goog.dom.getElementsByClass('cpt', this.elements_.checkOption_)[1].checked
+        );
+        var eventJudgeNode = goog.dom.getElementsByClass('attr', this.elements_.selectAttr_);
+        for(var i = 0, l = eventJudgeNode.length; i < l; ++i) {
+          var cellAttr1 = goog.dom.getElementsByClass('cellAttr', eventJudgeNode[i])[0];
+          var operation = goog.dom.getElementByClass('operation', eventJudgeNode[i]);
+          var cellAttr2 = goog.dom.getElementsByClass('cellAttr', eventJudgeNode[i])[1];
+          var logic = goog.dom.getElementByClass('logic', eventJudgeNode[i]);
+          eventJudge.push(dataModel.setEventJudge(
+            cellAttr1.childNodes[0][cellAttr1.childNodes[0].options.selectedIndex].value,
+            cellAttr1.childNodes[1].childNodes[1].value,
+            operation.childNodes[0][operation.childNodes[0].options.selectedIndex].value,
+            cellAttr2.childNodes[0][cellAttr2.childNodes[0].options.selectedIndex].value,
+            cellAttr2.childNodes[1].childNodes[1].value,
+            logic.childNodes[0][logic.childNodes[0].options.selectedIndex].value
+          ));
+        }
+        this.eventSet_[this.eventIndex_] = dataModel.setEventData(eventJudge, eventAction, eventMap, eventMapConfig);
+        if(!this.eventSet_[this.eventIndex_]) {
           var node = goog.dom.createElement('li');
           goog.dom.setTextContent(node, (this.elements_.cellName_.value != '' ? this.elements_.cellName_.value : '空'));
           goog.dom.classes.add(node, 'me');
