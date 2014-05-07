@@ -214,6 +214,9 @@ button {
       margin: auto;
       text-align: center;
       width: 800px;
+      p {
+        margin: auto;
+      }
       .attr {
         margin-top: 5px;
       }
@@ -260,6 +263,7 @@ button {
     .checkOption {
       text-align:center;
       margin: auto;
+      width: 800px;
       p {
         display: inline-block;
       }
@@ -267,11 +271,20 @@ button {
     .chooseAction {
       margin: auto;
       text-align: center;
+      width: 800px;
       .actionList {
         width: 150px;
       }
       p {
+        margin: auto;
         display: inline-block;
+      }
+      .cellAttr {
+        display: inline-block;
+        > * {
+          width: 80px;
+          display: inline-block;
+        }
       }
     }
   }

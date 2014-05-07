@@ -392,6 +392,8 @@ goog.scope(function() {
         this.elements_.message_.style.display = 'block';
         this.elements_.eventList_.style.display = 'block';
         this.elements_.selectAttr_.style.display = 'block';
+        this.elements_.mapimgdiv_.style.display = 'block';
+        this.elements_.checkOption_.style.display = 'block';
         break;
     };
   };
@@ -511,6 +513,7 @@ goog.scope(function() {
     this.mode_ = 5;
     if(this.modefive_) {
       this.editJudge();
+      this.editAction();
       this.modefive_ = false;
     }
     this.display_();
@@ -565,15 +568,33 @@ goog.scope(function() {
         goog.dom.appendChild(attr, option);
       }
     }, false. this);
-    goog.events.listen(attr, 'change', function() {
-      this_.elements_.mapimgdiv_.style.display = 'none';
-      this_.elements_.checkOption_.style.display = 'none';
-      if(attr.options.selectedIndex == 7) {
-        this_.elements_.mapimgdiv_.style.display = 'block';
-        this_.elements_.checkOption_.style.display = 'block';
-      }
-    } , false, this);
     return node;
+  };
+
+
+  /*
+   * 执行单元
+   */
+  exports.MapSetting.prototype.editAction = function() {
+    var this_ = this;
+    var div = goog.dom.createElement('div');
+    var p1 = goog.dom.createElement('p');
+    goog.dom.setTextContent(p1, '执行');
+    var p2 = goog.dom.createElement('p');
+    goog.dom.setTextContent(p2, '作用于');
+    var actionList = goog.dom.htmlToDocumentFragment(templates.actionList());
+    var btn = goog.dom.createElement('button');
+    goog.dom.setTextContent(btn, '添加');
+    goog.dom.appendChild(div, p1);
+    goog.dom.appendChild(div, actionList);
+    goog.dom.appendChild(div, p2);
+    goog.dom.appendChild(div, this.editAttr());
+    goog.dom.appendChild(div, this.editAttr());
+    goog.dom.appendChild(div, btn);
+    goog.dom.appendChild(this.elements_.chooseAction_, div);
+    goog.events.listen(btn, 'click', function() {
+      this_.editAction();
+    }, false, this);
   };
 
 
