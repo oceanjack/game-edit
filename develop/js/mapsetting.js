@@ -320,7 +320,7 @@ goog.scope(function() {
         } else {
           this.eventSet_[this.eventIndex_] = dataModel.setEventData(eventJudge, eventAction, eventMap, eventMapConfig);
           var list = goog.dom.getElementsByClass('me', this.elements_.eventList_);
-          var node = list[this.cellIndex_];
+          var node = list[this.eventIndex_];
           goog.dom.setTextContent(node, (this.elements_.cellName_.value != '' ? this.elements_.cellName_.value : '空'));
         }
         break;
@@ -406,6 +406,17 @@ goog.scope(function() {
     this.elements_.cellName_.value = '';
     this.tmpData_ = null;
     this.tmpData_ = {};
+    goog.dom.getElementsByClass('cpt', this.elements_.checkOption_)[0].checked = false;
+    goog.dom.getElementsByClass('cpt', this.elements_.checkOption_)[1].checked = false;
+    var eventActionNode = goog.dom.getElementsByClass('ac', this.elements_.chooseAction_);
+    for(var i = eventActionNode.length - 1; i >= 0; --i) {
+      goog.dom.removeNode(eventActionNode[i]);
+    }
+    var eventJudgeNode = goog.dom.getElementsByClass('attr', this.elements_.selectAttr_);
+    for(var i = eventJudgeNode.length - 1; i >= 0; --i) {
+      goog.dom.removeNode(eventJudgeNode[i]);
+    }
+    this.editJudge();
   };
 
 
@@ -591,36 +602,54 @@ goog.scope(function() {
     var one = goog.dom.getElementByClass('cellAttro', node);
     var attr = goog.dom.getElementByClass('cellAttrv', node); 
     goog.events.listen(one, 'mousedown', function() {
-      var clearList = goog.dom.getElementsByClass('new', one);
-      for(var i = clearList.length - 1; i >= 0; --i) {
-        if(goog.dom.classes.has(clearList[i], 'new')) {
-          goog.dom.removeNode(clearList[i]);
-        }
-      }
-      var oneList = goog.dom.getElementsByClass('ch', this_.elements_.productList_);
-      for(var i = 0, l = oneList.length; i < l; ++i) {
-        var option = goog.dom.createElement('option');
-        goog.dom.classes.add(option, 'new');
-        goog.dom.setTextContent(option, goog.dom.getTextContent(oneList[i]));
-        goog.dom.appendChild(one, option);
-      }
+      this_.addOneOption(one);
     }, false, this);
     goog.events.listen(attr, 'mousedown', function() {
-      var clearList = goog.dom.getElementsByClass('new', attr);
-      for(var i = clearList.length - 1; i >= 0; --i) {
-        if(goog.dom.classes.has(clearList[i], 'new')) {
-          goog.dom.removeNode(clearList[i]);
-        }
-      }
-      var attrList = goog.dom.getElementsByClass('at', this_.elements_.attributeList_);
-      for(var i = 0, l = attrList.length; i < l; ++i) {  
-        var option = goog.dom.createElement('option');
-        goog.dom.classes.add(option, 'new');
-        goog.dom.setTextContent(option, goog.dom.getTextContent(goog.dom.getElementByClass('val', attrList[i])));
-        goog.dom.appendChild(attr, option);
-      }
+      this_.addAttrOption(attr);
     }, false. this);
     return node;
+  };
+
+
+  /*
+   * 添加物体选项
+   */
+  exports.MapSetting.prototype.addOneOption = function(node) {
+    var this_ = this;
+    var clearList = goog.dom.getElementsByClass('new', node);
+    for(var i = clearList.length - 1; i >= 0; --i) {
+      if(goog.dom.classes.has(clearList[i], 'new')) {
+        goog.dom.removeNode(clearList[i]);
+      }
+    }
+    var oneList = goog.dom.getElementsByClass('ch', this_.elements_.productList_);
+    for(var i = 0, l = oneList.length; i < l; ++i) {
+      var option = goog.dom.createElement('option');
+      goog.dom.classes.add(option, 'new');
+      goog.dom.setTextContent(option, goog.dom.getTextContent(oneList[i]));
+      goog.dom.appendChild(node, option);
+    }
+  };
+  
+  
+  /*
+   * 添加属性选项
+   */
+  exports.MapSetting.prototype.addAttrOption = function(node) {
+    var this_ = this;
+    var clearList = goog.dom.getElementsByClass('new', node);
+    for(var i = clearList.length - 1; i >= 0; --i) {
+      if(goog.dom.classes.has(clearList[i], 'new')) {
+        goog.dom.removeNode(clearList[i]);
+      }
+    }
+    var attrList = goog.dom.getElementsByClass('at', this_.elements_.attributeList_);
+    for(var i = 0, l = attrList.length; i < l; ++i) {  
+      var option = goog.dom.createElement('option');
+      goog.dom.classes.add(option, 'new');
+      goog.dom.setTextContent(option, goog.dom.getTextContent(goog.dom.getElementByClass('val', attrList[i])));
+      goog.dom.appendChild(node, option);
+    }
   };
 
 
@@ -842,8 +871,78 @@ goog.scope(function() {
         this.cellIndex_ = e.index_;
         break;
       case 5:
+        this.clear();
         this.eventIndex_ = e.index_;
+        var data = dataModel.getEventData(this.eventSet_[this.eventIndex_]);
+        var eventJudge = data.eventJudge;
+        var eventAction = data.eventAction;
+        var eventMap = data.eventMap;
+        var eventMapConfig = dataModel.getEventMapConfig(data.eventMapConfig);
+        goog.dom.getElementsByClass('cpt', this.elements_.checkOption_)[0].checked = (eventMapConfig.rotate || eventMapConfig.rotate == 'true');
+        goog.dom.getElementsByClass('cpt', this.elements_.checkOption_)[1].checked = (eventMapConfig.turn || eventMapConfig.turn == 'true');
+        var eventMapNode = goog.dom.getElementsByClass('mapBlock', this.elements_.map_);
+        for(var i = 0, l = eventMap.length; i < l; ++i) {
+          var em = dataModel.getEventMap(eventMap[i]);
+          for(var j = 0; j < em.status.length; ++j) {
+            goog.dom.classes.add(eventMapNode[em.pos], em.status[j]);
+          }
+        }
+        for(var i = 0, l = eventAction.length; i < l; ++i) {
+          this.editAction();
+          var eventActionData = dataModel.getEventAction(eventAction[i]);
+          var eventActionNode = goog.dom.getElementsByClass('ac', this.elements_.chooseAction_);
+          var actionList = goog.dom.getElementByClass('actionList', eventActionNode[i]);
+          var cellAttr1 = goog.dom.getElementsByClass('cellAttr', eventActionNode[i])[0];
+          var cellAttr2 = goog.dom.getElementsByClass('cellAttr', eventActionNode[i])[1];
+          this.findOption(actionList, eventActionData.action);
+          this.addOptions(cellAttr1, eventActionData.firstNode, eventActionData.firstAttr);
+          this.addOptions(cellAttr2, eventActionData.secondNode, eventActionData.secondAttr);
+        }
+        for(var i = 0, l = eventJudge.length; i < l; ++i) {
+          (i > 0) && this.editJudge();
+          var eventJudgeData = dataModel.getEventJudge(eventJudge[i]);
+          var eventJudgeNode = goog.dom.getElementsByClass('attr', this.elements_.selectAttr_);
+          var cellAttr1 = goog.dom.getElementsByClass('cellAttr', eventJudgeNode[i])[0];
+          var operation = goog.dom.getElementByClass('operation', eventJudgeNode[i]);
+          var cellAttr2 = goog.dom.getElementsByClass('cellAttr', eventJudgeNode[i])[1];
+          var logic = goog.dom.getElementByClass('logic', eventJudgeNode[i]);
+          this.addOptions(cellAttr1, eventJudgeData.firstNode, eventJudgeData.firstAttr);
+          this.addOptions(cellAttr2, eventJudgeData.secondNode, eventJudgeData.secondAttr);
+          this.findOption(operation.childNodes[0], eventJudgeData.operation);
+          this.findOption(logic.childNodes[0], eventJudgeData.logic);
+        }
         break;
+    }
+  };
+
+
+  /*
+   * 添加选项 
+   */
+  exports.MapSetting.prototype.addOptions = function(node, opt_one, opt_attr) {
+    var one = goog.dom.getElementByClass('cellAttro', node);
+    var attr = goog.dom.getElementByClass('cellAttrv', node);
+    this.addOneOption(one);
+    this.addAttrOption(attr);
+    if(opt_one != null) {
+      this.findOption(one, opt_one);
+    }
+    if(opt_attr != null) {
+      this.findOption(attr, opt_attr);
+      attr.parentNode.childNodes[1].value = opt_attr;
+    }
+  };
+
+
+  /*
+   * 寻找属性
+   */
+  exports.MapSetting.prototype.findOption = function(node, val) {
+    for(var i = 0, l = node.options.length; i < l; ++i) {
+      if(node.options[i].value == val) {
+        node.options.selectedIndex = i;
+        break;
+      }
     }
   };
 

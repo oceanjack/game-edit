@@ -80,7 +80,7 @@ goog.scope(function() {
       eventJudge: data['ej'],
       eventAction: data['ea'] ,
       eventMap: data['em'],
-      eventMap: data['mc']
+      eventMapConfig: data['mc']
     };
   };
 
@@ -126,7 +126,7 @@ goog.scope(function() {
       firstNode: data['fn'],
       firstAttr: data['fa'],
       secondNode: data['sn'],
-      setAttribute: data['sa']
+      secondAttr: data['sa']
     };
   };
 
@@ -155,7 +155,7 @@ goog.scope(function() {
   };
 
 
-  exports.Data.getEventMapConfig = function(rotate, turn) {
+  exports.Data.getEventMapConfig = function(data) {
     return {
       rotate: data['r'],
       turn: data['t']
