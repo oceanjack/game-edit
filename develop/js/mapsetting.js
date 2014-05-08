@@ -288,8 +288,28 @@ goog.scope(function() {
             logic.childNodes[0][logic.childNodes[0].options.selectedIndex].value
           ));
         }
-        this.eventSet_[this.eventIndex_] = dataModel.setEventData(eventJudge, eventAction, eventMap, eventMapConfig);
+        var eventActionNode = goog.dom.getElementsByClass('ac', this.elements_.chooseAction_);
+        for(var i = 0, l = eventActionNode.length; i < l; ++i) {
+          var actionList = goog.dom.getElementByClass('actionList', eventActionNode[i]);
+          var cellAttr1 = goog.dom.getElementsByClass('cellAttr', eventActionNode[i])[0];
+          var cellAttr2 = goog.dom.getElementsByClass('cellAttr', eventActionNode[i])[1];
+          eventAction.push(dataModel.setEventAction(
+            actionList[actionList.options.selectedIndex].value,
+            cellAttr1.childNodes[0][cellAttr1.childNodes[0].options.selectedIndex].value,
+            cellAttr1.childNodes[1].childNodes[1].value,
+            cellAttr2.childNodes[0][cellAttr2.childNodes[0].options.selectedIndex].value,
+            cellAttr2.childNodes[1].childNodes[1].value
+          ));
+        }
+        var eventMapNode = goog.dom.getElementsByClass('mapBlock', this.elements_.map_);
+        for(var i = 0, l = eventMapNode.length; i < l; ++i) {
+          var classes = goog.dom.classes.get(eventMapNode[i]);
+          if(classes.length > 1) {
+            eventMap.push(dataModel.setEventMap(i, classes));
+          }
+        }
         if(!this.eventSet_[this.eventIndex_]) {
+          this.eventSet_[this.eventIndex_] = dataModel.setEventData(eventJudge, eventAction, eventMap, eventMapConfig);
           var node = goog.dom.createElement('li');
           goog.dom.setTextContent(node, (this.elements_.cellName_.value != '' ? this.elements_.cellName_.value : '空'));
           goog.dom.classes.add(node, 'me');
@@ -297,6 +317,11 @@ goog.scope(function() {
           this.elements_.eventList_.appendChild(node);
           goog.events.listen(node, 'click', this.reBuild, false, this);
           ++this.eTotleIndex_;
+        } else {
+          this.eventSet_[this.eventIndex_] = dataModel.setEventData(eventJudge, eventAction, eventMap, eventMapConfig);
+          var list = goog.dom.getElementsByClass('me', this.elements_.eventList_);
+          var node = list[this.cellIndex_];
+          goog.dom.setTextContent(node, (this.elements_.cellName_.value != '' ? this.elements_.cellName_.value : '空'));
         }
         break;
       default:
@@ -605,6 +630,7 @@ goog.scope(function() {
   exports.MapSetting.prototype.editAction = function() {
     var this_ = this;
     var div = goog.dom.createElement('div');
+    goog.dom.classes.add(div, 'ac');
     var p1 = goog.dom.createElement('p');
     goog.dom.setTextContent(p1, '执行');
     var p2 = goog.dom.createElement('p');

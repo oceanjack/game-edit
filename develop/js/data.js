@@ -115,7 +115,7 @@ goog.scope(function() {
       'fn': firstNode,
       'fa': firstAttr,
       'sn': secondNode,
-      'sa': setAttribute
+      'sa': secondAttr
     };
   };
 
@@ -131,19 +131,17 @@ goog.scope(function() {
   };
 
 
-  exports.Data.setEventMap = function(posX, posY, status) {
+  exports.Data.setEventMap = function(pos, status) {
     return {
-      'x': posX,
-      'y': posY,
+      'p': pos,
       's': status
     };
   };
 
 
-  exports.Data.setEventMap = function(data) {
+  exports.Data.getEventMap = function(data) {
     return {
-      posX: data['x'],
-      posY: data['y'],
+      pos: data['p'],
       status: data['s']
     };
   };
