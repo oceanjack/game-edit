@@ -84,6 +84,8 @@ goog.scope(function() {
     this.elements_.addWorld_ = goog.dom.getElementByClass('addWorld');
     this.elements_.addEvent_ = goog.dom.getElementByClass('addEvent');
     this.elements_.addActionBtn_ = goog.dom.getElementByClass('addActionBtn');
+    this.elements_.saveGameData_ = goog.dom.getElementByClass('saveGameData');
+    this.elements_.loadGameData_ = goog.dom.getElementByClass('loadGameData');
   };
 
 
@@ -183,6 +185,22 @@ goog.scope(function() {
     goog.events.listen(el.addWorld_, 'click', this.editWorld, false, this);
     goog.events.listen(el.addEvent_, 'click', this.editEvent, false, this);
     goog.events.listen(el.addActionBtn_, 'click', this.addActionBtn, false, this);
+    goog.events.listen(el.saveGameData_, 'click', this.saveGameData, false, this);
+    goog.events.listen(el.loadGameData_, 'click', this.loadGameData, false, this);
+  };
+
+
+  /*
+   * 保存数据
+   */
+  exports.MapSetting.prototype.saveGameData = function() {
+  };
+
+
+  /*
+   * 读取数据
+   */
+  exports.MapSetting.prototype.loadGameData = function() {
   };
 
 

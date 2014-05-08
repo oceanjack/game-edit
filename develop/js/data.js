@@ -161,4 +161,28 @@ goog.scope(function() {
       turn: data['t']
     };
   };
+
+
+  exports.Data.setGameData = function(size, background, cellSet, attrSet, world, event) {
+    return {
+      's': size,
+      'b': background,
+      'c': cellSet,
+      'a': attrSet,
+      'w': world,
+      'e': event
+    };
+  };
+
+
+  exports.Data.getGameData = function(data) {
+    return {
+      size: data['s'],
+      background: data['b'] ,
+      cellSet: data['c'] ,
+      attrSet: data['a'] ,
+      world: data['w'] ,
+      event: data['e']
+    };
+  };
 });
