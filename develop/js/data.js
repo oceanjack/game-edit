@@ -25,7 +25,7 @@ goog.scope(function() {
   };
 
 
-  exports.Data.setCharacter = function(width, height, src, opt_posX, opt_posY) {
+  exports.Data.setCharacter = function(width, height, src, opt_posX, opt_posY, opt_name) {
     return {
       'w': width,
       'h': height,
