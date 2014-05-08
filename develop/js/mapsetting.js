@@ -38,7 +38,6 @@ goog.scope(function() {
   exports.MapSetting.prototype.eventSet_ = null; //事件集合
   exports.MapSetting.prototype.eventIndex_ = null; //当前事件id
   exports.MapSetting.prototype.eTotleIndex_ = null; //总事件
-  exports.MapSetting.prototype.modefive_ = null; //是否首次进入模式5
 
 
   exports.MapSetting.prototype.init = function(x, y, background) {
@@ -59,7 +58,6 @@ goog.scope(function() {
     this.map_ = [];
     this.realWorld_ = [];
     this.background_ = background;
-    this.modefive_ = true;
     this.mode_ = 1; // 1 人物 2 属性 3 地图 4 行为 5 事件 6 策略 default 1
   };
 
@@ -592,10 +590,6 @@ goog.scope(function() {
    */
   exports.MapSetting.prototype.editEvent = function() {
     this.mode_ = 5;
-    if(this.modefive_) {
-      this.editJudge();
-      this.modefive_ = false;
-    }
     this.display_();
     this.clear();
     this.eventIndex_ = this.eTotleIndex_;
