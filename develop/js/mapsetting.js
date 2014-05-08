@@ -57,7 +57,7 @@ goog.scope(function() {
     this.tmpData_ = {};
     this.map_ = [];
     this.realWorld_ = [];
-    this.background_ = background;
+    this.background_ = dataModel.getImg(background);
     this.mode_ = 1; // 1 人物 2 属性 3 地图 4 行为 5 事件 6 策略 default 1
   };
 
@@ -83,7 +83,6 @@ goog.scope(function() {
     this.elements_.addEvent_ = goog.dom.getElementByClass('addEvent');
     this.elements_.addActionBtn_ = goog.dom.getElementByClass('addActionBtn');
     this.elements_.saveGameData_ = goog.dom.getElementByClass('saveGameData');
-    this.elements_.loadGameData_ = goog.dom.getElementByClass('loadGameData');
   };
 
 
@@ -148,7 +147,7 @@ goog.scope(function() {
                     this_.elements_.makeSure_.style.display = 'inline-block';
                     break;
                   case 3:
-                    this_.realWorld_[node.posY_][node.posX_] = new exports.One(this_.cellSet_[this_.cellIndex_], node);
+                    this_.realWorld_[node.posY_][node.posX_] = new exports.One(this_.cellSet_[this_.cellIndex_]);
                     this_.realWorld_[node.posY_][node.posX_].setAttribute(dataModel.attributeSet.posX, node.posX_);
                     this_.realWorld_[node.posY_][node.posX_].setAttribute(dataModel.attributeSet.posY, node.posY_);
                     this_.drawWorld();
@@ -184,7 +183,6 @@ goog.scope(function() {
     goog.events.listen(el.addEvent_, 'click', this.editEvent, false, this);
     goog.events.listen(el.addActionBtn_, 'click', this.addActionBtn, false, this);
     goog.events.listen(el.saveGameData_, 'click', this.saveGameData, false, this);
-    goog.events.listen(el.loadGameData_, 'click', this.loadGameData, false, this);
   };
 
 
@@ -222,11 +220,11 @@ goog.scope(function() {
       img.width = 0;
       img.height = 0;
     }
-    this.tmpData_.src = img;
     img.posX *= blockWidth;
     img.posY *= blockHeight;
     img.width *= blockWidth;
     img.height *= blockHeight;
+    this.tmpData_.src = dataModel.setImg(img);
     return img;
   };
 
@@ -574,10 +572,11 @@ goog.scope(function() {
     this.mode_ = 3;
     this.display_();
     this.clear();
+    var mapNode = goog.dom.getElementsByClass('mapBlock', this.elements_.map_);
     for(var j = 0; j < this.realWorld_.length; ++j) {
       for(var i = 0; i < this.realWorld_[j].length; ++i) {
         if(this.realWorld_[j][i]) {
-          goog.dom.classes.add(this.realWorld_[j][i].getNode(), 'selected');
+          goog.dom.classes.add(mapNode[j * this.size_[0] + i], 'selected');
         }
       }
     }
@@ -723,11 +722,11 @@ goog.scope(function() {
    * 绘图
    */
   exports.MapSetting.prototype.drawWorld = function() {
-    var c = this.elements_.canvas_.getContext('2d');
     var blockWidth = window.getComputedStyle(this.map_[0][0])['width'];
     var blockHeight = window.getComputedStyle(this.map_[0][0])['height'];
     blockWidth = parseFloat(blockWidth.substr(blockWidth, blockWidth.length - 2));
     blockHeight = parseFloat(blockHeight.substr(blockHeight, blockHeight.length - 2));
+    var c = this.elements_.canvas_.getContext('2d');
     c.clearRect(0, 0, 800, 600);
     this.background_ && c.drawImage(this.background_, 0, 0, this.background_.width, this.background_.height);
     for(var j = 0; j < this.realWorld_.length; ++j) {
@@ -736,7 +735,8 @@ goog.scope(function() {
           var posX = this.realWorld_[j][i].getAttribute(dataModel.attributeSet.posX);
           var posY = this.realWorld_[j][i].getAttribute(dataModel.attributeSet.posY);
           var img = dataModel.getCharacter(this.realWorld_[j][i].getImgData());
-          img.src && c.drawImage(img.src, posX * blockWidth, posY * blockHeight, img.width * blockWidth, img.height * blockHeight);
+          img.src = dataModel.getImg(img.src);
+          img.src && c.drawImage(img.src, posX * blockWidth, posY * blockHeight, img.src.width, img.src.height);
         }
       }
     }
@@ -844,7 +844,8 @@ goog.scope(function() {
         var blockHeight = window.getComputedStyle(this.map_[0][0])['height'];
         blockWidth = parseFloat(blockWidth.substr(blockWidth, blockWidth.length - 2));
         blockHeight = parseFloat(blockHeight.substr(blockHeight, blockHeight.length - 2));
-        data.src && context.drawImage(data.src, data.opt_posX * blockWidth, data.opt_posY * blockHeight, data.width * blockWidth, data.height * blockHeight);
+        data.src = dataModel.getImg(data.src);
+        data.src && context.drawImage(data.src, data.opt_posX * blockWidth, data.opt_posY * blockHeight, data.src.width, data.src.height);
         this.elements_.cellName_.value = goog.dom.getTextContent(e);
         break;
       case 2:

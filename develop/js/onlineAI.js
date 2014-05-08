@@ -5,9 +5,11 @@ goog.require('goog.events');
 goog.require('goog.style');
 
 goog.require('ocean.onlineAI.MapSetting');
+goog.require('ocean.onlineAI.Data');
 
 goog.scope(function() {
   var exports = ocean.onlineAI;
+  var dataModel = exports.Data;
 
 
   exports.OnlineAI = function() {
@@ -87,10 +89,10 @@ goog.scope(function() {
       el.mapImg_.width = width;
       el.mapImg_.src = img.src;
       el.mapImg_.height = el.mapImg_.height;
-      img.width = width;
+      el.mapImg_.width = el.mapImg_.width;
       el.canvas_.width = width;
       el.canvas_.height = height;
-      this_.background_ = el.mapImg_;
+      this_.background_ = dataModel.setImg(el.mapImg_);
 
       var context = el.canvas_.getContext('2d');
       context.clearRect(0, 0, width, height);

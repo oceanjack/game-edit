@@ -3,6 +3,28 @@ goog.provide('ocean.onlineAI.Data');
 goog.scope(function() {
   var exports = ocean.onlineAI;
 
+
+  exports.Data.setImg = function(img) {
+    return {
+      's': img.src,
+      'w': img.width,
+      'h': img.height
+    };
+  };
+  
+  
+  exports.Data.getImg = function(data) {
+    if(data) {
+      var img = new Image();
+      img.src = data['s'];
+      img.width = data['w'];
+      img.height = data['h'];
+      return img;
+    }
+    return null;
+  };
+
+
   exports.Data.setCharacter = function(width, height, src, opt_posX, opt_posY) {
     return {
       'w': width,
