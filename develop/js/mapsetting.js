@@ -317,7 +317,8 @@ goog.scope(function() {
         var eventMap = [];
         var eventMapConfig = dataModel.setEventMapConfig(
           goog.dom.getElementsByClass('cpt', this.elements_.checkOption_)[0].checked,
-          goog.dom.getElementsByClass('cpt', this.elements_.checkOption_)[1].checked
+          goog.dom.getElementsByClass('cpt', this.elements_.checkOption_)[1].checked,
+          goog.dom.getElementsByClass('cpt', this.elements_.checkOption_)[2].checked
         );
         var eventJudgeNode = goog.dom.getElementsByClass('attr', this.elements_.selectAttr_);
         for(var i = 0, l = eventJudgeNode.length; i < l; ++i) {
@@ -454,6 +455,7 @@ goog.scope(function() {
     this.tmpData_ = {};
     goog.dom.getElementsByClass('cpt', this.elements_.checkOption_)[0].checked = false;
     goog.dom.getElementsByClass('cpt', this.elements_.checkOption_)[1].checked = false;
+    goog.dom.getElementsByClass('cpt', this.elements_.checkOption_)[2].checked = false;
     var eventActionNode = goog.dom.getElementsByClass('ac', this.elements_.chooseAction_);
     for(var i = eventActionNode.length - 1; i >= 0; --i) {
       goog.dom.removeNode(eventActionNode[i]);
@@ -925,6 +927,7 @@ goog.scope(function() {
         var eventMapConfig = dataModel.getEventMapConfig(data.eventMapConfig);
         goog.dom.getElementsByClass('cpt', this.elements_.checkOption_)[0].checked = (eventMapConfig.rotate || eventMapConfig.rotate == 'true');
         goog.dom.getElementsByClass('cpt', this.elements_.checkOption_)[1].checked = (eventMapConfig.turn || eventMapConfig.turn == 'true');
+        goog.dom.getElementsByClass('cpt', this.elements_.checkOption_)[2].checked = (eventMapConfig.std || eventMapConfig.std == 'true');
         var eventMapNode = goog.dom.getElementsByClass('mapBlock', this.elements_.map_);
         for(var i = 0, l = eventMap.length; i < l; ++i) {
           var em = dataModel.getEventMap(eventMap[i]);

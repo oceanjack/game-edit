@@ -187,10 +187,11 @@ goog.scope(function() {
   };
 
 
-  exports.Data.setEventMapConfig = function(rotate, turn) {
+  exports.Data.setEventMapConfig = function(rotate, turn, std) {
     return {
       'r': rotate,
-      't': turn
+      't': turn,
+      's': std,
     };
   };
 
@@ -198,7 +199,8 @@ goog.scope(function() {
   exports.Data.getEventMapConfig = function(data) {
     return {
       rotate: data['r'],
-      turn: data['t']
+      turn: data['t'],
+      std: data['s']
     };
   };
 
