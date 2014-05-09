@@ -44,10 +44,20 @@ goog.scope(function() {
   exports.One.prototype.getLinks = function() {
     return this.attrLink_;
   };
-
-
+  
+  
+  exports.One.prototype.setLinks = function(data) {
+    this.attrLink_ = data;
+  };
+  
+  
   exports.One.prototype.getAttr = function() {
     return this.attribute_;
+  };
+  
+  
+  exports.One.prototype.setAttr = function(data) {
+    this.attribute_ = data;
   };
 
 

@@ -16,11 +16,13 @@ goog.scope(function() {
   var templates = ocean.onlineAI.OnlineAI.templates;
 
 
-  exports.MapSetting = function(x, y, background) {
-    this.init(x, y, background);
+  exports.MapSetting = function(x, y, background, data) {
+    this.init(x, y, background, data);
     this.getElements();
     this.settings();
     this.addEvents();
+    this.initAttr();
+    data && this.loadGameData(data);
   };
 
 
@@ -238,7 +240,71 @@ goog.scope(function() {
   /*
    * 读取数据
    */
-  exports.MapSetting.prototype.loadGameData = function() {
+  exports.MapSetting.prototype.loadGameData = function(data) {
+    this.totleIndex_ = data.cellSet.length;
+    this.eTotleIndex_ = data.event.length;
+    for(var i = 0; i < data.cellSet.length; ++i) {
+      this.cellSet_[i] = new exports.Cell(data.cellSet[i][0]);
+      this.cellSet_[i].setAllAttribute(data.cellSet[i][1]);
+      var name = dataModel.getCharacter(data.cellSet[i][0]).name;
+      var node = goog.dom.createElement('li');
+      goog.dom.setTextContent(node, name);
+      goog.dom.classes.add(node, 'ch');
+      node.index_ = i;
+      this.elements_.productList_.appendChild(node);
+      goog.events.listen(node, 'click', this.reBuild, false, this);
+    }
+
+    var attrO = goog.dom.getElementsByClass('atd', this.elements_.attributeList_);
+    for(var i = 0, l = attrO.length; i < l; ++i) {
+      var options = goog.dom.getElementByClass('editboxselect', attrO[i]);
+      for(var j = options.options.length - 1; j >= 0; --j) {
+        goog.dom.removeNode(options.options[j]);
+      }
+      var list = dataModel.getAttrList(data.attrSet[i]).options;
+      for(var j = 0, n = list.length; j < n; ++j) {
+        var op = goog.dom.createElement('option');
+        goog.dom.setTextContent(op, list[j]);
+        goog.dom.appendChild(options, op);
+      }
+    }
+    for(var i = attrO.length; i < data.attrSet.length; ++i) { 
+      var list = dataModel.getAttrList(data.attrSet[i]);
+      var node = goog.dom.createElement('li');
+      var p = goog.dom.createElement('p');
+      goog.dom.classes.add(node, 'at');
+      goog.dom.setTextContent(p, list.name);
+      var editbox = goog.dom.htmlToDocumentFragment(templates.selectInput());
+      goog.dom.classes.add(p, 'val');
+      goog.dom.appendChild(node, p);
+      goog.dom.appendChild(node, editbox);
+      goog.dom.appendChild(this.elements_.attributeList_, node);
+      var input = goog.dom.getElementByClass('editboxinput', editbox);
+      var select = goog.dom.getElementByClass('editboxselect', editbox);
+      this.valChange(select, input);
+      for(var j = 0, n = list.options.length; j < n; ++j) {
+        var op = goog.dom.createElement('option');
+        goog.dom.setTextContent(op, list.options[j]);
+        goog.dom.appendChild(select, op);
+      }
+      goog.events.listen(node, 'click', this.changeAttribute, false, this);
+    };
+    for(var i = 0, l = data.world.length; i < l; ++i) {
+      var wp = dataModel.getRealMapData(data.world[i]);
+      this.realWorld_[wp.posY][wp.posX] = new exports.One(this.cellSet_[wp.index]);
+      this.realWorld_[wp.posY][wp.posX].setLinks(wp.link);
+      this.realWorld_[wp.posY][wp.posX].setAttr(wp.attr);
+    };
+    this.eventSet_ = data.event;
+    for(var i = 0; i < this.eventSet_.length; ++i) {
+      var node = goog.dom.createElement('li');
+      var name = dataModel.getEventData(this.eventSet_[i]).name;
+      goog.dom.setTextContent(node, name);
+      goog.dom.classes.add(node, 'me');
+      node.index_ = i;
+      this.elements_.eventList_.appendChild(node);
+      goog.events.listen(node, 'click', this.reBuild, false, this);
+    }
   };
 
 
@@ -534,12 +600,9 @@ goog.scope(function() {
 
 
   /*
-   * 添加属性
+   * 初始化默认属性列表
    */
-  exports.MapSetting.prototype.createAttribute = function() {
-    this.mode_ = 2;
-    this.display_();
-    this.clear();
+  exports.MapSetting.prototype.initAttr = function() {
     var tmp = goog.dom.getElementsByClass('atd', this.elements_.attributeList_);
     for(var i = 0, l = tmp.length; i < l; ++i) {
       tmp[i].attrIndex_ = i;
@@ -549,65 +612,74 @@ goog.scope(function() {
       var editbox = goog.dom.htmlToDocumentFragment(templates.selectInput());
       var input = goog.dom.getElementByClass('editboxinput', editbox);
       var select = goog.dom.getElementByClass('editboxselect', editbox)
-      switch(i) {
-        case 0:
-          input.value = '无';
-          var op = goog.dom.createElement('option');
-          goog.dom.setTextContent(op, '无');
-          goog.dom.appendChild(select, op);
-          break;
-        case 1:
-          input.value = '无';
-          var op = goog.dom.createElement('option');
-          goog.dom.setTextContent(op, '无');
-          goog.dom.appendChild(select, op);
-          break;
-        case 2:
-          input.value = '上';
-          var op = goog.dom.createElement('option');
-          var op2 = goog.dom.createElement('option');
-          var op3 = goog.dom.createElement('option');
-          var op4 = goog.dom.createElement('option');
-          goog.dom.setTextContent(op, '上');
-          goog.dom.setTextContent(op2, '下');
-          goog.dom.setTextContent(op3, '左');
-          goog.dom.setTextContent(op4, '右');
-          goog.dom.appendChild(select, op);
-          goog.dom.appendChild(select, op2);
-          goog.dom.appendChild(select, op3);
-          goog.dom.appendChild(select, op4);
-          break;
-        case 3:
-          input.value = '1';
-          var op = goog.dom.createElement('option');
-          goog.dom.setTextContent(op, '1');
-          goog.dom.appendChild(select, op);
-          break;
-        case 4:
-          input.value = '否';
-          var op = goog.dom.createElement('option');
-          var op2 = goog.dom.createElement('option');
-          goog.dom.setTextContent(op, '否');
-          goog.dom.setTextContent(op2, '是');
-          goog.dom.appendChild(select, op);
-          goog.dom.appendChild(select, op2);
-          break;
-        case 5:
-          input.value = '无';
-          var op = goog.dom.createElement('option');
-          goog.dom.setTextContent(op, '无');
-          goog.dom.appendChild(select, op);
-          break;
-        case 6:
-          input.value = '无';
-          var op = goog.dom.createElement('option');
-          goog.dom.setTextContent(op, '无');
-          goog.dom.appendChild(select, op);
-          break;
-      };
+        switch(i) {
+          case 0:
+            input.value = '无';
+            var op = goog.dom.createElement('option');
+            goog.dom.setTextContent(op, '无');
+            goog.dom.appendChild(select, op);
+            break;
+          case 1:
+            input.value = '无';
+            var op = goog.dom.createElement('option');
+            goog.dom.setTextContent(op, '无');
+            goog.dom.appendChild(select, op);
+            break;
+          case 2:
+            input.value = '上';
+            var op = goog.dom.createElement('option');
+            var op2 = goog.dom.createElement('option');
+            var op3 = goog.dom.createElement('option');
+            var op4 = goog.dom.createElement('option');
+            goog.dom.setTextContent(op, '上');
+            goog.dom.setTextContent(op2, '下');
+            goog.dom.setTextContent(op3, '左');
+            goog.dom.setTextContent(op4, '右');
+            goog.dom.appendChild(select, op);
+            goog.dom.appendChild(select, op2);
+            goog.dom.appendChild(select, op3);
+            goog.dom.appendChild(select, op4);
+            break;
+          case 3:
+            input.value = '1';
+            var op = goog.dom.createElement('option');
+            goog.dom.setTextContent(op, '1');
+            goog.dom.appendChild(select, op);
+            break;
+          case 4:
+            input.value = '否';
+            var op = goog.dom.createElement('option');
+            var op2 = goog.dom.createElement('option');
+            goog.dom.setTextContent(op, '否');
+            goog.dom.setTextContent(op2, '是');
+            goog.dom.appendChild(select, op);
+            goog.dom.appendChild(select, op2);
+            break;
+          case 5:
+            input.value = '无';
+            var op = goog.dom.createElement('option');
+            goog.dom.setTextContent(op, '无');
+            goog.dom.appendChild(select, op);
+            break;
+          case 6:
+            input.value = '无';
+            var op = goog.dom.createElement('option');
+            goog.dom.setTextContent(op, '无');
+            goog.dom.appendChild(select, op);
+            break;
+        };
       goog.dom.appendChild(tmp[i], editbox);
       this.valChange(select, input);
     }
+  };
+
+  /*
+   * 添加属性
+   */
+  exports.MapSetting.prototype.createAttribute = function() {
+    this.mode_ = 2;
+    this.display_();
+    this.clear();
   };
 
 
