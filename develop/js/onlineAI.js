@@ -19,6 +19,7 @@ goog.scope(function() {
 
   exports.OnlineAI.prototype.elements_ = null;
   exports.OnlineAI.prototype.background_ = null;
+  exports.OnlineAI.prototype.data_ = null;
 
 
   exports.OnlineAI.prototype.init = function() {
@@ -43,6 +44,7 @@ goog.scope(function() {
     this.elements_.mapImgDiv_ = goog.dom.getElementByClass('mapimgdiv');
     this.elements_.mapImg_ = goog.dom.getElementByClass('mapimg');
     this.elements_.menuList_ = goog.dom.getElementsByClass('menulist');
+    this.elements_.loadData_ = goog.dom.getElementByClass('loadData');
   };
 
 
@@ -51,6 +53,7 @@ goog.scope(function() {
     goog.events.listen(el.defsize_, 'click', this.defsize, false, this);
     goog.events.listen(el.mapImgDiv_, 'dragover', this.onDragOver, false ,this);
     goog.events.listen(el.mapImgDiv_, 'drop', this.onFileSelect, false ,this);
+    goog.events.listen(el.loadData_, 'change', this.loadData, false ,this);
   };
 
 
@@ -114,6 +117,38 @@ goog.scope(function() {
     var reader = new FileReader();
     reader.onload = onFileReaded;
     reader.readAsDataURL(file);
+  };
+
+
+  /*
+   * 加载数据
+   */
+  exports.OnlineAI.prototype.loadedData = function(e) {
+    e = e.event_;
+    this.data_ = dataModel.getGameData(JSON.parse(e.target.result));
+    var el = this.elements_;
+    el.canvas_.width = 800;
+    el.canvas_.height = 600;
+    goog.style.setStyle(el.menuList_[0], 'display', 'none');
+    goog.style.setStyle(el.sizeArea_, 'display', 'none');
+    goog.style.setStyle(el.mapImg_, 'display', 'none');
+    goog.style.setStyle(el.canvas_, 'display', 'block');
+    goog.style.setStyle(el.menuList_[1], 'display', 'block');
+    new exports.MapSetting(this.data_.size[0], this.data_.size[1], this.data_.background, this.data_);
+  };
+
+
+  /*
+   * 读取数据
+   */
+  exports.OnlineAI.prototype.loadData = function(e) {
+    e = e.event_;
+    var file = e.target.files;
+    if(file[0]) {
+      var reader = new FileReader();
+      goog.events.listen(reader, 'load', this.loadedData, false, this);
+      reader.readAsText(file[0]);
+    }
   };
 
 
