@@ -41,6 +41,16 @@ goog.scope(function() {
   };
 
 
+  exports.One.prototype.getLinks = function() {
+    return this.attrLink_;
+  };
+
+
+  exports.One.prototype.getAttr = function() {
+    return this.attribute_;
+  };
+
+
   exports.One.prototype.setAttribute = function(key, val, opt_key) {
     if(key != dataModel.attributeSet.others) {
       this.attribute_[key] = val;
@@ -70,6 +80,12 @@ goog.scope(function() {
       }
       return this.data_.getAttribute(key)[opt_key];
     }
+  };
+
+
+  exports.One.prototype.getIndex = function() {
+    var data = dataModel.getCharacter(this.data_.getData());
+    return data.index;
   };
 
 

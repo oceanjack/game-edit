@@ -83,6 +83,7 @@ goog.scope(function() {
     this.elements_.addEvent_ = goog.dom.getElementByClass('addEvent');
     this.elements_.addActionBtn_ = goog.dom.getElementByClass('addActionBtn');
     this.elements_.saveGameData_ = goog.dom.getElementByClass('saveGameData');
+    this.elements_.downloadGameData_ = goog.dom.getElementByClass('downloaddata');
   };
 
 
@@ -105,7 +106,7 @@ goog.scope(function() {
         tmp.posY_ = j;
         (function(node) {
             goog.events.listen(node, 'click', function() {
-              if(this_.mode_ == 5 && this_.elements_.checkOptions_[2].checked) {
+              if(this_.mode_ == 5 && this_.elements_.checkOptions_[3].checked) {
                 if(goog.dom.classes.has(node, 'selectedEffect')) {
                   goog.dom.classes.remove(node, 'selectedEffect');
                 } else {
@@ -214,6 +215,14 @@ goog.scope(function() {
       attr.push(dataModel.setAttrList(vals, goog.dom.getTextContent(attrN[i].childNodes[0])));
     }
     var world = [];
+    for(var j = 0; j < this.realWorld_.length; ++j) {
+      for(var i = 0; i < this.realWorld_[j].length; ++i) {
+        var tmp = this.realWorld_[j][i];
+        if(tmp) {
+          world.push(dataModel.setRealMapData(i, j, tmp.getLinks(), tmp.getAttr(), tmp.getIndex()));
+        }
+      }
+    }
     var result = dataModel.setGameData(
       this.size_,
       dataModel.setImg(this.background_),
@@ -222,6 +231,7 @@ goog.scope(function() {
       world,
       this.eventSet_
     );
+    this.elements_.downloadGameData_.href = 'data:text/paint; utf-8,' + JSON.stringify(result);
   };
 
 
@@ -276,12 +286,12 @@ goog.scope(function() {
         this.tmpData_.height = size[3];
         var name = (this.elements_.cellName_.value != '' ? this.elements_.cellName_.value : '空');
         if(this.cellSet_[this.cellIndex_]) {
-          this.cellSet_[this.cellIndex_].setData(dataModel.setCharacter(t.width, t.height, t.src, t.posX, t.posY, name));
+          this.cellSet_[this.cellIndex_].setData(dataModel.setCharacter(t.width, t.height, t.src, t.posX, t.posY, name, this.cellIndex_));
           var list = goog.dom.getElementsByClass('ch', this.elements_.productList_);
           var node = list[this.cellIndex_];
           goog.dom.setTextContent(node, name);
         } else {
-          this.cellSet_[this.cellIndex_] = new exports.Cell(dataModel.setCharacter(t.width, t.height, t.src, t.posX, t.posY, name));
+          this.cellSet_[this.cellIndex_] = new exports.Cell(dataModel.setCharacter(t.width, t.height, t.src, t.posX, t.posY, name, this.cellIndex_));
           var node = goog.dom.createElement('li');
           goog.dom.setTextContent(node, name);
           goog.dom.classes.add(node, 'ch');

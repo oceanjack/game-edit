@@ -5,11 +5,14 @@ goog.scope(function() {
 
 
   exports.Data.setImg = function(img) {
-    return {
-      's': img.src,
-      'w': img.width,
-      'h': img.height
-    };
+    if(img) {
+      return {
+        's': img.src,
+        'w': img.width,
+        'h': img.height
+      };
+    }
+    return null;
   };
   
   
@@ -25,18 +28,19 @@ goog.scope(function() {
   };
 
 
-  exports.Data.setCharacter = function(width, height, src, opt_posX, opt_posY, name) {
+  exports.Data.setCharacter = function(width, height, src, opt_posX, opt_posY, name, index) {
     return {
       'w': width,
       'h': height,
       's': src,
       'x': opt_posX,
       'y': opt_posY,
-      'n': name
+      'n': name,
+      'i': index
     };
   };
 
-  
+ 
   exports.Data.getCharacter = function(data) {
     return {
       width: data['w'],
@@ -44,7 +48,8 @@ goog.scope(function() {
       src: data['s'],
       opt_posX: data['x'],
       opt_posY: data['y'],
-      name: data['n']
+      name: data['n'],
+      index: data['i']
     };
   };
 
@@ -104,6 +109,27 @@ goog.scope(function() {
     };
   };
 
+
+  exports.Data.setRealMapData = function(posX, posY, link, attr, index) {
+    return {
+      'x': posX,
+      'y': posY,
+      'l': link,
+      'a': attr,
+      'i': index
+    };
+  };
+  
+  
+  exports.Data.getRealMapData = function(data) {
+    return {
+      posX: data['x'],
+      posY: data['y'],
+      link: data['l'],
+      attr: data['a'],
+      index: data['i']
+    };
+  };
 
   exports.Data.setEventData = function(eventJudge, eventAction, eventMap, eventMapConfig, name) {
     return {
