@@ -25,13 +25,14 @@ goog.scope(function() {
   };
 
 
-  exports.Data.setCharacter = function(width, height, src, opt_posX, opt_posY, opt_name) {
+  exports.Data.setCharacter = function(width, height, src, opt_posX, opt_posY, name) {
     return {
       'w': width,
       'h': height,
       's': src,
       'x': opt_posX,
-      'y': opt_posY
+      'y': opt_posY,
+      'n': name
     };
   };
 
@@ -42,7 +43,8 @@ goog.scope(function() {
       height: data['h'],
       src: data['s'],
       opt_posX: data['x'],
-      opt_posY: data['y']
+      opt_posY: data['y'],
+      name: data['n']
     };
   };
 

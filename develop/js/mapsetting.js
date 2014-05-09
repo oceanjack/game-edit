@@ -274,15 +274,16 @@ goog.scope(function() {
         this.tmpData_.posY = size[1];
         this.tmpData_.width = size[2];
         this.tmpData_.height = size[3];
+        var name = (this.elements_.cellName_.value != '' ? this.elements_.cellName_.value : '空');
         if(this.cellSet_[this.cellIndex_]) {
-          this.cellSet_[this.cellIndex_].setData(dataModel.setCharacter(t.width, t.height, t.src, t.posX, t.posY));
+          this.cellSet_[this.cellIndex_].setData(dataModel.setCharacter(t.width, t.height, t.src, t.posX, t.posY, name));
           var list = goog.dom.getElementsByClass('ch', this.elements_.productList_);
           var node = list[this.cellIndex_];
-          goog.dom.setTextContent(node, (this.elements_.cellName_.value != '' ? this.elements_.cellName_.value : '空'));
+          goog.dom.setTextContent(node, name);
         } else {
-          this.cellSet_[this.cellIndex_] = new exports.Cell(dataModel.setCharacter(t.width, t.height, t.src, t.posX, t.posY));
+          this.cellSet_[this.cellIndex_] = new exports.Cell(dataModel.setCharacter(t.width, t.height, t.src, t.posX, t.posY, name));
           var node = goog.dom.createElement('li');
-          goog.dom.setTextContent(node, (this.elements_.cellName_.value != '' ? this.elements_.cellName_.value : '空'));
+          goog.dom.setTextContent(node, name);
           goog.dom.classes.add(node, 'ch');
           node.index_ = this.cellIndex_;
           this.elements_.productList_.appendChild(node);
@@ -355,20 +356,21 @@ goog.scope(function() {
             eventMap.push(dataModel.setEventMap(i, classes));
           }
         }
+        var name = (this.elements_.cellName_.value != '' ? this.elements_.cellName_.value : '空');
         if(!this.eventSet_[this.eventIndex_]) {
-          this.eventSet_[this.eventIndex_] = dataModel.setEventData(eventJudge, eventAction, eventMap, eventMapConfig);
+          this.eventSet_[this.eventIndex_] = dataModel.setEventData(eventJudge, eventAction, eventMap, eventMapConfig, name);
           var node = goog.dom.createElement('li');
-          goog.dom.setTextContent(node, (this.elements_.cellName_.value != '' ? this.elements_.cellName_.value : '空'));
+          goog.dom.setTextContent(node, name);
           goog.dom.classes.add(node, 'me');
           node.index_ = this.eventIndex_;
           this.elements_.eventList_.appendChild(node);
           goog.events.listen(node, 'click', this.reBuild, false, this);
           ++this.eTotleIndex_;
         } else {
-          this.eventSet_[this.eventIndex_] = dataModel.setEventData(eventJudge, eventAction, eventMap, eventMapConfig);
+          this.eventSet_[this.eventIndex_] = dataModel.setEventData(eventJudge, eventAction, eventMap, eventMapConfig, name);
           var list = goog.dom.getElementsByClass('me', this.elements_.eventList_);
           var node = list[this.eventIndex_];
-          goog.dom.setTextContent(node, (this.elements_.cellName_.value != '' ? this.elements_.cellName_.value : '空'));
+          goog.dom.setTextContent(node, name);
         }
         break;
       default:
@@ -880,7 +882,7 @@ goog.scope(function() {
         blockHeight = parseFloat(blockHeight.substr(blockHeight, blockHeight.length - 2));
         data.src = dataModel.getImg(data.src);
         data.src && context.drawImage(data.src, data.opt_posX * blockWidth, data.opt_posY * blockHeight, data.src.width, data.src.height);
-        this.elements_.cellName_.value = goog.dom.getTextContent(e);
+        this.elements_.cellName_.value = data.name;
         break;
       case 2:
         this.cellIndex_ = e.index_;
@@ -925,6 +927,7 @@ goog.scope(function() {
         var eventAction = data.eventAction;
         var eventMap = data.eventMap;
         var eventMapConfig = dataModel.getEventMapConfig(data.eventMapConfig);
+        this.elements_.cellName_.value = data.name;
         goog.dom.getElementsByClass('cpt', this.elements_.checkOption_)[0].checked = (eventMapConfig.rotate || eventMapConfig.rotate == 'true');
         goog.dom.getElementsByClass('cpt', this.elements_.checkOption_)[1].checked = (eventMapConfig.turn || eventMapConfig.turn == 'true');
         goog.dom.getElementsByClass('cpt', this.elements_.checkOption_)[2].checked = (eventMapConfig.std || eventMapConfig.std == 'true');
