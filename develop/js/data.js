@@ -59,6 +59,22 @@ goog.scope(function() {
   };
 
 
+  exports.Data.setAttrList = function(options, name) {
+    return {
+      'o': options,
+      'n': name
+    };
+  };
+
+
+  exports.Data.getAttrList = function(data) {
+    return {
+      options: data['o'],
+      name: data['n']
+    };
+  };
+
+
   exports.Data.setAttribute = function(posX, posY, dir, speed, visiable, status, belong, others) {
     return {
       'posX': posX,
@@ -87,12 +103,13 @@ goog.scope(function() {
   };
 
 
-  exports.Data.setEventData = function(eventJudge, eventAction, eventMap, eventMapConfig) {
+  exports.Data.setEventData = function(eventJudge, eventAction, eventMap, eventMapConfig, name) {
     return {
       'ej': eventJudge,
       'ea': eventAction ,
       'em': eventMap,
-      'mc': eventMapConfig
+      'mc': eventMapConfig,
+      'nm': name
     };
   };
 
@@ -102,7 +119,8 @@ goog.scope(function() {
       eventJudge: data['ej'],
       eventAction: data['ea'] ,
       eventMap: data['em'],
-      eventMapConfig: data['mc']
+      eventMapConfig: data['mc'],
+      name: data['nm']
     };
   };
 

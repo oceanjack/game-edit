@@ -190,6 +190,38 @@ goog.scope(function() {
    * 保存数据
    */
   exports.MapSetting.prototype.saveGameData = function() {
+    var cellSet = [];
+    for(var i = 0, l = this.cellSet_.length; i < l; ++i) {
+      cellSet.push([this.cellSet_[i].getData(), this.cellSet_[i].getAllAttribute()]);
+    }
+    var attr = [];
+    var attrO = goog.dom.getElementsByClass('atd', this.elements_.attributeList_);
+    var attrN = goog.dom.getElementsByClass('at', this.elements_.attributeList_);
+    for(var i = 0, l = attrO.length; i < l; ++i) {
+      var options = goog.dom.getElementByClass('editboxselect', attrO[i]);
+      var vals = [];
+      for(var j = 0, n = options.options.length; j < n; ++j) {
+        vals.push(goog.dom.getTextContent(options.options[j]));
+      }
+      attr.push(dataModel.setAttrList(vals, goog.dom.getTextContent(attrO[i].childNodes[0])));
+    }
+    for(var i = 0, l = attrN.length; i < l; ++i) {
+      var options = goog.dom.getElementByClass('editboxselect', attrN[i]);
+      var vals = [];
+      for(var j = 0, n = options.options.length; j < n; ++j) {
+        vals.push(goog.dom.getTextContent(options.options[j]));
+      }
+      attr.push(dataModel.setAttrList(vals, goog.dom.getTextContent(attrN[i].childNodes[0])));
+    }
+    var world = [];
+    var result = dataModel.setGameData(
+      this.size_,
+      dataModel.setImg(this.background_),
+      cellSet,
+      attr,
+      world,
+      this.eventSet_
+    );
   };
 
 
