@@ -42,6 +42,34 @@ goog.scope(function() {
   };
 
 
+  exports.Actions.MoveForce = function(data, dir) {
+    var posX = data.getAttribute(dataModel.attributeSet.posX);
+    var posY = data.getAttribute(dataModel.attributeSet.posY);
+    var speed = data.getAttribute(dataModel.attributeSet.speed);
+    posX = parseInt(posX);
+    posY = parseInt(posY);
+    speed = parseInt(speed);
+    switch(dir) {
+      case '上':
+        posY -= speed;
+        break;
+      case '下':
+        posY += speed;
+        break;
+      case '左':
+        posX -= speed;
+        break;
+      case '右':
+        posX += speed;
+        break;
+      default:
+        break;
+    data.setAttribute(dataModel.attributeSet.posX, posX);
+    data.setAttribute(dataModel.attributeSet.posY, posY);
+    data.setAttribute(dataModel.attributeSet.dir, dir);
+  };
+
+
   exports.Actions.Swap = function(data, data2, key, opt_key) {
     var val = data.getAttribute(key, opt_key);
     var val2 = data2.getAttribute(key, opt_key);
