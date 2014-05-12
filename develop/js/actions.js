@@ -64,6 +64,7 @@ goog.scope(function() {
         break;
       default:
         break;
+    };
     data.setAttribute(dataModel.attributeSet.posX, posX);
     data.setAttribute(dataModel.attributeSet.posY, posY);
     data.setAttribute(dataModel.attributeSet.dir, dir);

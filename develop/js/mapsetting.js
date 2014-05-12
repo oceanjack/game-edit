@@ -75,6 +75,7 @@ goog.scope(function() {
     this.elements_.checkOption_ = goog.dom.getElementByClass('checkOption');
     this.elements_.checkOptions_ = goog.dom.getElementsByClass('cpt', this.elements_.checkOption_);
     this.elements_.message_ = goog.dom.getElementByClass('message');
+    this.elements_.chooseType_ = goog.dom.getElementByClass('chooseType');
     this.elements_.selectAttr_ = goog.dom.getElementByClass('selectAttr');
     this.elements_.productList_ = goog.dom.getElementByClass('productlist');
     this.elements_.eventList_ = goog.dom.getElementByClass('eventList');
@@ -186,6 +187,7 @@ goog.scope(function() {
     goog.events.listen(el.addEvent_, 'click', this.editEvent, false, this);
     goog.events.listen(el.addActionBtn_, 'click', this.addActionBtn, false, this);
     goog.events.listen(el.saveGameData_, 'click', this.saveGameData, false, this);
+    goog.events.listen(el.chooseType_, 'change', this.findDataByType, false, this);
   };
 
 
@@ -433,8 +435,10 @@ goog.scope(function() {
           }
         }
         var name = (this.elements_.cellName_.value != '' ? this.elements_.cellName_.value : '空');
+        var type = this.elements_.chooseType_.options.selectedIndex;
+        (type != -1) && (type = this.elements_.chooseType_.options[type].value);
         if(!this.eventSet_[this.eventIndex_]) {
-          this.eventSet_[this.eventIndex_] = dataModel.setEventData(eventJudge, eventAction, eventMap, eventMapConfig, name);
+          this.eventSet_[this.eventIndex_] = dataModel.setEventData(eventJudge, eventAction, eventMap, eventMapConfig, name, type);
           var node = goog.dom.createElement('li');
           goog.dom.setTextContent(node, name);
           goog.dom.classes.add(node, 'me');
@@ -443,11 +447,12 @@ goog.scope(function() {
           goog.events.listen(node, 'click', this.reBuild, false, this);
           ++this.eTotleIndex_;
         } else {
-          this.eventSet_[this.eventIndex_] = dataModel.setEventData(eventJudge, eventAction, eventMap, eventMapConfig, name);
+          this.eventSet_[this.eventIndex_] = dataModel.setEventData(eventJudge, eventAction, eventMap, eventMapConfig, name, type);
           var list = goog.dom.getElementsByClass('me', this.elements_.eventList_);
           var node = list[this.eventIndex_];
           goog.dom.setTextContent(node, name);
         }
+        this.findDataByType();
         break;
       default:
         break;
@@ -543,6 +548,24 @@ goog.scope(function() {
       goog.dom.removeNode(eventJudgeNode[i]);
     }
     this.editJudge();
+    this.elements_.chooseType_.options.selectedIndex = 0;
+    this.findDataByType();
+  };
+
+
+  /*
+   * 筛选规则
+   */
+  exports.MapSetting.prototype.findDataByType = function() {
+    var list = goog.dom.getElementsByClass('me', this.elements_.eventList_);
+    for(var i = 0, l = this.eventSet_.length; i < l; ++i) {
+      var data = dataModel.getEventData(this.eventSet_[i]);
+      if(data.type == this.elements_.chooseType_.options[this.elements_.chooseType_.options.selectedIndex].value) {
+        goog.dom.classes.remove(list[i], 'hidden');
+      } else if(data.type) {
+        goog.dom.classes.add(list[i], 'hidden');
+      }
+    }
   };
 
 
@@ -556,6 +579,7 @@ goog.scope(function() {
     this.elements_.chooseAction_.style.display = 'none';
     this.elements_.message_.style.display = 'none';
     this.elements_.checkOption_.style.display = 'none';
+    this.elements_.chooseType_.style.display = 'none';
     this.elements_.productList_.style.display = 'none';
     this.elements_.eventList_.style.display = 'none';
     this.elements_.selectAttr_.style.display = 'none';
@@ -583,6 +607,7 @@ goog.scope(function() {
         this.elements_.selectAttr_.style.display = 'block';
         this.elements_.mapimgdiv_.style.display = 'block';
         this.elements_.checkOption_.style.display = 'block';
+        this.elements_.chooseType_.style.display = 'inline-block';
         break;
     };
   };
@@ -803,8 +828,34 @@ goog.scope(function() {
     goog.dom.appendChild(div, this.editAttr());
     goog.dom.appendChild(div, btn);
     goog.dom.appendChild(this.elements_.chooseAction_, div);
+    
+    var list = goog.dom.getElementsByClass('me', this_.elements_.eventList_);
+    for(var i = actionList.options.length - 1; i >= 0; --i) {
+      if(goog.dom.classes.has(actionList.options[i], 'new'));
+      goog.dom.removeNode(actionList.options[i]);
+    }
+    for(var i = 0, l = list.length; i < l; ++i) {
+      var option = goog.dom.createElement('option');
+      goog.dom.classes.add(option, 'new');
+      goog.dom.setTextContent(option, goog.dom.getTextContent(list[i]));
+      goog.dom.appendChild(actionList, option);
+    }
+    
     goog.events.listen(btn, 'click', function() {
       goog.dom.removeNode(div);
+    }, false, this);
+    goog.events.listen(actionList, 'mousedown', function() {
+      var list = goog.dom.getElementsByClass('me', this_.elements_.eventList_);
+      for(var i = actionList.options.length - 1; i >= 0; --i) {
+        if(goog.dom.classes.has(actionList.options[i], 'new'));
+        goog.dom.removeNode(actionList.options[i]);
+      }
+      for(var i = 0, l = list.length; i < l; ++i) {
+        var option = goog.dom.createElement('option');
+        goog.dom.classes.add(option, 'new');
+        goog.dom.setTextContent(option, goog.dom.getTextContent(list[i]));
+        goog.dom.appendChild(actionList, option);
+      }
     }, false, this);
   };
 
@@ -1009,6 +1060,7 @@ goog.scope(function() {
         var eventAction = data.eventAction;
         var eventMap = data.eventMap;
         var eventMapConfig = dataModel.getEventMapConfig(data.eventMapConfig);
+        this.findOption(this.elements_.chooseType_, data.type);
         this.elements_.cellName_.value = data.name;
         goog.dom.getElementsByClass('cpt', this.elements_.checkOption_)[0].checked = (eventMapConfig.rotate || eventMapConfig.rotate == 'true');
         goog.dom.getElementsByClass('cpt', this.elements_.checkOption_)[1].checked = (eventMapConfig.turn || eventMapConfig.turn == 'true');

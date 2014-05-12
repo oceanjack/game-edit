@@ -131,13 +131,14 @@ goog.scope(function() {
     };
   };
 
-  exports.Data.setEventData = function(eventJudge, eventAction, eventMap, eventMapConfig, name) {
+  exports.Data.setEventData = function(eventJudge, eventAction, eventMap, eventMapConfig, name, type) {
     return {
       'ej': eventJudge,
       'ea': eventAction ,
       'em': eventMap,
       'mc': eventMapConfig,
-      'nm': name
+      'nm': name,
+      'ty': type
     };
   };
 
@@ -148,7 +149,8 @@ goog.scope(function() {
       eventAction: data['ea'] ,
       eventMap: data['em'],
       eventMapConfig: data['mc'],
-      name: data['nm']
+      name: data['nm'],
+      type: data['ty']
     };
   };
 
