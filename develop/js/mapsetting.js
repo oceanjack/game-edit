@@ -831,8 +831,9 @@ goog.scope(function() {
     
     var list = goog.dom.getElementsByClass('me', this_.elements_.eventList_);
     for(var i = actionList.options.length - 1; i >= 0; --i) {
-      if(goog.dom.classes.has(actionList.options[i], 'new'));
-      goog.dom.removeNode(actionList.options[i]);
+      if(goog.dom.classes.has(actionList.options[i], 'new')) {
+        goog.dom.removeNode(actionList.options[i]);
+      }
     }
     for(var i = 0, l = list.length; i < l; ++i) {
       var option = goog.dom.createElement('option');
@@ -847,8 +848,9 @@ goog.scope(function() {
     goog.events.listen(actionList, 'mousedown', function() {
       var list = goog.dom.getElementsByClass('me', this_.elements_.eventList_);
       for(var i = actionList.options.length - 1; i >= 0; --i) {
-        if(goog.dom.classes.has(actionList.options[i], 'new'));
-        goog.dom.removeNode(actionList.options[i]);
+        if(goog.dom.classes.has(actionList.options[i], 'new')) {
+          goog.dom.removeNode(actionList.options[i]);
+        }
       }
       for(var i = 0, l = list.length; i < l; ++i) {
         var option = goog.dom.createElement('option');
