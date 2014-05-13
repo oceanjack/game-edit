@@ -40,6 +40,9 @@ goog.scope(function() {
   exports.MapSetting.prototype.eventSet_ = null; //事件集合
   exports.MapSetting.prototype.eventIndex_ = null; //当前事件id
   exports.MapSetting.prototype.eTotleIndex_ = null; //总事件
+  exports.MapSetting.prototype.workflowSet_ = null; //流程集合
+  exports.MapSetting.prototype.workflowIndex_ = null; //当流程id
+  exports.MapSetting.prototype.wTotleIndex_ = null; //总流程
 
 
   exports.MapSetting.prototype.init = function(x, y, background) {
@@ -60,7 +63,7 @@ goog.scope(function() {
     this.map_ = [];
     this.realWorld_ = [];
     this.background_ = dataModel.getImg(background);
-    this.mode_ = 1; // 1 人物 2 属性 3 地图 4 行为 5 事件 6 策略 default 1
+    this.mode_ = 1; // 1 人物 2 属性 3 地图 5 行为 事件 策略 8 流程 default 1
   };
 
 
@@ -79,12 +82,16 @@ goog.scope(function() {
     this.elements_.selectAttr_ = goog.dom.getElementByClass('selectAttr');
     this.elements_.productList_ = goog.dom.getElementByClass('productlist');
     this.elements_.eventList_ = goog.dom.getElementByClass('eventList');
+    this.elements_.workflowList_ = goog.dom.getElementByClass('workflowList');
     this.elements_.attributeList_ = goog.dom.getElementByClass('attributeList');
     this.elements_.addCharacter_ = goog.dom.getElementByClass('addCharacter');
     this.elements_.addAttribute_ = goog.dom.getElementByClass('addAttribute');
     this.elements_.addWorld_ = goog.dom.getElementByClass('addWorld');
     this.elements_.addEvent_ = goog.dom.getElementByClass('addEvent');
+    this.elements_.addWorkflow_ = goog.dom.getElementByClass('addWorkflow');
     this.elements_.addActionBtn_ = goog.dom.getElementByClass('addActionBtn');
+    this.elements_.workflowPart_ = goog.dom.getElementByClass('workflowPart');
+    this.elements_.workflowSpace_ = goog.dom.getElementByClass('workflowspace');
     this.elements_.saveGameData_ = goog.dom.getElementByClass('saveGameData');
     this.elements_.downloadGameData_ = goog.dom.getElementByClass('downloaddata');
   };
@@ -186,6 +193,7 @@ goog.scope(function() {
     goog.events.listen(el.addWorld_, 'click', this.editWorld, false, this);
     goog.events.listen(el.addEvent_, 'click', this.editEvent, false, this);
     goog.events.listen(el.addActionBtn_, 'click', this.addActionBtn, false, this);
+    goog.events.listen(el.addWorkflow_, 'click', this.addWorkflow, false, this);
     goog.events.listen(el.saveGameData_, 'click', this.saveGameData, false, this);
     goog.events.listen(el.chooseType_, 'change', this.findDataByType, false, this);
   };
@@ -454,6 +462,18 @@ goog.scope(function() {
         }
         this.findDataByType();
         break;
+      case 8:
+        var name = (this.elements_.cellName_.value != '' ? this.elements_.cellName_.value : '空');
+        var type = this.elements_.chooseType_.options.selectedIndex;
+        (type != -1) && (type = this.elements_.chooseType_.options[type].value);
+        var node = goog.dom.createElement('li');
+        goog.dom.setTextContent(node, name);
+        goog.dom.classes.add(node, 'me');
+        node.index_ = this.workflowIndex_;
+        this.elements_.workflowList_.appendChild(node);
+        goog.events.listen(node, 'click', this.reBuild, false, this);
+        ++this.wTotleIndex_;
+        break;
       default:
         break;
     };
@@ -583,6 +603,8 @@ goog.scope(function() {
     this.elements_.productList_.style.display = 'none';
     this.elements_.eventList_.style.display = 'none';
     this.elements_.selectAttr_.style.display = 'none';
+    this.elements_.workflowPart_.style.display = 'none';
+    this.elements_.workflowSpace_.style.display = 'none';
     switch(this.mode_) {
       case 1:
         this.elements_.mapimgdiv_.style.display = 'block';
@@ -608,6 +630,14 @@ goog.scope(function() {
         this.elements_.mapimgdiv_.style.display = 'block';
         this.elements_.checkOption_.style.display = 'block';
         this.elements_.chooseType_.style.display = 'inline-block';
+        break;
+      case 8:
+        this.elements_.makeSure_.style.display = 'inline-block';
+        this.elements_.message_.style.display = 'block';
+        this.elements_.workflowList_.style.display = 'block';
+        this.elements_.chooseType_.style.display = 'inline-block';
+        this.elements_.workflowPart_.style.display = 'block';
+        this.elements_.workflowSpace_.style.display = 'block';
         break;
     };
   };
@@ -735,6 +765,16 @@ goog.scope(function() {
     this.display_();
     this.clear();
     this.eventIndex_ = this.eTotleIndex_;
+  };
+
+
+  /*
+   * 编辑流程
+   */
+  exports.MapSetting.prototype.addWorkflow = function() {
+    this.mode_ = 8;
+    this.display_();
+    this.clear();
   };
 
 
