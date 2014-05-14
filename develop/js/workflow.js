@@ -40,6 +40,7 @@ goog.scope(function() {
     this.elements_.workflowSpace_ = goog.dom.getElementByClass('workflowspace');
     this.elements_.cellName_ = goog.dom.getElementByClass('cellName');
     this.elements_.chooseType_ = goog.dom.getElementByClass('chooseType');
+    this.elements_.eventList_ = goog.dom.getElementByClass('eventList');
   };
 
 
@@ -62,15 +63,51 @@ goog.scope(function() {
     goog.dom.classes.add(div, 'part');
     if(e == this.elements_.workflowMenu_[2]) {
       goog.dom.classes.add(div, 'jPart');
+      goog.dom.appendChild(div, this.createSelect());
     } else if(e == this.elements_.workflowMenu_[0]) {
       goog.dom.classes.add(div, 'sePart');
+      goog.dom.appendChild(div, goog.dom.htmlToDocumentFragment(templates.startAndEnd()));
     } else if(e == this.elements_.workflowMenu_[1]) {
       goog.dom.classes.add(div, 'ioPart');
     } else if(e == this.elements_.workflowMenu_[3]) {
       goog.dom.classes.add(div, 'sPart');
+      goog.dom.appendChild(div, this.createSelect());
     }
-    goog.dom.appendChild(div, goog.dom.htmlToDocumentFragment(templates.actionList()));
     goog.dom.appendChild(this.elements_.workflowSpace_, div);
+  };
+
+
+  exports.Workflow.prototype.createSelect = function() {
+    var select = goog.dom.htmlToDocumentFragment(templates.actionList());
+    var rules = goog.dom.getElementsByClass('me', this.elements_.eventList_);
+    for(var i = 0, l = rules.length; i < l; ++i) {
+      var option = goog.dom.createElement('option');
+      goog.dom.setTextContent(option, goog.dom.getTextContent(rules[i]));
+      goog.dom.classes.add(option, 'new');
+      goog.dom.appendChild(select, option);
+    }
+    goog.events.listen(select, 'mousedown', this.changeOptions, false, this);
+    return select;
+  };
+
+
+  exports.Workflow.prototype.changeOptions = function(e) {
+    e = e.event_;
+    e = e.target || e.srcElement;
+    var index = e.options.selectedIndex;
+    for(var i = e.options.length - 1; i >= 0; --i) {
+      if(goog.dom.classes.has(e.options[i], 'new')) {
+        goog.dom.removeNode(e.options[i]);
+      }
+    }
+    var rules = goog.dom.getElementsByClass('me', this.elements_.eventList_);
+    for(var i = 0, l = rules.length; i < l; ++i) {
+      var option = goog.dom.createElement('option');
+      goog.dom.setTextContent(option, goog.dom.getTextContent(rules[i]));
+      goog.dom.classes.add(option, 'new');
+      goog.dom.appendChild(e, option);
+    }
+    e.options.selectedIndex = index;
   };
 
 
