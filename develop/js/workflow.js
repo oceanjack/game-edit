@@ -5,11 +5,12 @@ goog.require('goog.events');
 goog.require('goog.style');
 
 goog.require('ocean.onlineAI.Data');
+goog.require('ocean.onlineAI.OnlineAI.templates');
 
 goog.scope(function() {
   var exports = ocean.onlineAI;
   var dataModel = exports.Data;
-
+  var templates = ocean.onlineAI.OnlineAI.templates;
 
   exports.Workflow = function() {
     this.init();
@@ -68,6 +69,7 @@ goog.scope(function() {
     } else if(e == this.elements_.workflowMenu_[3]) {
       goog.dom.classes.add(div, 'sPart');
     }
+    goog.dom.appendChild(div, goog.dom.htmlToDocumentFragment(templates.actionList()));
     goog.dom.appendChild(this.elements_.workflowSpace_, div);
   };
 
@@ -83,5 +85,9 @@ goog.scope(function() {
     this.elements_.workflowList_.appendChild(node);
     goog.events.listen(node, 'click', this.reBuild, false, this);
     ++this.wTotleIndex_; 
+  };
+
+
+  exports.Workflow.prototype.reBuild = function() {
   };
 });
