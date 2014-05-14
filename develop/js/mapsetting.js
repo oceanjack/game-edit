@@ -268,6 +268,7 @@ goog.scope(function() {
     var attrO = goog.dom.getElementsByClass('atd', this.elements_.attributeList_);
     for(var i = 0, l = attrO.length; i < l; ++i) {
       var options = goog.dom.getElementByClass('editboxselect', attrO[i]);
+      var index = options.options.selectedIndex;
       for(var j = options.options.length - 1; j >= 0; --j) {
         goog.dom.removeNode(options.options[j]);
       }
@@ -277,6 +278,7 @@ goog.scope(function() {
         goog.dom.setTextContent(op, list[j]);
         goog.dom.appendChild(options, op);
       }
+      options.options.selectedIndex = index;
     }
     for(var i = attrO.length; i < data.attrSet.length; ++i) { 
       var list = dataModel.getAttrList(data.attrSet[i]);
@@ -801,6 +803,7 @@ goog.scope(function() {
    */
   exports.MapSetting.prototype.addOneOption = function(node) {
     var this_ = this;
+    var index = node.options.selectedIndex;
     var clearList = goog.dom.getElementsByClass('new', node);
     for(var i = clearList.length - 1; i >= 0; --i) {
       if(goog.dom.classes.has(clearList[i], 'new')) {
@@ -814,6 +817,7 @@ goog.scope(function() {
       goog.dom.setTextContent(option, goog.dom.getTextContent(oneList[i]));
       goog.dom.appendChild(node, option);
     }
+    node.options.selectedIndex = index;
   };
   
   
@@ -822,6 +826,7 @@ goog.scope(function() {
    */
   exports.MapSetting.prototype.addAttrOption = function(node) {
     var this_ = this;
+    var index = node.options.selectedIndex;
     var clearList = goog.dom.getElementsByClass('new', node);
     for(var i = clearList.length - 1; i >= 0; --i) {
       if(goog.dom.classes.has(clearList[i], 'new')) {
@@ -835,6 +840,7 @@ goog.scope(function() {
       goog.dom.setTextContent(option, goog.dom.getTextContent(goog.dom.getElementByClass('val', attrList[i])));
       goog.dom.appendChild(node, option);
     }
+    node.options.selectedIndex = index;
   };
 
 
@@ -860,6 +866,7 @@ goog.scope(function() {
     goog.dom.appendChild(div, btn);
     goog.dom.appendChild(this.elements_.chooseAction_, div);
     
+    var index = actionList.options.selectedIndex;
     var list = goog.dom.getElementsByClass('me', this_.elements_.eventList_);
     for(var i = actionList.options.length - 1; i >= 0; --i) {
       if(goog.dom.classes.has(actionList.options[i], 'new')) {
@@ -872,12 +879,14 @@ goog.scope(function() {
       goog.dom.setTextContent(option, goog.dom.getTextContent(list[i]));
       goog.dom.appendChild(actionList, option);
     }
+    actionList.options.selectedIndex = index;
     
     goog.events.listen(btn, 'click', function() {
       goog.dom.removeNode(div);
     }, false, this);
     goog.events.listen(actionList, 'mousedown', function() {
       var list = goog.dom.getElementsByClass('me', this_.elements_.eventList_);
+      var index = actionList.options.selectedIndex;
       for(var i = actionList.options.length - 1; i >= 0; --i) {
         if(goog.dom.classes.has(actionList.options[i], 'new')) {
           goog.dom.removeNode(actionList.options[i]);
@@ -889,6 +898,7 @@ goog.scope(function() {
         goog.dom.setTextContent(option, goog.dom.getTextContent(list[i]));
         goog.dom.appendChild(actionList, option);
       }
+      actionList.options.selectedIndex = index;
     }, false, this);
   };
 
