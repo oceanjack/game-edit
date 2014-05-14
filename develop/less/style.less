@@ -184,8 +184,58 @@ button {
         select {
           width: 87px;
           border: none !important;
+          -moz-user-select: none;
+          -webkit-user-select: none;
+          -ms-user-select: none;
+          user-select: none;
         }
         background-color: rgb(221, 221, 221);
+      }
+      p {
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        position: absolute;
+      }
+      p:hover {
+        color: #29b23c;
+      }
+      .sePart, .ioPart, .sPart { 
+        .up {
+          margin-top: -22px;
+          margin-left: 45px;
+        }
+        .left {
+          margin-top: 0px;
+          margin-left: -4px;
+        }
+        .right {
+          margin-top: -40px;
+          margin-left: 95px;
+        }
+        .down {
+          margin-top: -22px;
+          margin-left: 45px;
+        }
+      }
+      .jPart {
+        .up {
+          margin-top: -49px;
+          margin-left: -8px;
+        }
+        .left {
+          margin-top: 40px;
+          margin-left: -7px;
+        }
+        .right {
+          margin-top: -137px;
+          margin-left: 82px;
+        } 
+        .down {
+          margin-top: -50px;
+          margin-left: 81px;
+        }
       }
       .jPart {
         width: 90px;

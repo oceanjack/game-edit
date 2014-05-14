@@ -61,6 +61,20 @@ goog.scope(function() {
     e = e.target || e.srcElement;
     var div = goog.dom.createElement('div');
     goog.dom.classes.add(div, 'part');
+    var up = goog.dom.createElement('p');
+    goog.dom.classes.add(up, 'up');
+    goog.dom.setTextContent(up, 'o');
+    var left = goog.dom.createElement('p');
+    goog.dom.classes.add(left, 'left');
+    goog.dom.setTextContent(left, 'o');
+    var right = goog.dom.createElement('p');
+    goog.dom.classes.add(right, 'right');
+    goog.dom.setTextContent(right, 'o');
+    var down = goog.dom.createElement('p');
+    goog.dom.classes.add(down, 'down');
+    goog.dom.setTextContent(down, 'o');
+    goog.dom.appendChild(div, up);
+    goog.dom.appendChild(div, left);
     if(e == this.elements_.workflowMenu_[2]) {
       goog.dom.classes.add(div, 'jPart');
       goog.dom.appendChild(div, this.createSelect());
@@ -73,6 +87,8 @@ goog.scope(function() {
       goog.dom.classes.add(div, 'sPart');
       goog.dom.appendChild(div, this.createSelect());
     }
+    goog.dom.appendChild(div, right);
+    goog.dom.appendChild(div, down);
     goog.dom.appendChild(this.elements_.workflowSpace_, div);
     this.dragAnddrop(div);
   };
