@@ -60,11 +60,11 @@ goog.scope(function() {
     e = e.target || e.srcElement;
     var div = goog.dom.createElement('div');
     goog.dom.classes.add(div, 'part');
-    if(e == this.elements_.workflowMenu_[0]) {
+    if(e == this.elements_.workflowMenu_[2]) {
       goog.dom.classes.add(div, 'jPart');
-    } else if(e == this.elements_.workflowMenu_[1]) {
+    } else if(e == this.elements_.workflowMenu_[0]) {
       goog.dom.classes.add(div, 'sePart');
-    } else if(e == this.elements_.workflowMenu_[2]) {
+    } else if(e == this.elements_.workflowMenu_[1]) {
       goog.dom.classes.add(div, 'ioPart');
     } else if(e == this.elements_.workflowMenu_[3]) {
       goog.dom.classes.add(div, 'sPart');
