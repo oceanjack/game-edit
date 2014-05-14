@@ -74,6 +74,43 @@ goog.scope(function() {
       goog.dom.appendChild(div, this.createSelect());
     }
     goog.dom.appendChild(this.elements_.workflowSpace_, div);
+    this.dragAnddrop(div);
+  };
+
+
+  exports.Workflow.prototype.dragAnddrop = function(node) {
+    var sign = false;
+    var orgX = 0;
+    var orgY = 0;
+    goog.events.listen(node, 'mousedown', function(e) {
+      sign = true;
+      e = e.event_;
+      var pos = {x: e.x, y: e.y};
+      orgX = pos.x - parseInt(window.getComputedStyle(node)['margin-left'].split('px')[0]);
+      orgY = pos.y - parseInt(window.getComputedStyle(node)['margin-top'].split('px')[0]);
+    }, false, this);
+    goog.events.listen(node, 'mousemove', function(e) {
+      if(!sign) {
+        return false;
+      }
+      e = e.event_;
+      e.preventDefault();
+      var pos = {x: e.x, y: e.y};
+      if(e.y - orgY >= 5 && e.y - orgY <= 550) {
+        goog.style.setStyle(node, 'margin-top', e.y - orgY + 'px');
+      }
+      if(e.x - orgX >= 30 && e.x - orgX <= 690) {
+        goog.style.setStyle(node, 'margin-left', e.x - orgX +'px');
+      }
+      return false;
+    }, false, this);
+    goog.events.listen(node, 'mouseup', function(e) {
+      e = e.event_;
+      e.preventDefault();
+      sign = false;
+      return false;
+    }, false, this);
+
   };
 
 
