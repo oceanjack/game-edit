@@ -29,11 +29,11 @@ goog.scope(function() {
 
   exports.One.prototype.initLink = function() {
     var attr = this.data_.getAllAttribute();
-    for(key in attr) {
+    for(var key in attr) {
       this.attrLink_[key] = -1;
       if(key == dataModel.attributeSet.others) {
         this.attrLink_[key] = {};
-        for(okey in attr[key]) {
+        for(var okey in attr[key]) {
           this.attrLink_[key][okey] = -1;
         }
       }

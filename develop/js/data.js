@@ -221,7 +221,7 @@ goog.scope(function() {
     return {
       'r': rotate,
       't': turn,
-      's': std,
+      's': std
     };
   };
 

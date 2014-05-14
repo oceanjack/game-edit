@@ -791,7 +791,7 @@ goog.scope(function() {
     }, false, this);
     goog.events.listen(attr, 'mousedown', function() {
       this_.addAttrOption(attr);
-    }, false. this);
+    }, false, this);
     return node;
   };
 

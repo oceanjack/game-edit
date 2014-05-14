@@ -20,8 +20,47 @@
       </div>
       <div class="map">
         <div class="message hidden">
+          <select class="chooseType hidden">
+            <option>事件</option>
+            <option>行为</option>
+            <option>策略</option>
+          </select>
           <input type="text" class="cellName" />
           <button class="makeSure hidden">确定</button>
+        </div>
+        <div class="workflowPart hidden">
+          <div class="wfp">开始/结束</div>
+          <div class="wfp hiddenForce">输入/输出</div>
+          <div class="wfp">判断</div>
+          <div class="wfp">方案</div>
+        </div>
+        <div class="workflowspace hidden">
+        </div>
+        <div class="attribute hidden">
+          <ul class="attributeList">
+            <li class="atd selected"><p class="val">横坐标</p></li>
+            <li class="atd selected"><p class="val">纵坐标</p></li>
+            <li class="atd selected"><p class="val">方向</p></li>
+            <li class="atd selected"><p class="val">速度</p></li>
+            <li class="atd selected"><p class="val">可穿透</p></li>
+            <li class="atd selected"><p class="val">状态</p></li>
+            <li class="atd selected"><p class="val">属于</p></li>
+          </ul>
+        </div>
+        <div class="selectAttr hidden">
+          <hr />
+          <p>如果</p>
+        </div>
+        <div class="chooseAction hidden">
+          <hr />
+          <button class="addActionBtn">添加</button>
+        </div>
+        <div class="checkOption hidden">
+          <hr />
+          <input class="cpt" type="checkbox" value="90度旋转"/><p>90度旋转</p>
+          <input class="cpt" type="checkbox" value="翻转"/><p>翻转</p>
+          <input class="cpt" type="checkbox" value="固定位置"/><p>固定位置</p>
+          <input class="cpt" type="checkbox" value="作用区"/><p>作用区</p>
         </div>
         <div class="mapimgdiv">
           <canvas class="hidden" id="canvas"></canvas>
@@ -32,17 +71,24 @@
     <div class="menu">
       <ul class="menulist">
         <li>创建地图</li>
+        <li class="loadGameData"><input type="file" class="loadData" /></li>
       </ul>
       <ul class="hidden menulist">
-        <li class='addCharacter'>添加人物</li>
-        <li>添加属性</li>
-        <li>添加行为</li>
-        <li>添加事件</li>
-        <li>添加策略</li>
+        <li class="addCharacter">创建物体</li>
+        <li class="addAttribute">增添属性</li>
+        <li class="addWorld">生成世界</li>
+        <li class="addEvent">编辑规则</li>
+        <li class="addWorkflow">流程组织</li>
+        <li class="saveGameData">保存数据</li>
+        <li><a class="downloaddata" download="data.txt">下载数据<a></li>
       </ul>
     </div>
     <div class="product">
       <ul class="productlist">
+      </ul>
+      <ul class="eventList hidden">
+      </ul>
+      <ul class="workflowList hidden">
       </ul>
     </div>
   </div>
