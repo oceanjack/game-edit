@@ -8,6 +8,7 @@ goog.require('ocean.onlineAI.Data');
 goog.require('ocean.onlineAI.Cell');
 goog.require('ocean.onlineAI.One');
 goog.require('ocean.onlineAI.Actions');
+goog.require('ocean.onlineAI.Workflow');
 goog.require('ocean.onlineAI.OnlineAI.templates');
 
 goog.scope(function() {
@@ -40,9 +41,7 @@ goog.scope(function() {
   exports.MapSetting.prototype.eventSet_ = null; //事件集合
   exports.MapSetting.prototype.eventIndex_ = null; //当前事件id
   exports.MapSetting.prototype.eTotleIndex_ = null; //总事件
-  exports.MapSetting.prototype.workflowSet_ = null; //流程集合
-  exports.MapSetting.prototype.workflowIndex_ = null; //当流程id
-  exports.MapSetting.prototype.wTotleIndex_ = null; //总流程
+  exports.MapSetting.prototype.workflow_ = null; //总事件
 
 
   exports.MapSetting.prototype.init = function(x, y, background) {
@@ -63,6 +62,7 @@ goog.scope(function() {
     this.map_ = [];
     this.realWorld_ = [];
     this.background_ = dataModel.getImg(background);
+    this.workflow_ = new exports.Workflow();
     this.mode_ = 1; // 1 人物 2 属性 3 地图 5 行为 事件 策略 8 流程 default 1
   };
 
@@ -82,7 +82,6 @@ goog.scope(function() {
     this.elements_.selectAttr_ = goog.dom.getElementByClass('selectAttr');
     this.elements_.productList_ = goog.dom.getElementByClass('productlist');
     this.elements_.eventList_ = goog.dom.getElementByClass('eventList');
-    this.elements_.workflowList_ = goog.dom.getElementByClass('workflowList');
     this.elements_.attributeList_ = goog.dom.getElementByClass('attributeList');
     this.elements_.addCharacter_ = goog.dom.getElementByClass('addCharacter');
     this.elements_.addAttribute_ = goog.dom.getElementByClass('addAttribute');
@@ -90,10 +89,11 @@ goog.scope(function() {
     this.elements_.addEvent_ = goog.dom.getElementByClass('addEvent');
     this.elements_.addWorkflow_ = goog.dom.getElementByClass('addWorkflow');
     this.elements_.addActionBtn_ = goog.dom.getElementByClass('addActionBtn');
-    this.elements_.workflowPart_ = goog.dom.getElementByClass('workflowPart');
-    this.elements_.workflowSpace_ = goog.dom.getElementByClass('workflowspace');
     this.elements_.saveGameData_ = goog.dom.getElementByClass('saveGameData');
     this.elements_.downloadGameData_ = goog.dom.getElementByClass('downloaddata');
+    this.elements_.workflowList_ = goog.dom.getElementByClass('workflowList');
+    this.elements_.workflowPart_ = goog.dom.getElementByClass('workflowPart');
+    this.elements_.workflowSpace_ = goog.dom.getElementByClass('workflowspace');
   };
 
 
@@ -463,16 +463,7 @@ goog.scope(function() {
         this.findDataByType();
         break;
       case 8:
-        var name = (this.elements_.cellName_.value != '' ? this.elements_.cellName_.value : '空');
-        var type = this.elements_.chooseType_.options.selectedIndex;
-        (type != -1) && (type = this.elements_.chooseType_.options[type].value);
-        var node = goog.dom.createElement('li');
-        goog.dom.setTextContent(node, name);
-        goog.dom.classes.add(node, 'me');
-        node.index_ = this.workflowIndex_;
-        this.elements_.workflowList_.appendChild(node);
-        goog.events.listen(node, 'click', this.reBuild, false, this);
-        ++this.wTotleIndex_;
+        this.workflow_.makeSure();
         break;
       default:
         break;

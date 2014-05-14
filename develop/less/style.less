@@ -173,6 +173,56 @@ button {
       text-align: center;
       margin: auto;
       margin-top: 5px;
+      .part {
+        position: absolute;
+        margin-left: 30px;
+        margin-top: 5px;
+        border: 1px solid #333;
+        select {
+          width: 70px;
+        }
+      }
+      .jPart {
+        width: 90px;
+        height: 90px;
+        line-height: 90px;
+        -webkit-transform: rotateX(60deg) rotateZ(45deg);
+        -o-transform: rotateX(60deg) rotateZ(45deg);
+        -moz-transform: rotateX(60deg) rotateZ(45deg);
+        transform: rotateX(60deg) rotateZ(45deg);
+        > * {
+          -webkit-transform: rotateZ(-45deg) scaleY(2);
+          -o-transform: rotateZ(-45deg) scaleY(2);
+          -moz-transform: rotateZ(-45deg) scaleY(2);
+          transform: rotateZ(-45deg) scaleY(2);
+        }
+      }
+      .sePart {
+        width: 100px;
+        height: 40px;
+        line-height: 40px;
+        border-radius: 10px;
+      }
+      .ioPart {
+        width: 100px;
+        height: 40px;
+        line-height: 40px;
+        -webkit-transform: skew(-40deg);
+        -o-transform: skew(-40deg);
+        -moz-transform: skew(-40deg);
+        transform: skew(-40deg);
+        > * {
+          -webkit-transform: skew(40deg);
+          -o-transform: skew(40deg);
+          -moz-transform: skew(40deg);
+          transform: skew(40deg);
+        }
+      }
+      .sPart {
+        line-height: 40px;
+        width: 100px;
+        height: 40px;
+      }
     }
     #canvas, .mapArea {
       position: absolute;
