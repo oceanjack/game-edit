@@ -44,6 +44,7 @@ goog.scope(function() {
     this.elements_.workflowList_ = goog.dom.getElementByClass('workflowList');
     this.elements_.workflowPart_ = goog.dom.getElementByClass('workflowPart');
     this.elements_.workflowMenu_ = goog.dom.getElementsByClass('wfp', this.elements_.workflowPart_);
+    this.elements_.removeMenu_ = goog.dom.getElementByClass('wfpRemove', this.elements_.workflowPart_);
     this.elements_.workflowSpace_ = goog.dom.getElementByClass('workflowspace');
     this.elements_.cellName_ = goog.dom.getElementByClass('cellName');
     this.elements_.chooseType_ = goog.dom.getElementByClass('chooseType');
@@ -143,6 +144,20 @@ goog.scope(function() {
     var orgY = 0;
     var this_ = this;
     goog.events.listen(node, 'mousedown', function(e) {
+      if(this_.elements_.removeMenu_.checked) {
+        for(var key in this.linkSet_) {
+          if(this.linkSet_[key]) {
+            var start = Math.floor(this.linkSet_[key][0].index_ / 10);
+            var end = Math.floor(this.linkSet_[key][1].index_ / 10);
+            if(start == node.index_ || end == node.index_) {
+              this.linkSet_[key] = null;
+            }
+          }
+        }
+        goog.dom.removeNode(node);
+        this_.draw();
+        return false;
+      }
       sign = true;
       e = e.event_;
       var pos = {x: e.x, y: e.y};
