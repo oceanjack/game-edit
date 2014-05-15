@@ -72,16 +72,16 @@ goog.scope(function() {
     goog.dom.classes.add(div, 'part');
     var up = goog.dom.createElement('p');
     goog.dom.classes.add(up, 'up');
-    goog.dom.setTextContent(up, 'o');
+    goog.dom.setTextContent(up, '+');
     var left = goog.dom.createElement('p');
     goog.dom.classes.add(left, 'left');
-    goog.dom.setTextContent(left, 'o');
+    goog.dom.setTextContent(left, '+');
     var right = goog.dom.createElement('p');
     goog.dom.classes.add(right, 'right');
-    goog.dom.setTextContent(right, 'o');
+    goog.dom.setTextContent(right, '+');
     var down = goog.dom.createElement('p');
     goog.dom.classes.add(down, 'down');
-    goog.dom.setTextContent(down, 'o');
+    goog.dom.setTextContent(down, '+');
     goog.dom.appendChild(div, up);
     goog.dom.appendChild(div, left);
     if(e == this.elements_.workflowMenu_[2]) {
