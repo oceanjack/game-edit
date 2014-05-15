@@ -241,7 +241,8 @@ goog.scope(function() {
       cellSet,
       attr,
       world,
-      this.eventSet_
+      this.eventSet_,
+      this.workflow_.getWorkflow()
     );
     this.elements_.downloadGameData_.href = 'data:text/paint; utf-8,' + JSON.stringify(result);
   };
@@ -317,6 +318,7 @@ goog.scope(function() {
       this.elements_.eventList_.appendChild(node);
       goog.events.listen(node, 'click', this.reBuild, false, this);
     }
+    this.workflow_.setWorkflow(data.workflow);
   };
 
 
@@ -563,6 +565,7 @@ goog.scope(function() {
     this.editJudge();
     this.elements_.chooseType_.options.selectedIndex = 0;
     this.findDataByType();
+    this.workflow_.clear();
   };
 
 
@@ -598,6 +601,7 @@ goog.scope(function() {
     this.elements_.selectAttr_.style.display = 'none';
     this.elements_.workflowPart_.style.display = 'none';
     this.elements_.workflowSpace_.style.display = 'none';
+    this.elements_.workflowList_.style.display = 'none';
     switch(this.mode_) {
       case 1:
         this.elements_.mapimgdiv_.style.display = 'block';

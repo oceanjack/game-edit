@@ -235,14 +235,57 @@ goog.scope(function() {
   };
 
 
-  exports.Data.setGameData = function(size, background, cellSet, attrSet, world, event) {
+  exports.Data.setWorkflow = function(nodes, links, name, type) {
+    return {
+      'n': nodes,
+      'l': links,
+      'm': name,
+      't': type
+    };
+  };
+
+
+  exports.Data.getWorkflow = function(data) {
+    return {
+      nodes: data['n'],
+      links: data['l'],
+      name: data['m'],
+      type: data['t']
+    };
+  };
+
+
+  exports.Data.setWorkflowPart = function(left, top, type, index, val) {
+    return {
+      'l': left,
+      't': top,
+      'y': type,
+      'i': index,
+      'v': val
+    };
+  };
+
+
+  exports.Data.getWorkflowPart = function(data) {
+    return {
+      left: data['l'],
+      top: data['t'],
+      type: data['y'],
+      index: data['i'],
+      val: data['v']
+    };
+  };
+
+
+  exports.Data.setGameData = function(size, background, cellSet, attrSet, world, event, workflow) {
     return {
       's': size,
       'b': background,
       'c': cellSet,
       'a': attrSet,
       'w': world,
-      'e': event
+      'e': event,
+      'f': workflow
     };
   };
 
@@ -250,11 +293,12 @@ goog.scope(function() {
   exports.Data.getGameData = function(data) {
     return {
       size: data['s'],
-      background: data['b'] ,
-      cellSet: data['c'] ,
-      attrSet: data['a'] ,
-      world: data['w'] ,
-      event: data['e']
+      background: data['b'],
+      cellSet: data['c'],
+      attrSet: data['a'],
+      world: data['w'],
+      event: data['e'],
+      workflow: data['f']
     };
   };
 });

@@ -65,43 +65,54 @@ goog.scope(function() {
   /*
    * 添加流程图组件
    */
-  exports.Workflow.prototype.addWorkflowPart = function(e) {
-    e = e.event_;
-    e = e.target || e.srcElement;
+  exports.Workflow.prototype.addWorkflowPart = function(e, opt_type, opt_index) {
+    if(e) {
+      e = e.event_;
+      e = e.target || e.srcElement;
+    }
     var div = goog.dom.createElement('div');
     goog.dom.classes.add(div, 'part');
     var up = goog.dom.createElement('p');
     goog.dom.classes.add(up, 'up');
+    goog.dom.classes.add(up, 'pp');
     goog.dom.setTextContent(up, '+');
     var left = goog.dom.createElement('p');
     goog.dom.classes.add(left, 'left');
+    goog.dom.classes.add(left, 'pp');
     goog.dom.setTextContent(left, '+');
     var right = goog.dom.createElement('p');
     goog.dom.classes.add(right, 'right');
+    goog.dom.classes.add(right, 'pp');
     goog.dom.setTextContent(right, '+');
     var down = goog.dom.createElement('p');
     goog.dom.classes.add(down, 'down');
+    goog.dom.classes.add(down, 'pp');
     goog.dom.setTextContent(down, '+');
     goog.dom.appendChild(div, up);
     goog.dom.appendChild(div, left);
-    if(e == this.elements_.workflowMenu_[2]) {
+    if(e == this.elements_.workflowMenu_[2] || opt_type == 'jPart') {
       goog.dom.classes.add(div, 'jPart');
       goog.dom.appendChild(div, this.createSelect());
       this.editLinks(up, left, right, down, 2);
-    } else if(e == this.elements_.workflowMenu_[0]) {
+    } else if(e == this.elements_.workflowMenu_[0] || opt_type == 'sePart') {
       goog.dom.classes.add(div, 'sePart');
-      goog.dom.appendChild(div, goog.dom.htmlToDocumentFragment(templates.startAndEnd()));
+      var select = goog.dom.htmlToDocumentFragment(templates.startAndEnd());
+      goog.dom.classes.add(select, 'sel');
+      goog.dom.appendChild(div, select);
       this.editLinks(up, left, right, down, 1);
-    } else if(e == this.elements_.workflowMenu_[1]) {
+    } else if(e == this.elements_.workflowMenu_[1] || opt_type == 'ioPart') {
       goog.dom.classes.add(div, 'ioPart', 1);
       this.editLinks(up, left, right, down);
-    } else if(e == this.elements_.workflowMenu_[3]) {
+    } else if(e == this.elements_.workflowMenu_[3] || opt_type == 'sPart') {
       goog.dom.classes.add(div, 'sPart');
       goog.dom.appendChild(div, this.createSelect());
       this.editLinks(up, left, right, down, 1);
     }
     goog.dom.appendChild(div, right);
     goog.dom.appendChild(div, down);
+    if(!e) {
+      this.partIndex_ = opt_index;
+    }
     div.index_ = this.partIndex_;
     up.index_ = this.partIndex_ * 10 + 0;
     left.index_ = this.partIndex_ * 10 + 1;
@@ -110,6 +121,7 @@ goog.scope(function() {
     ++this.partIndex_;
     goog.dom.appendChild(this.elements_.workflowSpace_, div);
     this.dragAnddrop(div);
+    return div;
   };
 
 
@@ -191,6 +203,7 @@ goog.scope(function() {
 
   exports.Workflow.prototype.createSelect = function() {
     var select = goog.dom.htmlToDocumentFragment(templates.actionList());
+    goog.dom.classes.add(select, 'sel');
     var rules = goog.dom.getElementsByClass('me', this.elements_.eventList_);
     for(var i = 0, l = rules.length; i < l; ++i) {
       var option = goog.dom.createElement('option');
@@ -255,16 +268,117 @@ goog.scope(function() {
     var name = (this.elements_.cellName_.value != '' ? this.elements_.cellName_.value : '空');
     var type = this.elements_.chooseType_.options.selectedIndex;
     (type != -1) && (type = this.elements_.chooseType_.options[type].value);
-    var node = goog.dom.createElement('li');
-    goog.dom.setTextContent(node, name);
-    goog.dom.classes.add(node, 'me');
-    node.index_ = this.workflowIndex_;
-    this.elements_.workflowList_.appendChild(node);
-    goog.events.listen(node, 'click', this.reBuild, false, this);
-    ++this.wTotleIndex_; 
+    var node = goog.dom.getElementsByClass('part', this.elements_.workflowSpace_);
+    var nodeSet = [];
+    for(var i = 0, l = node.length; i < l; ++i) {
+      var left = goog.style.getStyle(node[i], 'margin-left');
+      var top = goog.style.getStyle(node[i], 'margin-top');
+      var select = goog.dom.getElementByClass('sel', node[i]);
+      var selectIndex = select.options.selectedIndex;
+      var val = (selectIndex != -1 ? select.options[selectIndex].value : '');
+      var types = goog.dom.classes.get(node[i])[1];
+      nodeSet.push(dataModel.setWorkflowPart(left, top, types, node[i].index_, val));
+    }
+    var linkSet = [];
+    for(var key in this.linkSet_) {
+      if(this.linkSet_[key]) {
+        linkSet.push([this.linkSet_[key][0].index_, this.linkSet_[key][1].index_]);
+      }
+    }
+    var list = goog.dom.getElementsByClass('me', this.elements_.workflowList_);
+    if(this.workflowSet_[this.workflowIndex_]) {
+      this.workflowSet_[this.workflowIndex_] = dataModel.setWorkflow(nodeSet, linkSet, name, type);
+      goog.dom.setTextContent(list[this.workflowIndex_], name);
+    } else {
+      this.workflowSet_[this.workflowIndex_] = dataModel.setWorkflow(nodeSet, linkSet, name, type);
+      var li = goog.dom.createElement('li');
+      goog.dom.setTextContent(li, name);
+      goog.dom.classes.add(li, 'me');
+      li.index_ = this.workflowIndex_;
+      this.elements_.workflowList_.appendChild(li);
+      goog.events.listen(li, 'click', this.reBuild, false, this);
+      ++this.wTotleIndex_;
+    }
   };
 
 
-  exports.Workflow.prototype.reBuild = function() {
+  exports.Workflow.prototype.findOption = function(node, val) {
+    for(var i = 0, l = node.options.length; i < l; ++i) {
+      if(node.options[i].value == val) {
+        node.options.selectedIndex = i;
+        break;
+      }
+    }
+  };
+
+
+  exports.Workflow.prototype.reBuild = function(e) {
+    this.clear();
+    e = e.event_;
+    e = e.target || e.srcElement;
+    this.workflowIndex_ = e.index_;
+    this.selected_ = false;
+    var data = dataModel.getWorkflow(this.workflowSet_[this.workflowIndex_]);
+    this.elements_.cellName_.value = data.name;
+    this.findOption(this.elements_.chooseType_, data.type);
+    var maxIndex = 0;
+    var partSet = {};
+    for(var i = 0, l = data.nodes.length; i < l; ++i) {
+      node = dataModel.getWorkflowPart(data.nodes[i]);
+      (node.index > maxIndex) && (maxIndex = node.index);
+      var part = this.addWorkflowPart(null, node.type, node.index);
+      goog.style.setStyle(part, 'margin-left', node.left);
+      goog.style.setStyle(part, 'margin-top', node.top);
+      this.findOption(goog.dom.getElementByClass('sel', part), node.val);
+      partSet[node.index] = part;
+    }
+    this.partIndex_ = ++maxIndex;
+    for(var i = 0, l = data.links.length; i < l; ++i) {
+      var start = Math.floor(parseInt(data.links[i][0]) / 10);
+      var startP = Math.floor(parseInt(data.links[i][0]) % 10);
+      var end = Math.floor(parseInt(data.links[i][1]) / 10);
+      var endP = Math.floor(parseInt(data.links[i][1]) % 10);
+      var startPNode = goog.dom.getElementsByClass('pp', partSet[start]);
+      var endPNode = goog.dom.getElementsByClass('pp', partSet[end]);
+      this.linkSet_[parseInt(data.links[i][0])] = [startPNode[startP], endPNode[endP]];
+    }
+    this.draw();
+  };
+
+
+  exports.Workflow.prototype.clear = function() {
+    this.workflowIndex_ = this.wTotleIndex_;
+    var c = this.elements_.canvas_.getContext('2d');
+    c.clearRect(0, 0, 800, 600);
+    var node = goog.dom.getElementsByClass('part', this.elements_.workflowSpace_);
+    for(var i = node.length - 1; i >= 0; --i) {
+      goog.dom.removeNode(node[i]);
+    }
+    this.selected_ = false;
+    this.linkSet_ = {};
+    this.partIndex_ = 0;
+  };
+
+
+  exports.Workflow.prototype.getWorkflow = function() {
+    return this.workflowSet_;
+  };
+
+
+  exports.Workflow.prototype.setWorkflow = function(data) {
+    this.workflowIndex_ = 0;
+    if(data) {
+      this.wTotleIndex_ = data.length;
+      this.workflowSet_ = data;
+      for(var i = 0, l = data.length; i < l; ++i) {
+        var tmp = dataModel.getWorkflow(data[i]);
+        var li = goog.dom.createElement('li');
+        goog.dom.setTextContent(li, tmp.name);
+        goog.dom.classes.add(li, 'me');
+        li.index_ = i;
+        this.elements_.workflowList_.appendChild(li);
+        goog.events.listen(li, 'click', this.reBuild, false, this);
+      }
+    }
   };
 });
