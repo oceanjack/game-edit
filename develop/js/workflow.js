@@ -23,13 +23,20 @@ goog.scope(function() {
   exports.Workflow.prototype.workflowSet_ = null; //流程集合
   exports.Workflow.prototype.workflowIndex_ = null; //当流程id
   exports.Workflow.prototype.wTotleIndex_ = null; //总流程
+  exports.Workflow.prototype.selected_ = null;
+  exports.Workflow.prototype.selectedPoint_ = null;
+  exports.Workflow.prototype.linkSet_ = null;
+  exports.Workflow.prototype.partIndex_ = null;
 
 
   exports.Workflow.prototype.init = function() {
     this.elements_ = {};
     this.workflowSet_ = [];
+    this.linkSet_ = {};
     this.workflowIndex_ = 0;
     this.wTotleIndex_ = 0;
+    this.partIndex_ = 0;
+    this.selected_ = false;
   };
 
   
@@ -41,6 +48,7 @@ goog.scope(function() {
     this.elements_.cellName_ = goog.dom.getElementByClass('cellName');
     this.elements_.chooseType_ = goog.dom.getElementByClass('chooseType');
     this.elements_.eventList_ = goog.dom.getElementByClass('eventList');
+    this.elements_.canvas_ = goog.dom.getElementByClass('workflowCanvas');
   };
 
 
@@ -78,19 +86,54 @@ goog.scope(function() {
     if(e == this.elements_.workflowMenu_[2]) {
       goog.dom.classes.add(div, 'jPart');
       goog.dom.appendChild(div, this.createSelect());
+      this.editLinks(up, left, right, down, 2);
     } else if(e == this.elements_.workflowMenu_[0]) {
       goog.dom.classes.add(div, 'sePart');
       goog.dom.appendChild(div, goog.dom.htmlToDocumentFragment(templates.startAndEnd()));
+      this.editLinks(up, left, right, down, 1);
     } else if(e == this.elements_.workflowMenu_[1]) {
-      goog.dom.classes.add(div, 'ioPart');
+      goog.dom.classes.add(div, 'ioPart', 1);
+      this.editLinks(up, left, right, down);
     } else if(e == this.elements_.workflowMenu_[3]) {
       goog.dom.classes.add(div, 'sPart');
       goog.dom.appendChild(div, this.createSelect());
+      this.editLinks(up, left, right, down, 1);
     }
     goog.dom.appendChild(div, right);
     goog.dom.appendChild(div, down);
+    div.index_ = this.partIndex_;
+    up.index_ = this.partIndex_ * 10 + 0;
+    left.index_ = this.partIndex_ * 10 + 1;
+    right.index_ = this.partIndex_ * 10 + 2;
+    down.index_ = this.partIndex_ * 10 + 3;
+    ++this.partIndex_;
     goog.dom.appendChild(this.elements_.workflowSpace_, div);
     this.dragAnddrop(div);
+  };
+
+
+  exports.Workflow.prototype.editLinks = function(u, l, r, d, n) {
+    var this_ = this;
+    var linking = function(e) {
+      e = e.event_;
+      e = e.target || e.srcElement;
+      if(this_.selected_) {
+        if(e != this_.selectedPoint_ && e.parentNode != this_.selectedPoint_.parentNode) {
+          this_.linkSet_[this_.selectedPoint_.index_] = [this_.selectedPoint_, e];
+        } else if(e == this_.selectedPoint_) {
+          this_.linkSet_[this_.selectedPoint_.index_] = null;
+        }
+        this_.selected_ = false;
+      } else {
+        this_.selectedPoint_ = e;
+        this_.selected_ = true;
+      }
+      this_.draw();
+    };
+    goog.events.listen(u, 'click', function(e) {linking(e);}, false, this);
+    goog.events.listen(l, 'click', function(e) {linking(e);}, false, this);
+    goog.events.listen(r, 'click', function(e) {linking(e);}, false, this);
+    goog.events.listen(d, 'click', function(e) {linking(e);}, false, this);
   };
 
 
@@ -98,6 +141,7 @@ goog.scope(function() {
     var sign = false;
     var orgX = 0;
     var orgY = 0;
+    var this_ = this;
     goog.events.listen(node, 'mousedown', function(e) {
       sign = true;
       e = e.event_;
@@ -118,6 +162,7 @@ goog.scope(function() {
       if(e.x - orgX >= 30 && e.x - orgX <= 690) {
         goog.style.setStyle(node, 'margin-left', e.x - orgX +'px');
       }
+      this_.draw();
       return false;
     }, false, this);
     goog.events.listen(node, 'mouseup', function(e) {
@@ -126,7 +171,6 @@ goog.scope(function() {
       sign = false;
       return false;
     }, false, this);
-
   };
 
 
@@ -161,6 +205,34 @@ goog.scope(function() {
       goog.dom.appendChild(e, option);
     }
     e.options.selectedIndex = index;
+  };
+
+
+  exports.Workflow.prototype.draw = function() {
+    var c = this.elements_.canvas_.getContext('2d');
+    c.clearRect(0, 0, 800, 600);
+    var left = this.elements_.canvas_.getBoundingClientRect().left - 5;
+    var top = this.elements_.canvas_.getBoundingClientRect().top;
+    for(var key in this.linkSet_) {
+      if(this.linkSet_[key] == null) {
+        continue;
+      }
+      var start = this.linkSet_[key][0].getBoundingClientRect();
+      var end = this.linkSet_[key][1].getBoundingClientRect();
+      var sx = start.left - left;
+      var sy = start.top - top;
+      var ex = end.left - left;
+      var ey = end.top - top;
+      c.beginPath();
+      c.moveTo(sx, sy);
+      c.lineTo(ex, ey);
+      c.fillStyle="#FF0000";
+      c.stroke();
+      c.beginPath();
+      c.arc(ex, ey, 7, 0, Math.PI * 2, true);
+      c.closePath();
+      c.fill();
+    }
   };
 
 
