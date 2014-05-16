@@ -848,6 +848,7 @@ goog.scope(function() {
     for(var i = 0, l = oneList.length; i < l; ++i) {
       var option = goog.dom.createElement('option');
       goog.dom.classes.add(option, 'new');
+      goog.dom.classes.add(option, 'judge');
       goog.dom.setTextContent(option, goog.dom.getTextContent(oneList[i]));
       goog.dom.appendChild(node, option);
     }
@@ -871,6 +872,7 @@ goog.scope(function() {
     for(var i = 0, l = attrList.length; i < l; ++i) {  
       var option = goog.dom.createElement('option');
       goog.dom.classes.add(option, 'new');
+      goog.dom.classes.add(option, 'judge');
       goog.dom.setTextContent(option, goog.dom.getTextContent(goog.dom.getElementByClass('val', attrList[i])));
       goog.dom.appendChild(node, option);
     }
@@ -910,6 +912,7 @@ goog.scope(function() {
     for(var i = 0, l = list.length; i < l; ++i) {
       var option = goog.dom.createElement('option');
       goog.dom.classes.add(option, 'new');
+      goog.dom.classes.add(option, 'judge');
       goog.dom.setTextContent(option, goog.dom.getTextContent(list[i]));
       goog.dom.appendChild(actionList, option);
     }
@@ -929,6 +932,7 @@ goog.scope(function() {
       for(var i = 0, l = list.length; i < l; ++i) {
         var option = goog.dom.createElement('option');
         goog.dom.classes.add(option, 'new');
+      goog.dom.classes.add(option, 'judge');
         goog.dom.setTextContent(option, goog.dom.getTextContent(list[i]));
         goog.dom.appendChild(actionList, option);
       }

@@ -209,6 +209,15 @@ goog.scope(function() {
       var option = goog.dom.createElement('option');
       goog.dom.setTextContent(option, goog.dom.getTextContent(rules[i]));
       goog.dom.classes.add(option, 'new');
+      goog.dom.classes.add(option, 'judge');
+      goog.dom.appendChild(select, option);
+    }
+    var rules2 = goog.dom.getElementsByClass('me', this.elements_.workflowList_);
+    for(var i = 1, l = rules2.length; i < l; ++i) {
+      var option = goog.dom.createElement('option');
+      goog.dom.setTextContent(option, goog.dom.getTextContent(rules2[i]));
+      goog.dom.classes.add(option, 'new');
+      goog.dom.classes.add(option, 'workflow');
       goog.dom.appendChild(select, option);
     }
     goog.events.listen(select, 'mousedown', this.changeOptions, false, this);
@@ -230,6 +239,15 @@ goog.scope(function() {
       var option = goog.dom.createElement('option');
       goog.dom.setTextContent(option, goog.dom.getTextContent(rules[i]));
       goog.dom.classes.add(option, 'new');
+      goog.dom.classes.add(option, 'judge');
+      goog.dom.appendChild(e, option);
+    }
+    var rules2 = goog.dom.getElementsByClass('me', this.elements_.workflowList_);
+    for(var i = 1, l = rules2.length; i < l; ++i) {
+      var option = goog.dom.createElement('option');
+      goog.dom.setTextContent(option, goog.dom.getTextContent(rules2[i]));
+      goog.dom.classes.add(option, 'new');
+      goog.dom.classes.add(option, 'workflow');
       goog.dom.appendChild(e, option);
     }
     e.options.selectedIndex = index;
