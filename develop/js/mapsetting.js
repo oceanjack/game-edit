@@ -248,7 +248,14 @@ goog.scope(function() {
       this.eventSet_,
       this.workflow_.getWorkflow()
     );
-    this.matrix_ = new exports.Matrix(result, this.elements_.canvas_.getContext('2d'));
+    this.matrix_ = new exports.Matrix(
+      this.cellSet_,
+      this.background_,
+      this.realWorld_,
+      this.eventSet_,
+      this.workflow_.getWorkflow(),
+      this.elements_.canvas_.getContext('2d')
+    );
     this.elements_.downloadGameData_.href = 'data:text/paint; utf-8,' + JSON.stringify(result);
   };
 
@@ -794,6 +801,7 @@ goog.scope(function() {
     this.mode_ = 13;
     this.display_();
     this.clear();
+    this.matrix_.run();
   };
 
 
