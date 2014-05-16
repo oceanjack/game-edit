@@ -575,7 +575,7 @@ goog.scope(function() {
       goog.dom.removeNode(eventJudgeNode[i]);
     }
     this.editJudge();
-    this.elements_.chooseType_.options.selectedIndex = 0;
+    //this.elements_.chooseType_.options.selectedIndex = 0;
     this.findDataByType();
     this.workflow_.clear();
   };
@@ -940,7 +940,7 @@ goog.scope(function() {
   /*
    * 逻辑单元
    */
-  exports.MapSetting.prototype.editJudge = function() {
+  exports.MapSetting.prototype.editJudge = function(opt_next) {
     var this_ = this;
     var father = goog.dom.createElement('div');
     goog.dom.classes.add(father, 'attr');
@@ -953,10 +953,19 @@ goog.scope(function() {
     goog.dom.appendChild(father, logic);
     goog.dom.appendChild(this.elements_.selectAttr_, father);
     var newJudge = null;
+    opt_next && (newJudge = opt_next);
     goog.events.listen(logic, 'change', function() {
       if(logic.childNodes[0].options.selectedIndex == 0) {
-        newJudge && goog.dom.removeNode(newJudge);
-      } else {
+        newJudge && goog.dom.removeNode(newJudge) && (newJudge = null);
+        var eventJudgeNode = goog.dom.getElementsByClass('attr', this_.elements_.selectAttr_);
+        var sign = false;
+        for(var i = eventJudgeNode.length - 1; i > 0; --i) {
+          if(eventJudgeNode[i] == father) {
+            break;
+          }
+          goog.dom.removeNode(eventJudgeNode[i]);
+        }
+      } else if(!newJudge) {
         newJudge = this_.editJudge();
       }
     }, false, this);
