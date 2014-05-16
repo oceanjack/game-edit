@@ -9,6 +9,7 @@ goog.require('ocean.onlineAI.Cell');
 goog.require('ocean.onlineAI.One');
 goog.require('ocean.onlineAI.Actions');
 goog.require('ocean.onlineAI.Workflow');
+goog.require('ocean.onlineAI.Matrix');
 goog.require('ocean.onlineAI.OnlineAI.templates');
 
 goog.scope(function() {
@@ -42,6 +43,7 @@ goog.scope(function() {
   exports.MapSetting.prototype.eventIndex_ = null; //当前事件id
   exports.MapSetting.prototype.eTotleIndex_ = null; //总事件
   exports.MapSetting.prototype.workflow_ = null; //总事件
+  exports.MapSetting.prototype.matrix_ = null; //虚拟世界
 
 
   exports.MapSetting.prototype.init = function(x, y, background) {
@@ -94,6 +96,7 @@ goog.scope(function() {
     this.elements_.workflowList_ = goog.dom.getElementByClass('workflowList');
     this.elements_.workflowPart_ = goog.dom.getElementByClass('workflowPart');
     this.elements_.workflowSpace_ = goog.dom.getElementByClass('workflowspace');
+    this.elements_.runGame_ = goog.dom.getElementByClass('runGame');
   };
 
 
@@ -196,6 +199,7 @@ goog.scope(function() {
     goog.events.listen(el.addWorkflow_, 'click', this.addWorkflow, false, this);
     goog.events.listen(el.saveGameData_, 'click', this.saveGameData, false, this);
     goog.events.listen(el.chooseType_, 'change', this.findDataByType, false, this);
+    goog.events.listen(el.runGame_, 'click', this.runGame, false, this);
   };
 
 
@@ -244,6 +248,7 @@ goog.scope(function() {
       this.eventSet_,
       this.workflow_.getWorkflow()
     );
+    this.matrix_ = new exports.Matrix(result, this.elements_.canvas_.getContext('2d'));
     this.elements_.downloadGameData_.href = 'data:text/paint; utf-8,' + JSON.stringify(result);
   };
 
@@ -590,6 +595,7 @@ goog.scope(function() {
    */
   exports.MapSetting.prototype.display_ = function() {
     this.elements_.mapimgdiv_.style.display = 'none';
+    this.elements_.map_.style.display = 'none';
     this.elements_.attribute_.style.display = 'none';
     this.elements_.makeSure_.style.display = 'none';
     this.elements_.chooseAction_.style.display = 'none';
@@ -605,6 +611,7 @@ goog.scope(function() {
     switch(this.mode_) {
       case 1:
         this.elements_.mapimgdiv_.style.display = 'block';
+        this.elements_.map_.style.display = 'block';
         this.elements_.message_.style.display = 'block';
         this.elements_.productList_.style.display = 'block';
         break;
@@ -616,6 +623,7 @@ goog.scope(function() {
         break;
       case 3:
         this.elements_.mapimgdiv_.style.display = 'block';
+        this.elements_.map_.style.display = 'block';
         this.elements_.productList_.style.display = 'block';
         break;
       case 5:
@@ -625,6 +633,7 @@ goog.scope(function() {
         this.elements_.eventList_.style.display = 'block';
         this.elements_.selectAttr_.style.display = 'block';
         this.elements_.mapimgdiv_.style.display = 'block';
+        this.elements_.map_.style.display = 'block';
         this.elements_.checkOption_.style.display = 'block';
         this.elements_.chooseType_.style.display = 'inline-block';
         break;
@@ -635,6 +644,9 @@ goog.scope(function() {
         this.elements_.chooseType_.style.display = 'inline-block';
         this.elements_.workflowPart_.style.display = 'block';
         this.elements_.workflowSpace_.style.display = 'block';
+        break;
+      case 13:
+        this.elements_.mapimgdiv_.style.display = 'block';
         break;
     };
   };
@@ -770,6 +782,16 @@ goog.scope(function() {
    */
   exports.MapSetting.prototype.addWorkflow = function() {
     this.mode_ = 8;
+    this.display_();
+    this.clear();
+  };
+
+
+  /*
+   * 运行世界
+   */
+  exports.MapSetting.prototype.runGame = function() {
+    this.mode_ = 13;
     this.display_();
     this.clear();
   };
