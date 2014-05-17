@@ -48,11 +48,36 @@ goog.scope(function() {
       }
       this.eventSet_[i].eventMapConfig = dataModel.getEventMapConfig(this.eventSet_[i].eventMapConfig);
     }
+    //handle workflow
     for(var i = 0, l = this.workflow_.length; i < l; ++i) {
       this.workflow_[i] = dataModel.getWorkflow(this.workflow_[i]);
+      this.workflow_[i].startIndex = -1;
+      this.workflow_[i].endIndex = -1;
+      var workflow = {};
       for(j = 0, n = this.workflow_[i].nodes.length; j < n; ++j) {
-        this.workflow_[i].nodes[j] = dataModel.getWorkflowPart(this.workflow_[i].nodes[j]);
+        var tmp = this.workflow_[i].nodes[j];
+        tmp = dataModel.getWorkflowPart(tmp);
+        workflow[tmp.index] = tmp;
+        if(tmp.type == 'sePart') {
+          if(tmp.val == '开始') {
+            this.workflow_[i].startIndex = tmp.index;
+          } else {
+            this.workflow_[i].endIndex = tmp.index;
+          }
+        }
       }
+      this.workflow_[i].nodes = workflow;
+      var links = {};
+      for(var j = 0, n = this.workflow_[i].links.length; j < n; ++j) {
+        var lk = this.workflow_[i].links[j];
+        var sn = Math.floor(parseInt(lk[0]) / 10);
+        var sp = Math.floor(parseInt(lk[0]) % 10);
+        var en = Math.floor(parseInt(lk[1]) / 10);
+        var ep = Math.floor(parseInt(lk[1]) % 10);
+        (!links[sn]) && (links[sn] = []);
+        links[sn].push([sp, en, ep]); 
+      };
+      this.workflow_[i].links = links;
     }
   };
 
