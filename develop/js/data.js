@@ -134,7 +134,7 @@ goog.scope(function() {
   exports.Data.setEventData = function(eventJudge, eventAction, eventMap, eventMapConfig, name, type) {
     return {
       'ej': eventJudge,
-      'ea': eventAction ,
+      'ea': eventAction,
       'em': eventMap,
       'mc': eventMapConfig,
       'nm': name,

@@ -249,6 +249,7 @@ goog.scope(function() {
       this.workflow_.getWorkflow()
     );
     this.matrix_ = new exports.Matrix(
+      this.size_,
       this.cellSet_,
       this.background_,
       this.realWorld_,
