@@ -47,6 +47,10 @@ goog.scope(function() {
       }
       for(var j = 0, n = this.eventSet_[i].eventMap.length; j < n; ++j) {
         this.eventSet_[i].eventMap[j] = dataModel.getEventMap(this.eventSet_[i].eventMap[j]);
+        var ii = this.eventSet_[i].eventMap[j].pos;
+        var nx = Math.floor(parseInt(ii) / this.size_[0]);
+        var ny = Math.floor(parseInt(ii) % this.size_[0]);
+        this.eventSet_[i].eventMap[j].pos = [nx, ny];
       }
       this.eventSet_[i].eventMapConfig = dataModel.getEventMapConfig(this.eventSet_[i].eventMapConfig);
       eventSet[this.eventSet_[i].name] = this.eventSet_[i];
@@ -109,8 +113,63 @@ goog.scope(function() {
 
 
   exports.Matrix.prototype.run = function() {
-    alert('You have the final fight!');
-    this.draw();
+    this.runWorkflow(this.workflow_.import__);
+  };
+
+
+  exports.Matrix.prototype.runWorkflow = function(input, opt_data) {
+    var order = this.workflow_[input];
+    var index = order.startIndex;
+    var node = order.nodes[index];
+    while(node.index != order.endIndex) {
+      index = order.links[node.index];
+      if(index == undefined) {
+        break;
+      }
+      switch(node.type) {
+        case 'sePart':
+          for(var i = 0, l = index.length; i < l; ++i) {
+            index = index[i][1];
+            break;
+          }
+          node = order.nodes[index];
+          break;
+        case 'jPart':
+          var result = this.runWorkflowPart(node.val, false);
+          for(var i = 0, l = index.length; i < l; ++i) {
+            if(result[0]) {
+              if(index[i][0] == 3) {
+                index = index[i][1];
+                break;
+              }
+            } else {
+              if(index[i][0] != 3) {
+                index = index[i][1];
+                break;
+              }
+            }
+          };
+          node = order.nodes[index];
+          break;
+        case 'sPart':
+          var result = this.runWorkflowPart(node.val, true);
+          for(var i = 0, l = index.length; i < l; ++i) {
+            index = index[i][1];
+            break;
+          }
+          node = order.nodes[index];
+          break;
+        default:
+          break;
+      }
+    }
+  };
+
+
+  exports.Matrix.prototype.runWorkflowPart = function(data, isDo) {
+    var result = null;
+    var judge = (Math.random() * 10 > 5) ? true : false;
+    return [judge, result];
   };
 
 
