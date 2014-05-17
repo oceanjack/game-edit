@@ -88,10 +88,48 @@ goog.scope(function() {
       (i == 0) && (workflows.import__ = this.workflow_[i].name);
     }
     this.workflow_ = workflows;
+    //handle cellset
+    var cellSet = {};
+    for(var i = 0, l = this.cellSet_.length; i < l; ++i) {
+      var data = dataModel.getCharacter(this.cellSet_[i].getData());
+      data.src = dataModel.getImg(data.src);
+      this.cellSet_[i].setData(data);
+      cellSet[this.cellSet_[i].getData().name] = this.cellSet_[i];
+    }
+    this.cellSet_ = cellSet;
+    //handle map
+    for(var j = 0, n = this.realWorld_.length; j < n; ++j) {
+      for(var i = 0, l = this.realWorld_[j].length; i < l; ++i) {
+        if(this.realWorld_[j][i]) {
+          this.realWorld_[j][i].setNewData(this.cellSet_[this.realWorld_[j][i].getName()]);
+        }
+      }
+    }
   };
 
 
   exports.Matrix.prototype.run = function() {
-    alert('You have the final fight!')
+    alert('You have the final fight!');
+    this.draw();
+  };
+
+
+  exports.Matrix.prototype.draw = function() {
+    var c = this.canvas_;
+    var w = 800 / this.size_[0];
+    var h = 600 / this.size_[1];
+    c.clearRect(0, 0, 800, 600);
+    this.background_ && c.drawImage(this.background_, 0, 0, this.background_.width, this.background_.height);
+    for(var j = 0, n = this.realWorld_.length; j < n; ++j) {
+      for(var i = 0, l = this.realWorld_[j].length; i < l; ++i) {
+        var tmp = this.realWorld_[j][i];
+        if(tmp) {
+          var x = tmp.getAttribute(dataModel.attributeSet.posX);
+          var y = tmp.getAttribute(dataModel.attributeSet.posY);
+          var data = tmp.getImgData().src;
+          data && c.drawImage(data, x * w, y * h, data.width, data.height);
+        }
+      }
+    }
   };
 });

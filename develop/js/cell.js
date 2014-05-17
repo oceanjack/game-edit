@@ -15,8 +15,6 @@ goog.scope(function() {
 
   exports.Cell.prototype.data_ = null;
   exports.Cell.prototype.attributes_ = null;
-  exports.Cell.prototype.actions_ = null;
-  exports.Cell.prototype.events_ = null;
 
   
   exports.Cell.prototype.setData = function(data) {
@@ -46,23 +44,5 @@ goog.scope(function() {
 
   exports.Cell.prototype.setAllAttribute = function(data) {
     this.attributes_ = data;
-  };
-
-
-  exports.Cell.prototype.setAction = function(key, func) {
-    this.actions_[key] = func;
-  };
-
-
-  exports.Cell.prototype.setEvent = function(key, func) {
-    this.events_[key] = func;
-  };
-
-
-  exports.Cell.prototype.checkEvent = function() {
-    var this_ = this;
-    for(var key in this.events_) {
-      this.events_[key](this_);
-    }
   };
 });

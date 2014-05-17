@@ -27,6 +27,11 @@ goog.scope(function() {
   exports.One.prototype.node_ = null;
 
 
+  exports.One.prototype.setNewData = function(data) {
+    this.data_ = data;
+  };
+
+
   exports.One.prototype.initLink = function() {
     var attr = this.data_.getAllAttribute();
     for(var key in attr) {
@@ -96,6 +101,12 @@ goog.scope(function() {
   exports.One.prototype.getIndex = function() {
     var data = dataModel.getCharacter(this.data_.getData());
     return data.index;
+  };
+
+
+  exports.One.prototype.getName = function() {
+    var data = dataModel.getCharacter(this.data_.getData());
+    return data.name;
   };
 
 
