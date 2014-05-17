@@ -35,6 +35,8 @@ goog.scope(function() {
 
 
   exports.Matrix.prototype.initData = function() {
+    //handle eventSet
+    var eventSet = {};
     for(var i = 0, l = this.eventSet_.length; i < l; ++i) {
       this.eventSet_[i] = dataModel.getEventData(this.eventSet_[i]);
       for(var j = 0, n = this.eventSet_[i].eventJudge.length; j < n; ++j) {
@@ -47,8 +49,12 @@ goog.scope(function() {
         this.eventSet_[i].eventMap[j] = dataModel.getEventMap(this.eventSet_[i].eventMap[j]);
       }
       this.eventSet_[i].eventMapConfig = dataModel.getEventMapConfig(this.eventSet_[i].eventMapConfig);
+      eventSet[this.eventSet_[i].name] = this.eventSet_[i];
     }
+    this.eventSet_ = eventSet;
+    
     //handle workflow
+    var workflows = {};
     for(var i = 0, l = this.workflow_.length; i < l; ++i) {
       this.workflow_[i] = dataModel.getWorkflow(this.workflow_[i]);
       this.workflow_[i].startIndex = -1;
@@ -78,7 +84,10 @@ goog.scope(function() {
         links[sn].push([sp, en, ep]); 
       };
       this.workflow_[i].links = links;
+      workflows[this.workflow_[i].name] = this.workflow_[i];
+      (i == 0) && (workflows.import__ = this.workflow_[i].name);
     }
+    this.workflow_ = workflows;
   };
 
 
