@@ -121,6 +121,7 @@ goog.scope(function() {
     var order = this.workflow_[input];
     var index = order.startIndex;
     var node = order.nodes[index];
+    var result = null;
     while(node.index != order.endIndex) {
       index = order.links[node.index];
       if(index == undefined) {
@@ -135,7 +136,7 @@ goog.scope(function() {
           node = order.nodes[index];
           break;
         case 'jPart':
-          var result = this.runWorkflowPart(node.val, false);
+          result = this.runWorkflowPart(node.val, false);
           for(var i = 0, l = index.length; i < l; ++i) {
             if(result[0]) {
               if(index[i][0] == 3) {
@@ -152,7 +153,7 @@ goog.scope(function() {
           node = order.nodes[index];
           break;
         case 'sPart':
-          var result = this.runWorkflowPart(node.val, true);
+          result = this.runWorkflowPart(node.val, true);
           for(var i = 0, l = index.length; i < l; ++i) {
             index = index[i][1];
             break;
@@ -163,13 +164,31 @@ goog.scope(function() {
           break;
       }
     }
+    return result;
   };
 
 
   exports.Matrix.prototype.runWorkflowPart = function(data, isDo) {
-    var result = null;
+    if(this.workflow_[data]) {
+      return this.runWorkflow(data);
+    } else if(this.eventSet_[data]) {
+      return this.runEvent(data, isDo);
+    } else {
+      return this.runDefault(data, isDo);
+    }
+  };
+
+
+  exports.Matrix.prototype.runEvent = function(data, isDo) {
+  };
+
+
+  exports.Matrix.prototype.runDefault = function(data, isDo) {
+    if(!isDo) {
+      return [false, null];
+    }
     var judge = (Math.random() * 10 > 5) ? true : false;
-    return [judge, result];
+    return [judge, null];
   };
 
 
