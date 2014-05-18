@@ -180,6 +180,81 @@ goog.scope(function() {
 
 
   exports.Matrix.prototype.runEvent = function(data, isDo) {
+    var order = this.eventSet_[data];
+    var result = null;
+    var action = null;
+    do {
+      result = this.runEventJudge(order.eventJudge, order);
+      if(result.judge && isDo) {
+        action = this.runEventAction(order.eventAction, order, result);
+      } else {
+        return [result.judge, null];
+      }
+    } while(action.next);
+    return [reslut.judge, action];
+  };
+
+
+  exports.Matrix.prototype.runEventJudge = function(data, father) {
+    var nodes = {};
+    var result = [];
+    var canBe = true;
+    for(var i = 0, l = data.length; i < l; ++i) {
+      var order = data[i];
+      if(i <= 0) {
+        canBe = this.runOneJudge(data[i], nodes, result);
+      } else {
+        switch(data[i - 1].logic) {
+          case '并且':
+            canBe = canbe && this.runOneJudge(data[i], nodes, result, father);
+            break;
+          case '或者':
+            canBe = canbe || this.runOneJudge(data[i], nodes, result, father);
+            break;
+          case '并且不是':
+            canBe = canbe && !this.runOneJudge(data[i], nodes, result, father);
+            break;
+          case '或者不是':
+            canBe = canbe || !this.runOneJudge(data[i], nodes, result, father);
+            break;
+          default:
+            break;
+        }
+      }
+    }
+    return [canBe, nodes, result];
+  };
+
+
+  exports.Matrix.prototype.runOneJudge = function(data, nodes, result, father) {
+    if(result.length <= 0) {
+      for(var j = 0, n = this.realWorld_.length; j < n; ++j) {
+        for(var i = 0, l = this.realWorld_[j].length; i < l; ++i) {
+          if(this.realWorld_[j][i]) {
+            var key = this.realWorld_[j][i].getImgData().name;
+            if(this.cellSet_[key]) {
+              
+            }
+          }
+        }
+      }
+    }
+  };
+
+
+  exports.Matrix.prototype.runEventAction = function(data, father, result) {
+    var nodes = result[1];
+    var reslut = reslut[2];
+    var goon = false;
+    for(var i = 0, l = data.length; i < l && goon; ++i) {
+      var order = data[i];
+      goon = this.runOneAction(data[i], nodes, result, father);
+    }
+    return [nodes, data, goon];
+  };
+  
+  
+  exports.Matrix.prototype.runOneAction = function(data, nodes, result, father) {
   };
 
 

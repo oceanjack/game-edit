@@ -202,7 +202,8 @@ goog.scope(function() {
 
 
   exports.Workflow.prototype.createSelect = function() {
-    var select = goog.dom.htmlToDocumentFragment(templates.actionList());
+    var select = goog.dom.createElement('select');
+    goog.dom.classes.add(select, 'actionList');
     goog.dom.classes.add(select, 'sel');
     var rules = goog.dom.getElementsByClass('me', this.elements_.eventList_);
     for(var i = 0, l = rules.length; i < l; ++i) {
