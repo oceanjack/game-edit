@@ -62,7 +62,14 @@ goog.scope(function() {
     visiable: 'visiable',
     status: 'status',
     belong: 'belong',
-    others: 'others'
+    others: 'others',
+    '横坐标': 'posX',
+    '纵坐标': 'posY',
+    '方向': 'dir',
+    '速度': 'speed',
+    '可穿透': 'visiable',
+    '状态': 'status',
+    '属于': 'belong'
   };
 
 

@@ -51,8 +51,8 @@ goog.scope(function() {
       for(var j = 0, n = this.eventSet_[i].eventMap.length; j < n; ++j) {
         this.eventSet_[i].eventMap[j] = dataModel.getEventMap(this.eventSet_[i].eventMap[j]);
         var ii = this.eventSet_[i].eventMap[j].pos;
-        var nx = Math.floor(parseInt(ii) / this.size_[0]);
-        var ny = Math.floor(parseInt(ii) % this.size_[0]);
+        var nx = Math.floor(parseInt(ii) % this.size_[0]);
+        var ny = Math.floor(parseInt(ii) / this.size_[0]);
         if(j <= 0) {
           ox = nx;
           oy = ny;
@@ -212,7 +212,7 @@ goog.scope(function() {
 
   exports.Matrix.prototype.runEventJudge = function(data, father) {
     var nodes = {x: -1, y: -1, node: null};
-    var result = {judge: false, val: null};
+    var result = {judge: true, val: null};
     var order = null;
     var order0 = data[0];
     var foundInMap = false;
@@ -221,22 +221,32 @@ goog.scope(function() {
       //TODO: 匹配固定形状
     }
     for(var j = 0, yMax = this.realWorld_.length; j < yMax && !canBe; ++j) {
-      for(var i = 0, xMax = this.realWorld_[j].length; i < xMax &&!canBe; ++i) {
+      for(var i = 0, xMax = this.realWorld_[j].length; i < xMax && !canBe; ++i) {
+        nodes = {x: -1, y: -1, node: null};
+        result = {judge: true, val: null};
         if(order0.firstAttr == '形状') {
           foundInMap = true;
           //对当前(x, y)匹配形状及后续条件
           var ok = true;
           var type = '';
-          for(var k = 0, l = father.eventMap.length && ok; k < l; ++k) {
+          var startX = -1;
+          var startY = -1;
+          for(var k = 0, l = father.eventMap.length; k < l; ++k) {
             var nx = i + father.eventMap[k].pos[0];
             var ny = j + father.eventMap[k].pos[1];
             if(!this.isIn(nx, ny)) {
               ok = false;
               break;
             }
+            if(!this.realWorld_[ny][nx]) {
+              ok = false;
+              break;
+            }
             //检测匹配节点类型..任意/同一/特定的
             if(k <= 0) {
               type = this.realWorld_[ny][nx].getName();
+              startX = nx;
+              startY = ny;
             }
             switch(order0.firstNode) {
               case '任意':
@@ -249,17 +259,24 @@ goog.scope(function() {
                 ok = (this.realWorld_[ny][nx].getName() == order0.firstNode);
                 break;
             }
+            if(!ok) break;
             //检测后续条件
             nodes.x = nx;
             nodes.y = ny;
             for(var p = 1, pl = data.length; p < pl && ok; ++p) {
               order = data[p];
-              this.runOneJudge(order, nodes, result);
+              var logic = '并且';
+              if(p >= 1) {
+                logic = data[p - 1].logic;
+              }
+              this.runOneJudge(order, nodes, result, logic);
               ok = result.judge;
             }
           }
           if(ok) {
-            canbe = ok;
+            nodes.x = startX;
+            nodes.y = startY;
+            canBe = ok;
             break;
           }
         } else {
@@ -269,24 +286,33 @@ goog.scope(function() {
           var ok = true;
           for(var p = 0, pl = data.length; p < pl && ok; ++p) {
             order = data[p];
-            this.runOneJudge(order, nodes, result);
+            var logic = '并且';
+            if(p >= 1) {
+              logic = data[p - 1].logic;
+            }
+            this.runOneJudge(order, nodes, result, logic);
             ok = result.judge;
             ok && (foundInMap = true); 
+          }
+          if(ok) {
+            canBe = ok;
+            break;
           }
         }
       }
     }
     if(!foundInMap) {
+      nodes = {x: -1, y: -1, node: null};
+      result = {judge: true, val: null};
       var ok = true;
       for(var k = 0, l = data.length && ok; k < l; ++k) {
         //未在map中找到，所以在cellSet中匹配条件
         order = data[k];
-        if(k <= 0) {
-          if(this.cellSet_[order.firstNode]) {
-            nodes.node = this.cellSet_[order.firstNode];
-          }
+        var logic = '并且';
+        if(k >= 1) {
+          logic = data[k - 1].logic;
         }
-        this.runOneJudge(order, nodes, result);
+        this.runOneJudge(order, nodes, result, logic);
         ok = result.judge;
       }
       canBe = ok;
@@ -295,7 +321,122 @@ goog.scope(function() {
   };
 
 
-  exports.Matrix.prototype.runOneJudge = function(data, nodes, result) {
+  exports.Matrix.prototype.runOneJudge = function(data, nodes, result, logic) {
+    var s0 = (data.firstAttr == '横坐标');
+    var s1 = (data.firstAttr == '纵坐标');
+    var s2 = (data.secondAttr == '横坐标');
+    var s3 = (data.secondAttr == '纵坐标');
+    var s4 = (data.firstNode.indexOf('任意') != -1 || data.firstNode.indexOf('同一') != -1);
+    var s5 = (data.secondNode.indexOf('任意') != -1 || data.secondNode.indexOf('同一') != -1);
+    var s6 = (data.firstNode == '结果');
+    var s7 = (data.secondNode == '');
+    if(s0 || s1) {
+      if(s2 || s3) {
+        s0 && s2 && (nodes.nx = nodes.x);
+        s0 && s3 && (nodes.nx = nodes.y);
+        s1 && s2 && (nodes.ny = nodes.x);
+        s1 && s3 && (nodes.ny = nodes.y);
+        this.changeJudge(result, logic, true);
+        return;
+      }
+      if(s7) {
+        if(!window.isNaN(parseInt(data.secondAttr))) {
+          data.secondAttr = parseInt(data.secondAttr);
+        }
+        switch(data.operation) {
+          case '减去':
+            result.val = (s0 ? (nodes.x) : (nodes.y)) - data.secondAttr;
+            break;
+          case '加上':
+            result.val = (s0 ? (nodes.x) : (nodes.y)) + data.secondAttr;
+            break;
+          case '乘以':
+            result.val = (s0 ? (nodes.x) : (nodes.y)) * data.secondAttr;
+            break;
+          case '除以':
+            result.val = (s0 ? (nodes.x) : (nodes.y)) / data.secondAttr;
+            break;
+        }
+        this.changeJudge(result, logic, true);
+        return;
+      }
+    } else if(s2 || s3) {
+      s2 && (nodes.nx = result.val);
+      s3 && (nodes.ny = result.val);
+      this.changeJudge(result, logic, this.isIn(nodes.nx, nodes.ny));
+      return;
+    }
+    var val = this.getNodeVal(data.firstNode, data.firstAttr, result.val, nodes);
+    var val2 = this.getNodeVal(data.secondNode, data.secondAttr, result.val, nodes);
+    var judge = false;
+    var res = 0;
+    if(!window.isNaN(parseInt(val))) {
+      val = parseInt(val);
+    }
+    if(!window.isNaN(parseInt(val2))) {
+      val2 = parseInt(val2);
+    }
+    switch(data.operation) {
+      case '小于':
+        judge = (val < val2);
+        break;
+      case '大于':
+        judge = (val > val2);
+        break;
+      case '等于':
+        judge = (val == val2);
+        break;
+      case '不等于':
+        judge = (val != val2);
+        break;
+      case '大于等于':
+        judge = (val >= val2);
+        break;
+      case '小于等于':
+        judge = (val <= val2);
+        break;
+      case '减去':
+        res = (val - val2);
+        judge = true;
+        break;
+      case '加上':
+        res = (val + val2);
+        judge = true;
+        break;
+      case '乘以':
+        res = (val * val2);
+        judge = true;
+        break;
+      case '除以':
+        res = (val / val2);
+        judge = true;
+        break;
+      default:
+        judge = true;
+        break;
+    };
+    this.changeJudge(result, logic, judge);
+    result.val = res;
+  };
+
+
+  exports.Matrix.prototype.changeJudge = function(result, logic, judge) {
+    switch(logic) {
+      case '并且':
+        result.judge = result.judge && judge;
+        break;
+      case '或者':
+        result.judge = result.judge || judge;
+        break;
+      case '并且不是':
+        result.judge = result.judge && !judge;
+        break;
+      case '或者不是':
+        result.judge = result.judge || !judge;
+        break;
+      default:
+        result.judge = result.judge || judge;
+    };
   };
 
 
@@ -307,8 +448,24 @@ goog.scope(function() {
         val = res;
         (attr == '绝对值') && (val < 0) && (val = -val);
         break;
+      case '':
+        val = attr;
+        break;
       default:
-        (this.cellSet_[node]) && (val = this.cellSet_[node].getAttribute(attr));
+        if(nodes.x == -1) {
+          val = (this.cellSet_[node]) && (val = this.cellSet_[node].getAttribute(attr));
+        } else {
+          if(node == '任意2' || node == '同一2') {
+            val = this.realWorld_[nodes.ny][nodes.nx];
+          } else {
+            val = this.realWorld_[nodes.y][nodes.x];
+          }
+          if(val == null || val == undefined) {
+            val = '不存在';
+          } else {
+            val = val.getAttribute(attr);
+          }
+        }
         break;
     };
     return val;
@@ -320,7 +477,7 @@ goog.scope(function() {
     var result = result.result;
     var order = null;
     var order0 = data[0];
-    var goOn = true;
+    var goOn = false;
     for(var i = 0, l = data.length; i < l && goOn; ++i) {
       //执行一条指令
       var order = data[i];

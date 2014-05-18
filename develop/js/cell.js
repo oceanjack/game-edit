@@ -46,6 +46,7 @@ goog.scope(function() {
 
 
   exports.Cell.prototype.getAttribute = function(key) {
+    (dataModel.attributeSet[key]) && (key = dataModel.attributeSet[key]);
     if(this.attributes_[key]) {
       return this.attributes_[key];
     } else if(this.attributes_[dataModel.attributeSet.others][key]) {

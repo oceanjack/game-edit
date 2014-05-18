@@ -80,7 +80,7 @@ goog.scope(function() {
       if(this.attribute_[dataModel.attributeSet.others]) {
         this.attribute_[dataModel.attributeSet.others] = {};
       }
-      if(this.attriLink_[dataModel.attributeSet.others]) {
+      if(this.attrLink_[dataModel.attributeSet.others]) {
         this.attrLink_[dataModel.attributeSet.others] = {};
       }
       this.attribute_[dataModel.attributeSet.others][key] = val;
@@ -90,10 +90,11 @@ goog.scope(function() {
 
 
   exports.One.prototype.getAttribute = function(key) {
+    (dataModel.attributeSet[key]) && (key = dataModel.attributeSet[key]);
     if(this.attrLink_[key] == 1) {
       return this.attribute_[key];
-    } else if(this.attriLink_[dataModel.attributeSet.others]) {
-      if(this.attriLink_[dataModel.attributeSet.others][key] == 1) {
+    } else if(this.attrLink_[dataModel.attributeSet.others]) {
+      if(this.attrLink_[dataModel.attributeSet.others][key] == 1) {
         return this.attribute_[dataModel.attributeSet.others][key];
       } 
     }
@@ -108,6 +109,9 @@ goog.scope(function() {
 
 
   exports.One.prototype.getName = function() {
+    if(this.data_.getData().name) {
+      return this.data_.getData().name;
+    }
     var data = dataModel.getCharacter(this.data_.getData());
     return data.name;
   };
