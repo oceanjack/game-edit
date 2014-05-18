@@ -4,8 +4,11 @@ goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.style');
 
+goog.require('ocean.onlineAI.Data');
+
 goog.scope(function() {
   var exports = ocean.onlineAI;
+  var dataModel = exports.Data;
 
 
   exports.Cell = function(data) {
@@ -28,12 +31,26 @@ goog.scope(function() {
 
 
   exports.Cell.prototype.setAttribute = function(key, val) {
-    this.attributes_[key] = val;
+    var s = false;
+    for(var v in dataModel.attributeSet) {
+      if(dataModel.attributeSet[v] == key) {
+        this.attributes_[key] = val;
+        s = true;
+        break;
+      }
+    }
+    if(!s) {
+      this.attributes_[dataModel.attributeSet.others][key] = val;
+    }
   };
 
 
   exports.Cell.prototype.getAttribute = function(key) {
-    return this.attributes_[key] ? this.attributes_[key] : null;
+    if(this.attributes_[key]) {
+      return this.attributes_[key];
+    } else if(this.attributes_[dataModel.attributeSet.others][key]) {
+      return this.attributes_[dataModel.attributeSet.others][key];
+    }
   };
 
 

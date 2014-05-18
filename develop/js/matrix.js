@@ -45,12 +45,22 @@ goog.scope(function() {
       for(var j = 0, n = this.eventSet_[i].eventAction.length; j < n; ++j) {
         this.eventSet_[i].eventAction[j] = dataModel.getEventAction(this.eventSet_[i].eventAction[j]);
       }
+      var ox = 0;
+      var oy = 0;
       for(var j = 0, n = this.eventSet_[i].eventMap.length; j < n; ++j) {
         this.eventSet_[i].eventMap[j] = dataModel.getEventMap(this.eventSet_[i].eventMap[j]);
         var ii = this.eventSet_[i].eventMap[j].pos;
         var nx = Math.floor(parseInt(ii) / this.size_[0]);
         var ny = Math.floor(parseInt(ii) % this.size_[0]);
-        this.eventSet_[i].eventMap[j].pos = [nx, ny];
+        if(j == 0) {
+          ox = nx;
+          oy = ny;
+        }
+        if(this.eventSet_[i].eventMapConfig.std == false) {
+          this.eventSet_[i].eventMap[j].pos = [nx - ox, ny - oy];
+        } else {
+          this.eventSet_[i].eventMap[j].pos = [nx, ny];
+        }
       }
       this.eventSet_[i].eventMapConfig = dataModel.getEventMapConfig(this.eventSet_[i].eventMapConfig);
       eventSet[this.eventSet_[i].name] = this.eventSet_[i];
@@ -196,49 +206,35 @@ goog.scope(function() {
 
 
   exports.Matrix.prototype.runEventJudge = function(data, father) {
-    var nodes = {};
-    var result = [];
-    var canBe = true;
+    var nodes = {x: -1, y: -1, h: false, v: null};
+    var result = 0;
     for(var i = 0, l = data.length; i < l; ++i) {
       var order = data[i];
-      if(i <= 0) {
-        canBe = this.runOneJudge(data[i], nodes, result);
+      var foundInMap = false;
+      if(order.firstAttr == '形状') {
+        foundInMap = true;
       } else {
-        switch(data[i - 1].logic) {
-          case '并且':
-            canBe = canbe && this.runOneJudge(data[i], nodes, result, father);
-            break;
-          case '或者':
-            canBe = canbe || this.runOneJudge(data[i], nodes, result, father);
-            break;
-          case '并且不是':
-            canBe = canbe && !this.runOneJudge(data[i], nodes, result, father);
-            break;
-          case '或者不是':
-            canBe = canbe || !this.runOneJudge(data[i], nodes, result, father);
-            break;
-          default:
-            break;
-        }
+      }
+      if(!foundInMap) {
+        var val = this.getNodeVal(order.firstNode, order.firstAttr, result, nodes);
       }
     }
     return [canBe, nodes, result];
   };
 
 
-  exports.Matrix.prototype.runOneJudge = function(data, nodes, result, father) {
-    if(result.length <= 0) {
-      for(var j = 0, n = this.realWorld_.length; j < n; ++j) {
-        for(var i = 0, l = this.realWorld_[j].length; i < l; ++i) {
-          if(this.realWorld_[j][i]) {
-            var key = this.realWorld_[j][i].getImgData().name;
-            if(this.cellSet_[key]) {
-              
-            }
-          }
-        }
-      }
-    }
+  exports.Matrix.prototype.getNodeVal = function(node, attr, res, nodes) {
+    var val = null;
+    switch(node) {
+      case '结果':
+        val = res;
+        (attr == '绝对值') && (val < 0) && (val = -val);
+        break;
+      default:
+        (this.cellSet_[node]) && (val = this.cellSet_[node].getAttribute(attr));
+        break;
+    };
+    return val;
   };
 
 
@@ -254,16 +250,12 @@ goog.scope(function() {
   };
   
   
-  exports.Matrix.prototype.runOneAction = function(data, nodes, result, father) {
-  };
-
 
   exports.Matrix.prototype.runDefault = function(data, isDo) {
     if(!isDo) {
       return [false, null];
     }
-    var judge = (Math.random() * 10 > 5) ? true : false;
-    return [judge, null];
+    return [(Math.random() * 10 > 5) ? true : false, null];
   };
 
 

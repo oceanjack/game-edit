@@ -66,35 +66,38 @@ goog.scope(function() {
   };
 
 
-  exports.One.prototype.setAttribute = function(key, val, opt_key) {
-    if(key != dataModel.attributeSet.others) {
-      this.attribute_[key] = val;
-      this.attrLink_[key] = 1;
-    } else {
-      if(!this.attribute_[key]) {
-        this.attribute_[key] = {};
+  exports.One.prototype.setAttribute = function(key, val) {
+    var s = false;
+    for(var k in dataModel.attributeSet) {
+      if(dataModel.attributeSet[k] == key) {
+        this.attribute_[key] = val;
+        this.attrLink_[key] = 1;
+        s = true;
+        break;
       }
-      this.attribute_[key][opt_key] = val;
-      this.attribute_[key][opt_key] = 1;
+    }
+    if(!s) {
+      if(this.attribute_[dataModel.attributeSet.others]) {
+        this.attribute_[dataModel.attributeSet.others] = {};
+      }
+      if(this.attriLink_[dataModel.attributeSet.others]) {
+        this.attrLink_[dataModel.attributeSet.others] = {};
+      }
+      this.attribute_[dataModel.attributeSet.others][key] = val;
+      this.attrLink_[dataModel.attributeSet.others][key] = 1;
     }
   };
 
 
-  exports.One.prototype.getAttribute = function(key, opt_key) {
-    if(key != dataModel.attributeSet.others) {
-      if(this.attrLink_[key] == 1) {
-        return this.attribute_[key];
-      }
-      return this.data_.getAttribute(key);
-    } else {
-      if(!this.attribute_[key]) {
-        this.attribute_[key] = {};
-      }
-      if(this.attribute_[key][opt_key] == 1) {
-        return this.attribute_[key][opt_key];
-      }
-      return this.data_.getAttribute(key)[opt_key];
+  exports.One.prototype.getAttribute = function(key) {
+    if(this.attrLink_[key] == 1) {
+      return this.attribute_[key];
+    } else if(this.attriLink_[dataModel.attributeSet.others]) {
+      if(this.attriLink_[dataModel.attributeSet.others][key] == 1) {
+        return this.attribute_[dataModel.attributeSet.others][key];
+      } 
     }
+    return this.data_.getAttribute(key);
   };
 
 
