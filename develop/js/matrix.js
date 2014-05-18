@@ -47,12 +47,13 @@ goog.scope(function() {
       }
       var ox = 0;
       var oy = 0;
+      this.eventSet_[i].eventMapConfig = dataModel.getEventMapConfig(this.eventSet_[i].eventMapConfig);
       for(var j = 0, n = this.eventSet_[i].eventMap.length; j < n; ++j) {
         this.eventSet_[i].eventMap[j] = dataModel.getEventMap(this.eventSet_[i].eventMap[j]);
         var ii = this.eventSet_[i].eventMap[j].pos;
         var nx = Math.floor(parseInt(ii) / this.size_[0]);
         var ny = Math.floor(parseInt(ii) % this.size_[0]);
-        if(j == 0) {
+        if(j <= 0) {
           ox = nx;
           oy = ny;
         }
@@ -62,7 +63,6 @@ goog.scope(function() {
           this.eventSet_[i].eventMap[j].pos = [nx, ny];
         }
       }
-      this.eventSet_[i].eventMapConfig = dataModel.getEventMapConfig(this.eventSet_[i].eventMapConfig);
       eventSet[this.eventSet_[i].name] = this.eventSet_[i];
     }
     this.eventSet_ = eventSet;
@@ -201,34 +201,101 @@ goog.scope(function() {
         return [result.judge, null];
       }
     } while(action.next);
-    return [reslut.judge, action];
+    return [result.judge, action];
+  };
+
+
+  exports.Matrix.prototype.isIn = function(x, y) {
+    return (0 <= x && x < this.size_[0] && 0 <= y && y < this.size_[1]);
   };
 
 
   exports.Matrix.prototype.runEventJudge = function(data, father) {
-    var nodes = {x: -1, y: -1, h: false, v: null};
-    var result = 0;
+    var nodes = {x: -1, y: -1, node: null};
+    var result = {judge: false, val: null};
     var order = null;
     var order0 = data[0];
     var foundInMap = false;
     var canBe = false;
-    for(var j = 0, yMax = this.realWorld_.length; j < yMax; ++j) {
-      for(var i = 0, xMax = this.realWorld_[j].length; i < xMax; ++i) {
+    if(order0.firstAttr == '形状' && father.eventMapConfig.std) {
+      //TODO: 匹配固定形状
+    }
+    for(var j = 0, yMax = this.realWorld_.length; j < yMax && !canBe; ++j) {
+      for(var i = 0, xMax = this.realWorld_[j].length; i < xMax &&!canBe; ++i) {
         if(order0.firstAttr == '形状') {
+          foundInMap = true;
           //对当前(x, y)匹配形状及后续条件
+          var ok = true;
+          var type = '';
+          for(var k = 0, l = father.eventMap.length && ok; k < l; ++k) {
+            var nx = i + father.eventMap[k].pos[0];
+            var ny = j + father.eventMap[k].pos[1];
+            if(!this.isIn(nx, ny)) {
+              ok = false;
+              break;
+            }
+            //检测匹配节点类型..任意/同一/特定的
+            if(k <= 0) {
+              type = this.realWorld_[ny][nx].getName();
+            }
+            switch(order0.firstNode) {
+              case '任意':
+              case '':
+                break;
+              case '同一':
+                ok = (this.realWorld_[ny][nx].getName() == type);
+                break;
+              default:
+                ok = (this.realWorld_[ny][nx].getName() == order0.firstNode);
+                break;
+            }
+            //检测后续条件
+            nodes.x = nx;
+            nodes.y = ny;
+            for(var p = 1, pl = data.length; p < pl && ok; ++p) {
+              order = data[p];
+              this.runOneJudge(order, nodes, result);
+              ok = result.judge;
+            }
+          }
+          if(ok) {
+            canbe = ok;
+            break;
+          }
         } else {
           //对当前点匹配条件
+          nodes.x = i;
+          nodes.y = j;
+          var ok = true;
+          for(var p = 0, pl = data.length; p < pl && ok; ++p) {
+            order = data[p];
+            this.runOneJudge(order, nodes, result);
+            ok = result.judge;
+            ok && (foundInMap = true); 
+          }
         }
       }
     }
     if(!foundInMap) {
-      for(var k = 0, l = data.length; k < l; ++k) {
+      var ok = true;
+      for(var k = 0, l = data.length && ok; k < l; ++k) {
         //未在map中找到，所以在cellSet中匹配条件
         order = data[k];
-        var val = this.getNodeVal(order.firstNode, order.firstAttr, result, nodes);
+        if(k <= 0) {
+          if(this.cellSet_[order.firstNode]) {
+            nodes.node = this.cellSet_[order.firstNode];
+          }
+        }
+        this.runOneJudge(order, nodes, result);
+        ok = result.judge;
       }
+      canBe = ok;
     }
     return {judge: canBe, nodes: nodes, result: result};
+  };
+
+
+  exports.Matrix.prototype.runOneJudge = function(data, nodes, result) {
   };
 
 
@@ -250,7 +317,7 @@ goog.scope(function() {
 
   exports.Matrix.prototype.runEventAction = function(data, father, result) {
     var nodes = result.nodes;
-    var reslut = reslut.result;
+    var result = result.result;
     var order = null;
     var order0 = data[0];
     var goOn = true;
