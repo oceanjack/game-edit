@@ -208,22 +208,32 @@ goog.scope(function() {
   exports.Matrix.prototype.runEventJudge = function(data, father) {
     var nodes = {x: -1, y: -1, h: false, v: null};
     var result = 0;
-    for(var i = 0, l = data.length; i < l; ++i) {
-      var order = data[i];
-      var foundInMap = false;
-      if(order.firstAttr == '形状') {
-        foundInMap = true;
-      } else {
+    var order = null;
+    var order0 = data[0];
+    var foundInMap = false;
+    var canBe = false;
+    for(var j = 0, yMax = this.realWorld_.length; j < yMax; ++j) {
+      for(var i = 0, xMax = this.realWorld_[j].length; i < xMax; ++i) {
+        if(order0.firstAttr == '形状') {
+          //对当前(x, y)匹配形状及后续条件
+        } else {
+          //对当前点匹配条件
+        }
       }
-      if(!foundInMap) {
+    }
+    if(!foundInMap) {
+      for(var k = 0, l = data.length; k < l; ++k) {
+        //未在map中找到，所以在cellSet中匹配条件
+        order = data[k];
         var val = this.getNodeVal(order.firstNode, order.firstAttr, result, nodes);
       }
     }
-    return [canBe, nodes, result];
+    return {judge: canBe, nodes: nodes, result: result};
   };
 
 
   exports.Matrix.prototype.getNodeVal = function(node, attr, res, nodes) {
+    //获取节点值
     var val = null;
     switch(node) {
       case '结果':
@@ -239,14 +249,16 @@ goog.scope(function() {
 
 
   exports.Matrix.prototype.runEventAction = function(data, father, result) {
-    var nodes = result[1];
-    var reslut = reslut[2];
-    var goon = false;
-    for(var i = 0, l = data.length; i < l && goon; ++i) {
+    var nodes = result.nodes;
+    var reslut = reslut.result;
+    var order = null;
+    var order0 = data[0];
+    var goOn = true;
+    for(var i = 0, l = data.length; i < l && goOn; ++i) {
+      //执行一条指令
       var order = data[i];
-      goon = this.runOneAction(data[i], nodes, result, father);
     }
-    return [nodes, data, goon];
+    return {nodes: nodes, next: goOn, action: data};
   };
   
   
