@@ -347,7 +347,7 @@ goog.scope(function() {
         return;
       }
       if(s7) {
-        if(!window.isNaN(parseInt(data.secondAttr))) {
+        if(!window['isNaN'](parseInt(data.secondAttr))) {
           data.secondAttr = parseInt(data.secondAttr);
         }
         switch(data.operation) {
@@ -377,10 +377,10 @@ goog.scope(function() {
     var val2 = this.getNodeVal(data.secondNode, data.secondAttr, result.val, nodes);
     var judge = false;
     var res = 0;
-    if(!window.isNaN(parseInt(val))) {
+    if(!window['isNaN'](parseInt(val))) {
       val = parseInt(val);
     }
-    if(!window.isNaN(parseInt(val2))) {
+    if(!window['isNaN'](parseInt(val2))) {
       val2 = parseInt(val2);
     }
     switch(data.operation) {
