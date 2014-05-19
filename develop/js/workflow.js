@@ -343,7 +343,7 @@ goog.scope(function() {
     var maxIndex = 0;
     var partSet = {};
     for(var i = 0, l = data.nodes.length; i < l; ++i) {
-      node = dataModel.getWorkflowPart(data.nodes[i]);
+      var node = dataModel.getWorkflowPart(data.nodes[i]);
       (node.index > maxIndex) && (maxIndex = node.index);
       var part = this.addWorkflowPart(null, node.type, node.index);
       goog.style.setStyle(part, 'margin-left', node.left);

@@ -1,7 +1,5 @@
 goog.provide('ocean.onlineAI.Matrix');
 
-goog.require('goog.cloneObject');
-
 goog.require('ocean.onlineAI.Cell');
 goog.require('ocean.onlineAI.Actions');
 goog.require('ocean.onlineAI.One');

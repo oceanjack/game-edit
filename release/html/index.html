@@ -33,8 +33,10 @@
           <div class="wfp hiddenForce">输入/输出</div>
           <div class="wfp">判断</div>
           <div class="wfp">方案</div>
+          <input type="checkbox" class="wfpRemove" value="移除"/><span>移除</span>
         </div>
         <div class="workflowspace hidden">
+          <canvas class="workflowCanvas" width="800" height="600"></canvas>
         </div>
         <div class="attribute hidden">
           <ul class="attributeList">
@@ -57,8 +59,8 @@
         </div>
         <div class="checkOption hidden">
           <hr />
-          <input class="cpt" type="checkbox" value="90度旋转"/><p>90度旋转</p>
-          <input class="cpt" type="checkbox" value="翻转"/><p>翻转</p>
+          <input class="cpt hiddenForce" type="checkbox" value="90度旋转"/><p class="hiddenForce">90度旋转</p>
+          <input class="cpt hiddenForce" type="checkbox" value="翻转"/><p class="hiddenForce">翻转</p>
           <input class="cpt" type="checkbox" value="固定位置"/><p>固定位置</p>
           <input class="cpt" type="checkbox" value="作用区"/><p>作用区</p>
         </div>
@@ -80,6 +82,7 @@
         <li class="addEvent">编辑规则</li>
         <li class="addWorkflow">流程组织</li>
         <li class="saveGameData">保存数据</li>
+        <li class="runGame">运行世界</li>
         <li><a class="downloaddata" download="data.txt">下载数据<a></li>
       </ul>
     </div>
