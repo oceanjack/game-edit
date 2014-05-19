@@ -108,7 +108,7 @@ goog.scope(function() {
       return;
     }
     var tmp = data.getAttribute(key);
-    if(window.isNaN(parseInt(tmp)) || window.isNaN(parseInt(val))) {
+    if(window['isNaN'](parseInt(tmp)) || window['isNaN'](parseInt(val))) {
       return;
     }
     tmp = parseInt(tmp) + parseInt(val);
@@ -121,7 +121,7 @@ goog.scope(function() {
       return;
     }
     var tmp = data.getAttribute(key);
-    if(window.isNaN(parseInt(tmp)) || window.isNaN(parseInt(val))) {
+    if(window['isNaN'](parseInt(tmp)) || window['isNaN'](parseInt(val))) {
       return;
     }
     tmp = parseInt(tmp) - parseInt(val);

@@ -19,6 +19,7 @@ goog.scope(function() {
     this.eventSet_ = goog.cloneObject(eventSet);
     this.workflow_ = goog.cloneObject(workflow);
     this.canvas_ = context;
+    this.stop_ = false;
     this.initData();
   };
 
@@ -31,6 +32,7 @@ goog.scope(function() {
   exports.Matrix.prototype.workflow_ = null;
   exports.Matrix.prototype.canvas_ = null;
   exports.Matrix.prototype.clock_ = null;
+  exports.Matrix.prototype.stop_ = null;
 
 
   exports.Matrix.prototype.initData = function() {
@@ -123,8 +125,15 @@ goog.scope(function() {
 
   exports.Matrix.prototype.run = function() {
     var this_ = this;
+    this.stop_ = false;
     this.clock_ = window.setInterval(function () {this_.draw();}, 40);
     this.runWorkflow(this.workflow_.import__);
+  };
+
+
+  exports.Matrix.prototype.stop = function() {
+    this.clock_ && window.clearInterval(this.clock_);
+    this.stop_ = true;
   };
 
 
@@ -136,6 +145,8 @@ goog.scope(function() {
     var clock = null;
     var this_ = this;
     var workflowPipe = function () {
+      if(this_.stop_)
+        return;
       index = order.links[node.index];
       switch(node.type) {
         case 'sePart':
@@ -173,7 +184,7 @@ goog.scope(function() {
         default:
           break;
       }
-      this_.draw();
+      //this_.draw();
       if(node.index != order.endIndex) {
         clock = window.setTimeout(function() {
           workflowPipe();

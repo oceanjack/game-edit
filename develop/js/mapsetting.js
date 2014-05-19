@@ -579,6 +579,7 @@ goog.scope(function() {
     //this.elements_.chooseType_.options.selectedIndex = 0;
     this.findDataByType();
     this.workflow_.clear();
+    this.matrix_ && this.matrix_.stop();
   };
 
 
@@ -802,7 +803,7 @@ goog.scope(function() {
     this.mode_ = 13;
     this.display_();
     this.clear();
-    this.matrix_.run();
+    this.matrix_ && this.matrix_.run();
   };
 
 
