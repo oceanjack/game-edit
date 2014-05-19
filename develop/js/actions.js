@@ -19,7 +19,7 @@ goog.scope(function() {
     var speed = data.getAttribute(dataModel.attributeSet.speed);
     var dir = data.getAttribute(dataModel.attributeSet.dir);
     var tmp = world[posY][posX];
-    //world[posY][posX] = null;
+    world[posY][posX] = null;
     posX = parseInt(posX);
     posY = parseInt(posY);
     var oldX = posX;
@@ -68,8 +68,6 @@ goog.scope(function() {
         tmp.setAttribute(dataModel.attributeSet.posY, nowY); 
         window.setTimeout(function() {step()}, 30);
       } else {
-        world[oldY][oldX] = null;
-        world[posY][posX] = tmp;
         tmp.setAttribute(dataModel.attributeSet.posX, posX);
         tmp.setAttribute(dataModel.attributeSet.posY, posY); 
         tmp.setAttribute(dataModel.attributeSet.status, oldStatus);

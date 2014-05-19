@@ -125,7 +125,7 @@ goog.scope(function() {
 
   exports.Matrix.prototype.run = function() {
     var this_ = this;
-    this.clock_ = window.setInterval(function () {this_.draw();}, 33);
+    this.clock_ = window.setInterval(function () {this_.draw();}, 40);
     this.runWorkflow(this.workflow_.import__);
   };
 
@@ -175,11 +175,11 @@ goog.scope(function() {
         default:
           break;
       }
-      //this_.draw();
+      this_.draw();
       if(node.index != order.endIndex) {
         clock = window.setTimeout(function() {
           workflowPipe();
-        }, 10);
+        }, 20);
       }
     }
     workflowPipe();
@@ -610,7 +610,6 @@ goog.scope(function() {
         result.judge = false;
         break;
     };
-    //result.judge = false;
   };
   
   
