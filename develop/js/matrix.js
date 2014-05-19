@@ -32,6 +32,7 @@ goog.scope(function() {
   exports.Matrix.prototype.eventSet_ = null;
   exports.Matrix.prototype.workflow_ = null;
   exports.Matrix.prototype.canvas_ = null;
+  exports.Matrix.prototype.clock_ = null;
 
 
   exports.Matrix.prototype.initData = function() {
@@ -123,6 +124,8 @@ goog.scope(function() {
 
 
   exports.Matrix.prototype.run = function() {
+    var this_ = this;
+    this.clock_ = window.setInterval(function () {this_.draw();}, 33);
     this.runWorkflow(this.workflow_.import__);
   };
 
@@ -132,11 +135,10 @@ goog.scope(function() {
     var index = order.startIndex;
     var node = order.nodes[index];
     var result = null;
-    while(node.index != order.endIndex) {
+    var clock = null;
+    var this_ = this;
+    var workflowPipe = function () {
       index = order.links[node.index];
-      if(index == undefined) {
-        break;
-      }
       switch(node.type) {
         case 'sePart':
           for(var i = 0, l = index.length; i < l; ++i) {
@@ -146,7 +148,7 @@ goog.scope(function() {
           node = order.nodes[index];
           break;
         case 'jPart':
-          result = this.runWorkflowPart(node.val, false);
+          result = this_.runWorkflowPart(node.val, false);
           for(var i = 0, l = index.length; i < l; ++i) {
             if(result[0]) {
               if(index[i][0] == 3) {
@@ -163,7 +165,7 @@ goog.scope(function() {
           node = order.nodes[index];
           break;
         case 'sPart':
-          result = this.runWorkflowPart(node.val, true);
+          result = this_.runWorkflowPart(node.val, true);
           for(var i = 0, l = index.length; i < l; ++i) {
             index = index[i][1];
             break;
@@ -173,7 +175,14 @@ goog.scope(function() {
         default:
           break;
       }
+      //this_.draw();
+      if(node.index != order.endIndex) {
+        clock = window.setTimeout(function() {
+          workflowPipe();
+        }, 10);
+      }
     }
+    workflowPipe();
     return result;
   };
 
@@ -463,7 +472,11 @@ goog.scope(function() {
           if(val == null || val == undefined) {
             val = '不存在';
           } else {
-            val = val.getAttribute(attr);
+            if(attr != '') {
+              val = val.getAttribute(attr);
+            } else {
+              val = '存在';
+            }
           }
         }
         break;
@@ -473,16 +486,110 @@ goog.scope(function() {
 
 
   exports.Matrix.prototype.runEventAction = function(data, father, result) {
-    var nodes = result.nodes;
-    var result = result.result;
-    var order = null;
-    var order0 = data[0];
-    var goOn = false;
-    for(var i = 0, l = data.length; i < l && goOn; ++i) {
+    var goOn = true;
+    for(var i = 0, l = data.length; i < l; ++i) {
       //执行一条指令
-      var order = data[i];
+      this.runOneAction(data[i], father, result);
+      if(!result.judge) {
+        goOn = false;
+        break;
+      }
     }
-    return {nodes: nodes, next: goOn, action: data};
+    return {result: result, next: goOn, action: data};
+  };
+
+
+  exports.Matrix.prototype.runOneAction = function(data, father, result) {
+    switch(data.action) {
+      case '消除':
+        if(data.firstAttr == '形状') {
+          for(var i = 0, l = father.eventMap.length; i < l; ++i) {
+            var x = result.nodes.x + father.eventMap[i].pos[0];
+            var y = result.nodes.y + father.eventMap[i].pos[1];
+            this.realWorld_[y][x] = null;
+          }
+        }
+        break;
+      case '创建':
+        if(data.firstAttr == '形状') {
+        } else {
+          var x = result.nodes.x, y = result.nodes.y;
+          var dataSet = [];
+          if(data.firstNode.indexOf('任意') != -1 || data.firstNode.indexOf('同一') != -1) {
+            for(var key in this.cellSet_) {
+              if(this.cellSet_[key].getAttribute(data.firstAttr) == data.secondAttr) {
+                dataSet.push(key);
+              }
+            }
+          } else {
+            dataSet.push(data.firstNode);
+          }
+          var len = dataSet.length;
+          this.realWorld_[y][x] = actionModel.CreateOne(
+              x, y, 
+              this.cellSet_[dataSet[Math.floor(Math.random() * 100) % len]]
+          );
+        }
+        break;
+      case '交换':
+        break;
+      case '向下移动':
+        if(data.firstNode == '任意' || data.firstNode == '同一') {
+          actionModel.Move(this.realWorld_[result.nodes.y][result.nodes.x], this.realWorld_);
+        } else if(data.firstNode == '任意2' || data.firstNode == '同一2') {
+          actionModel.Move(this.realWorld_[result.nodes.ny][result.nodes.nx], this.realWorld_);
+        }
+        break;
+      case '数值增加':
+        if(data.firstNode == '任意' || data.firstNode == '同一') {
+          actionModel.AddNum(
+            this.realWorld_[result.nodes.y][result.nodes.x],
+            data.firstAttr,
+            data.secondAttr
+          );
+        } else if(data.firstNode == '任意2' || data.firstNode == '同一2') {
+          actionModel.AddNum(
+            this.realWorld_[result.nodes.ny][result.nodes.nx],
+            data.firstAttr,
+            data.secondAttr
+          );
+        } else {
+          actionModel.AddNum(
+            this.cellSet_[data.firstNode],
+            data.firstAttr,
+            data.secondAttr
+          );
+        }
+        break;
+      case '数值减少':
+        if(data.firstNode == '任意' || data.firstNode == '同一') {
+          actionModel.ReduceNum(
+            this.realWorld_[result.nodes.y][result.nodes.x],
+            data.firstAttr,
+            data.secondAttr
+          );
+        } else if(data.firstNode == '任意2' || data.firstNode == '同一2') {
+          actionModel.ReduceNum(
+            this.realWorld_[result.nodes.ny][result.nodes.nx],
+            data.firstAttr,
+            data.secondAttr
+          );
+        } else {
+          actionModel.ReduceNum(
+            this.cellSet_[data.firstNode],
+            data.firstAttr,
+            data.secondAttr
+          );
+        }
+        break;
+      case '结束游戏':
+        window.clearInterval(this.clock_);
+        break;
+      case '结束事件':
+        result.judge = false;
+        break;
+    };
+    //result.judge = false;
   };
   
   

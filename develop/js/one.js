@@ -67,6 +67,7 @@ goog.scope(function() {
 
 
   exports.One.prototype.setAttribute = function(key, val) {
+    (dataModel.attributeSet[key]) && (key = dataModel.attributeSet[key]);
     var s = false;
     for(var k in dataModel.attributeSet) {
       if(dataModel.attributeSet[k] == key) {

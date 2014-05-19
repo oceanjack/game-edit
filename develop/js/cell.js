@@ -31,6 +31,7 @@ goog.scope(function() {
 
 
   exports.Cell.prototype.setAttribute = function(key, val) {
+    (dataModel.attributeSet[key]) && (key = dataModel.attributeSet[key]);
     var s = false;
     for(var v in dataModel.attributeSet) {
       if(dataModel.attributeSet[v] == key) {

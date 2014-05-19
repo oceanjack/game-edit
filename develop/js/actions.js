@@ -13,13 +13,18 @@ goog.scope(function() {
   };
 
 
-  exports.Actions.Move = function(data) {
+  exports.Actions.Move = function(data, world) {
     var posX = data.getAttribute(dataModel.attributeSet.posX);
     var posY = data.getAttribute(dataModel.attributeSet.posY);
     var speed = data.getAttribute(dataModel.attributeSet.speed);
     var dir = data.getAttribute(dataModel.attributeSet.dir);
+    var tmp = world[posY][posX];
+    world[posY][posX] = null;
     posX = parseInt(posX);
     posY = parseInt(posY);
+    var oldX = posX;
+    var oldY = posY;
+    var oldStatus = data.getAttribute(dataModel.attributeSet.status);
     speed = parseInt(speed);
     switch(dir) {
       case '上':
@@ -37,8 +42,38 @@ goog.scope(function() {
       default:
         break;
     }
-    data.setAttribute(dataModel.attributeSet.posX, posX);
-    data.setAttribute(dataModel.attributeSet.posY, posY);
+    world[posY][posX] = tmp;
+    world[posY][posX].setAttribute(dataModel.attributeSet.status, 'moving');
+    var ll = 0.05;
+    var step = function() {
+      var nowX = tmp.getAttribute(dataModel.attributeSet.posX);
+      var nowY = tmp.getAttribute(dataModel.attributeSet.posY);
+      var change = false;
+      if(nowX - posX > 0.01) {
+        nowX -= ll;
+        change = true;
+      } else if(posX - nowX > 0.01) {
+        nowX += ll;
+        change = true;
+      }
+      if(nowY - posY > 0.01) {
+        nowY -= ll;
+        change = true;
+      } else if(posY - nowY > 0.01) {
+        nowY += ll;
+        change = true;
+      }
+      if(change) {
+        tmp.setAttribute(dataModel.attributeSet.posX, nowX);
+        tmp.setAttribute(dataModel.attributeSet.posY, nowY); 
+        window.setTimeout(function() {step()}, 30);
+      } else {
+        tmp.setAttribute(dataModel.attributeSet.posX, posX);
+        tmp.setAttribute(dataModel.attributeSet.posY, posY); 
+        tmp.setAttribute(dataModel.attributeSet.status, oldStatus);
+      }
+    };
+    step();
   };
 
 
@@ -106,16 +141,28 @@ goog.scope(function() {
   };
 
 
-  exports.Actions.AddNum = function(data, key, val, opt_key) {
-    var tmp = data.getAttribute(key, opt_key);
+  exports.Actions.AddNum = function(data, key, val) {
+    if(data == null || data == undefined) {
+      return;
+    }
+    var tmp = data.getAttribute(key);
+    if(window.isNaN(parseInt(tmp)) || window.isNaN(parseInt(val))) {
+      return;
+    }
     tmp = parseInt(tmp) + parseInt(val);
-    data.setAttribute(key, tmp, opt_key);
+    data.setAttribute(key, tmp);
   };
 
 
-  exports.Actions.ReduceNum = function(data, key, val, opt_key) {
-    var tmp = data.getAttribute(key, opt_key);
+  exports.Actions.ReduceNum = function(data, key, val) {
+    if(data == null || data == undefined) {
+      return;
+    }
+    var tmp = data.getAttribute(key);
+    if(window.isNaN(parseInt(tmp)) || window.isNaN(parseInt(val))) {
+      return;
+    }
     tmp = parseInt(tmp) - parseInt(val);
-    data.setAttribute(key, tmp, opt_key);
+    data.setAttribute(key, tmp);
   };
 });
