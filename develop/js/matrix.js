@@ -531,6 +531,27 @@ goog.scope(function() {
           );
         }
         break;
+      case '改变属性':
+        if(data.firstNode == '任意' || data.firstNode == '同一') {
+          actionModel.ChangeAttr(
+            this.realWorld_[result.nodes.y][result.nodes.x],
+            data.firstAttr,
+            data.secondAttr
+          );
+        } else if(data.firstNode == '任意2' || data.firstNode == '同一2') {
+          actionModel.ChangeAttr(
+            this.realWorld_[result.nodes.ny][result.nodes.nx],
+            data.firstAttr,
+            data.secondAttr
+          );
+        } else {
+          actionModel.ChangeAttr(
+            this.cellSet_[data.firstNode],
+            data.firstAttr,
+            data.secondAttr
+          );
+        } 
+        break;
       case '交换':
         break;
       case '向下移动':

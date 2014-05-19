@@ -19,7 +19,7 @@ goog.scope(function() {
     var speed = data.getAttribute(dataModel.attributeSet.speed);
     var dir = data.getAttribute(dataModel.attributeSet.dir);
     var tmp = world[posY][posX];
-    world[posY][posX] = null;
+    //world[posY][posX] = null;
     posX = parseInt(posX);
     posY = parseInt(posY);
     var oldX = posX;
@@ -68,6 +68,8 @@ goog.scope(function() {
         tmp.setAttribute(dataModel.attributeSet.posY, nowY); 
         window.setTimeout(function() {step()}, 30);
       } else {
+        world[oldY][oldX] = null;
+        world[posY][posX] = tmp;
         tmp.setAttribute(dataModel.attributeSet.posX, posX);
         tmp.setAttribute(dataModel.attributeSet.posY, posY); 
         tmp.setAttribute(dataModel.attributeSet.status, oldStatus);
@@ -77,40 +79,11 @@ goog.scope(function() {
   };
 
 
-  exports.Actions.MoveForce = function(data, dir) {
-    var posX = data.getAttribute(dataModel.attributeSet.posX);
-    var posY = data.getAttribute(dataModel.attributeSet.posY);
-    var speed = data.getAttribute(dataModel.attributeSet.speed);
-    posX = parseInt(posX);
-    posY = parseInt(posY);
-    speed = parseInt(speed);
-    switch(dir) {
-      case '上':
-        posY -= speed;
-        break;
-      case '下':
-        posY += speed;
-        break;
-      case '左':
-        posX -= speed;
-        break;
-      case '右':
-        posX += speed;
-        break;
-      default:
-        break;
-    };
-    data.setAttribute(dataModel.attributeSet.posX, posX);
-    data.setAttribute(dataModel.attributeSet.posY, posY);
-    data.setAttribute(dataModel.attributeSet.dir, dir);
-  };
-
-
-  exports.Actions.Swap = function(data, data2, key, opt_key) {
-    var val = data.getAttribute(key, opt_key);
-    var val2 = data2.getAttribute(key, opt_key);
-    data.setAttribute(key, val2, opt_key);
-    data2.setAttribute(key, val, opt_key);
+  exports.Actions.Swap = function(data, data2, key) {
+    var val = data.getAttribute(key);
+    var val2 = data2.getAttribute(key);
+    data.setAttribute(key, val2);
+    data2.setAttribute(key, val);
   };
 
 
@@ -127,17 +100,8 @@ goog.scope(function() {
   };
 
 
-  exports.Actions.ChangeAttr = function(data, key, val, opt_key) {
-    data.setAttribute(key, val, opt_key);
-  };
-
-
-  exports.Actions.End = function(status) {
-    status.end && (status.end = true);
-  };
-
-
-  exports.Actions.Nothing = function() {
+  exports.Actions.ChangeAttr = function(data, key, val) {
+    data.setAttribute(key, val);
   };
 
 
