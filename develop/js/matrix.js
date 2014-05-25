@@ -238,7 +238,9 @@ goog.scope(function() {
     if(order0.firstAttr == '形状' && father.eventMapConfig.std) {
       //匹配固定形状
     }
-    for(var j = 0, yMax = this.realWorld_.length; j < yMax && !canBe; ++j) {
+    //判断是否为形状或者坐标
+    var con = (order0.firstAttr != '形状' && order0.firstNode != '任意' && order0.firstNode != '同一');
+    for(var j = 0, yMax = this.realWorld_.length; j < yMax && !canBe && !con; ++j) {
       for(var i = 0, xMax = this.realWorld_[j].length; i < xMax && !canBe; ++i) {
         nodes = {x: -1, y: -1, node: null};
         result = {judge: true, val: null};
