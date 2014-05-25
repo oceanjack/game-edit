@@ -29,38 +29,38 @@ goog.scope(function() {
     speed = parseInt(speed);
     switch(dir) {
       case '上':
-        posY -= speed;
+        posY -= 1;
         break;
       case '下':
-        posY += speed;
+        posY += 1;
         break;
       case '左':
-        posX -= speed;
+        posX -= 1;
         break;
       case '右':
-        posX += speed;
+        posX += 1;
         break;
       default:
         break;
     }
     world[posY][posX] = tmp;
     world[posY][posX].setAttribute(dataModel.attributeSet.status, 'moving');
-    var ll = 0.05;
+    var ll = 0.05 * speed;
     var step = function() {
       var nowX = tmp.getAttribute(dataModel.attributeSet.posX);
       var nowY = tmp.getAttribute(dataModel.attributeSet.posY);
       var change = false;
-      if(nowX - posX > 0.01) {
+      if(nowX - posX > ll) {
         nowX -= ll;
         change = true;
-      } else if(posX - nowX > 0.01) {
+      } else if(posX - nowX > ll) {
         nowX += ll;
         change = true;
       }
-      if(nowY - posY > 0.01) {
+      if(nowY - posY > ll) {
         nowY -= ll;
         change = true;
-      } else if(posY - nowY > 0.01) {
+      } else if(posY - nowY > ll) {
         nowY += ll;
         change = true;
       }

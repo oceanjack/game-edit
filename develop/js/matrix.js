@@ -363,6 +363,7 @@ goog.scope(function() {
         if(!window['isNaN'](parseInt(data.secondAttr))) {
           data.secondAttr = parseInt(data.secondAttr);
         }
+        var s = true;
         switch(data.operation) {
           case '减去':
             result.val = (s0 ? (nodes.x) : (nodes.y)) - data.secondAttr;
@@ -376,9 +377,14 @@ goog.scope(function() {
           case '除以':
             result.val = (s0 ? (nodes.x) : (nodes.y)) / data.secondAttr;
             break;
+          default:
+            s = false;
+            break;
         }
-        this.changeJudge(result, logic, true);
-        return;
+        if(s) {
+          this.changeJudge(result, logic, true);
+          return;
+        }
       }
     } else if(s2 || s3) {
       s2 && (nodes.nx = result.val);
