@@ -13,10 +13,11 @@ goog.scope(function() {
   };
 
 
-  exports.Actions.Move = function(data, world) {
+  exports.Actions.Move = function(data, world, opt_dir) {
     var posX = data.getAttribute(dataModel.attributeSet.posX);
     var posY = data.getAttribute(dataModel.attributeSet.posY);
     var speed = data.getAttribute(dataModel.attributeSet.speed);
+    opt_dir && data.setAttribute(dataModel.attributeSet.dir, opt_dir);
     var dir = data.getAttribute(dataModel.attributeSet.dir);
     var tmp = world[posY][posX];
     world[posY][posX] = null;

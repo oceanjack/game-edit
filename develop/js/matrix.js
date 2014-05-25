@@ -236,7 +236,7 @@ goog.scope(function() {
     var foundInMap = false;
     var canBe = false;
     if(order0.firstAttr == '形状' && father.eventMapConfig.std) {
-      //TODO: 匹配固定形状
+      //匹配固定形状
     }
     for(var j = 0, yMax = this.realWorld_.length; j < yMax && !canBe; ++j) {
       for(var i = 0, xMax = this.realWorld_[j].length; i < xMax && !canBe; ++i) {
@@ -565,9 +565,62 @@ goog.scope(function() {
         break;
       case '向下移动':
         if(data.firstNode == '任意' || data.firstNode == '同一') {
-          actionModel.Move(this.realWorld_[result.nodes.y][result.nodes.x], this.realWorld_);
+          actionModel.Move(
+              this.realWorld_[result.nodes.y][result.nodes.x], 
+              this.realWorld_,
+              '下'
+          );
         } else if(data.firstNode == '任意2' || data.firstNode == '同一2') {
-          actionModel.Move(this.realWorld_[result.nodes.ny][result.nodes.nx], this.realWorld_);
+          actionModel.Move(
+              this.realWorld_[result.nodes.ny][result.nodes.nx], 
+              this.realWorld_,
+              '下'
+          );
+        }
+        break;
+      case '向上移动':
+        if(data.firstNode == '任意' || data.firstNode == '同一') {
+          actionModel.Move(
+              this.realWorld_[result.nodes.y][result.nodes.x], 
+              this.realWorld_,
+              '上'
+          );
+        } else if(data.firstNode == '任意2' || data.firstNode == '同一2') {
+          actionModel.Move(
+              this.realWorld_[result.nodes.ny][result.nodes.nx], 
+              this.realWorld_,
+              '上'
+          );
+        }
+        break;
+      case '向左移动':
+        if(data.firstNode == '任意' || data.firstNode == '同一') {
+          actionModel.Move(
+              this.realWorld_[result.nodes.y][result.nodes.x], 
+              this.realWorld_,
+              '左'
+          );
+        } else if(data.firstNode == '任意2' || data.firstNode == '同一2') {
+          actionModel.Move(
+              this.realWorld_[result.nodes.ny][result.nodes.nx], 
+              this.realWorld_,
+              '左'
+          );
+        }
+        break;
+      case '向右移动':
+        if(data.firstNode == '任意' || data.firstNode == '同一') {
+          actionModel.Move(
+              this.realWorld_[result.nodes.y][result.nodes.x], 
+              this.realWorld_,
+              '右'
+          );
+        } else if(data.firstNode == '任意2' || data.firstNode == '同一2') {
+          actionModel.Move(
+              this.realWorld_[result.nodes.ny][result.nodes.nx], 
+              this.realWorld_,
+              '右'
+          );
         }
         break;
       case '数值增加':
