@@ -565,6 +565,19 @@ goog.scope(function() {
         break;
       case '交换':
         break;
+      case '移动':
+        if(data.firstNode == '任意' || data.firstNode == '同一') {
+          actionModel.Move(
+              this.realWorld_[result.nodes.y][result.nodes.x], 
+              this.realWorld_
+          );
+        } else if(data.firstNode == '任意2' || data.firstNode == '同一2') {
+          actionModel.Move(
+              this.realWorld_[result.nodes.ny][result.nodes.nx], 
+              this.realWorld_
+          );
+        }
+        break;
       case '向下移动':
         if(data.firstNode == '任意' || data.firstNode == '同一') {
           actionModel.Move(
