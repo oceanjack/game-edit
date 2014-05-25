@@ -1,1 +1,470 @@
-body{background-color:#f6f6f6;font-family:'微软雅黑'}.hidden{display:none}.hiddenForce{display:none!important}.boxshadow{box-shadow:0 1px 5px #aaa}a{text-decoration:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;-o-user-select:none;user-select:none}input,button,select{border-radius:4px;margin:auto;height:20px;width:40px}button{width:50px}*,*:before,*:after{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}@keyframes display_{0%{opacity:.0;filter:alpha(opacity=0)}100%{opacity:1.0;filter:alpha(opacity=100)}}@-moz-keyframes display_{0%{opacity:.0;filter:alpha(opacity=0)}100%{opacity:1.0;filter:alpha(opacity=100)}}@-webkit-keyframes display_{0%{opacity:.0;filter:alpha(opacity=0)}100%{opacity:1.0;filter:alpha(opacity=100)}}@-o-keyframes display_{0%{opacity:.0;filter:alpha(opacity=0)}100%{opacity:1.0;filter:alpha(opacity=100)}}*{animation:display_ 1s ease 0s 1 normal;-moz-animation:display_ 1s ease 0s 1 normal;-webkit-animation:display_ 1s ease 0s 1 normal;-o-animation:display_ 1s ease 0s 1 normal}.menu{width:120px;min-height:100%;position:fixed;margin:0;left:0;top:0;background-color:#eee;box-shadow:0 1px 5px #aaa}.menu .loadData{width:70px}.menu ul{list-style:none;padding-left:0}.menu ul li{padding-left:20%;padding-top:7px;padding-bottom:7px;color:#333;cursor:pointer;text-shadow:1px 2px 2px #aaa}.menu ul li:hover{color:#444;background-color:#ccc}.product{width:120px;min-height:100%;position:fixed;margin:0;right:0;top:0;background-color:#eee;box-shadow:0 1px 5px #aaa}.product ul{list-style:none;padding-left:0}.product ul li{padding-left:20%;padding-top:7px;padding-bottom:7px;color:#333;cursor:pointer;text-shadow:1px 2px 2px #aaa}.product ul li:hover{color:#444;background-color:#ccc}.editarea{position:absolute;min-width:99%;min-height:98%}.editarea>*{margin:auto}.editarea .size{width:220px;margin:auto}.editarea .size>*{display:inline-block}.editarea .map{position:relative;min-width:800px;min-height:600px}.editarea .map .mapimgdiv{margin-top:10px}.editarea .map .mapimgdiv,.editarea .map #canvas{background-color:#fff}.editarea .map .mapimgdiv,.editarea .map #canvas,.editarea .map .mapArea{margin-left:auto;margin-right:auto;width:800px;height:600px;overflow:hidden;box-shadow:0 1px 5px #aaa}.editarea .map .workflowPart{text-align:center;margin:auto;width:800px;margin-top:5px}.editarea .map .workflowPart>div{margin-left:2px;margin-right:2px;display:inline-block;background-color:#ddd;border-radius:2px;padding:2px;cursor:pointer}.editarea .map .workflowspace{width:800px;height:600px;border:1px solid #29b39c;border-radius:7px;text-align:left;margin:auto;margin-top:5px}.editarea .map .workflowspace .workflowCanvas{position:absolute;margin:0;border-radius:7px}.editarea .map .workflowspace .part{position:absolute;margin-left:30px;margin-top:5px;border:1px solid #333;text-align:center;background-color:#ddd}.editarea .map .workflowspace .part select{width:87px;border:none!important;-moz-user-select:none;-webkit-user-select:none;-ms-user-select:none;user-select:none}.editarea .map .workflowspace .part select .judge{background-color:#ddd}.editarea .map .workflowspace .part select .workflow{background-color:#aaa}.editarea .map .workflowspace p{line-height:0;cursor:pointer;-moz-user-select:none;-webkit-user-select:none;-ms-user-select:none;user-select:none;position:absolute}.editarea .map .workflowspace p:hover{color:#29b23c}.editarea .map .workflowspace .sePart .up,.editarea .map .workflowspace .ioPart .up,.editarea .map .workflowspace .sPart .up{margin-top:0;margin-left:45px}.editarea .map .workflowspace .sePart .left,.editarea .map .workflowspace .ioPart .left,.editarea .map .workflowspace .sPart .left{margin-top:20px;margin-left:-5px}.editarea .map .workflowspace .sePart .right,.editarea .map .workflowspace .ioPart .right,.editarea .map .workflowspace .sPart .right{margin-top:-20px;margin-left:94px}.editarea .map .workflowspace .sePart .down,.editarea .map .workflowspace .ioPart .down,.editarea .map .workflowspace .sPart .down{margin-top:-1px;margin-left:45px}.editarea .map .workflowspace .jPart .up{margin-top:0;margin-left:-4px}.editarea .map .workflowspace .jPart .left{margin-top:88px;margin-left:-4px}.editarea .map .workflowspace .jPart .right{margin-top:-90px;margin-left:84px}.editarea .map .workflowspace .jPart .down{margin-top:0;margin-left:85px}.editarea .map .workflowspace .jPart{width:90px;height:90px;line-height:90px;-webkit-transform:rotateX(60deg) rotateZ(45deg);-o-transform:rotateX(60deg) rotateZ(45deg);-moz-transform:rotateX(60deg) rotateZ(45deg);transform:rotateX(60deg) rotateZ(45deg)}.editarea .map .workflowspace .jPart>*{-webkit-transform:rotateZ(-45deg) scaleY(2);-o-transform:rotateZ(-45deg) scaleY(2);-moz-transform:rotateZ(-45deg) scaleY(2);transform:rotateZ(-45deg) scaleY(2)}.editarea .map .workflowspace .sePart{width:100px;height:40px;line-height:40px;border-radius:40px}.editarea .map .workflowspace .ioPart{width:100px;height:40px;line-height:40px;-webkit-transform:skew(-40deg);-o-transform:skew(-40deg);-moz-transform:skew(-40deg);transform:skew(-40deg)}.editarea .map .workflowspace .ioPart>*{-webkit-transform:skew(40deg);-o-transform:skew(40deg);-moz-transform:skew(40deg);transform:skew(40deg)}.editarea .map .workflowspace .sPart{line-height:40px;width:100px;height:40px}.editarea .map #canvas,.editarea .map .mapArea{position:absolute}.editarea .map .mapArea .mapBlock{animation:none;-moz-animation:none;-webkit-animation:none;-o-animation:none;float:left;background-color:#aaa;opacity:.3;border:1px solid #fff}.editarea .map .mapArea .mapBlock:hover{opacity:.8}.editarea .map .mapArea .selected{color:#fff;opacity:.8!important}.editarea .map .mapArea .selectedNo:before{content:'无'}.editarea .map .mapArea .selectedHave:before{content:'有'}.editarea .map .mapArea .selectedNone:before{content:'禁'}.editarea .map .mapArea .selectedEffect{background-color:#cc2!important;opacity:.8!important}.editarea .map .message,.editarea .map .makeSure,.editarea .map .cellName{margin:auto;text-align:center}.editarea .map .message input,.editarea .map .makeSure input,.editarea .map .cellName input{width:120px}.editarea .map .chooseType{width:80px}.editarea .map .cellName{display:inline-block}.editarea .map .editbox{text-align:left;margin:auto;width:70px;height:13px;line-height:13px}.editarea .map .editbox>*{display:inline-block}.editarea .map .editbox .editboxinput{position:absolute;width:50px}.editarea .map .editbox .editboxselect{position:absolute;width:70px}.editarea .map .selectAttr{margin:auto;text-align:center;width:800px}.editarea .map .selectAttr p{margin:auto}.editarea .map .selectAttr .attr{margin-top:5px}.editarea .map .selectAttr select{width:80px}.editarea .map .selectAttr select .judge{background-color:#ddd}.editarea .map .selectAttr>div>*{display:inline-block}.editarea .map .selectAttr>div>*>*{display:inline-block}.editarea .map .attribute{margin:auto;text-align:center}.editarea .map .attribute ul{max-width:800px;margin-left:auto;margin-right:auto}.editarea .map .attribute ul li p{margin:auto}.editarea .map .attribute ul li{color:#444;margin-left:10px;margin-right:10px;padding:10px 5px;display:inline-block;margin-bottom:10px;border-radius:5px;border:1px solid #777}.editarea .map .attribute ul li:hover{color:#23a;cursor:pointer}.editarea .map .attribute .selected{border-radius:5px;border:1px solid #3b3}.editarea .map .checkOption{text-align:center;margin:auto;width:800px}.editarea .map .checkOption p{display:inline-block}.editarea .map .chooseAction{margin:auto;text-align:center;width:800px}.editarea .map .chooseAction .actionList{width:150px}.editarea .map .chooseAction p{margin:auto;display:inline-block}.editarea .map .chooseAction .cellAttr{display:inline-block}.editarea .map .chooseAction .cellAttr>*{width:80px;display:inline-block}
+body {
+  background-color: #f6f6f6;
+  font-family: '微软雅黑';
+}
+.hidden {
+  display: none;
+}
+.hiddenForce {
+  display: none !important;
+}
+.boxshadow {
+  box-shadow: 0px 1px 5px #aaa;
+}
+a {
+  text-decoration: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+input,
+button,
+select {
+  border-radius: 4px;
+  margin: auto;
+  height: 20px;
+  width: 40px;
+}
+button {
+  width: 50px;
+}
+*,
+*:before,
+*:after {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+@keyframes display_ {
+  0% {
+    opacity: 0.0;
+    filter: alpha(opacity=0);
+  }
+  100% {
+    opacity: 1.0;
+    filter: alpha(opacity=100);
+  }
+}
+@-moz-keyframes display_ {
+  0% {
+    opacity: 0.0;
+    filter: alpha(opacity=0);
+  }
+  100% {
+    opacity: 1.0;
+    filter: alpha(opacity=100);
+  }
+}
+@-webkit-keyframes display_ {
+  0% {
+    opacity: 0.0;
+    filter: alpha(opacity=0);
+  }
+  100% {
+    opacity: 1.0;
+    filter: alpha(opacity=100);
+  }
+}
+@-o-keyframes display_ {
+  0% {
+    opacity: 0.0;
+    filter: alpha(opacity=0);
+  }
+  100% {
+    opacity: 1.0;
+    filter: alpha(opacity=100);
+  }
+}
+* {
+  animation: display_ 1s ease 0s 1 normal;
+  -moz-animation: display_ 1s ease 0s 1 normal;
+  -webkit-animation: display_ 1s ease 0s 1 normal;
+  -o-animation: display_ 1s ease 0s 1 normal;
+}
+.menu {
+  width: 120px;
+  min-height: 100%;
+  position: fixed;
+  margin: 0;
+  left: 0;
+  top: 0;
+  background-color: #eee;
+  box-shadow: 0px 1px 5px #aaa;
+}
+.menu .loadData {
+  width: 70px;
+}
+.menu ul {
+  list-style: none;
+  padding-left: 0;
+}
+.menu ul li {
+  padding-left: 20%;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  color: #333;
+  cursor: pointer;
+  text-shadow: 1px 2px 2px #aaa;
+}
+.menu ul li:hover {
+  color: #444;
+  background-color: #ccc;
+}
+.product {
+  width: 120px;
+  min-height: 100%;
+  position: fixed;
+  margin: 0;
+  right: 0;
+  top: 0;
+  background-color: #eee;
+  box-shadow: 0px 1px 5px #aaa;
+}
+.product ul {
+  list-style: none;
+  padding-left: 0;
+}
+.product ul li {
+  padding-left: 20%;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  color: #333;
+  cursor: pointer;
+  text-shadow: 1px 2px 2px #aaa;
+}
+.product ul li:hover {
+  color: #444;
+  background-color: #ccc;
+}
+.editarea {
+  position: absolute;
+  min-width: 99%;
+  min-height: 98%;
+}
+.editarea > * {
+  margin: auto;
+}
+.editarea .size {
+  width: 220px;
+  margin: auto;
+}
+.editarea .size > * {
+  display: inline-block;
+}
+.editarea .map {
+  position: relative;
+  min-width: 800px;
+  min-height: 600px;
+}
+.editarea .map .mapimgdiv {
+  margin-top: 10px;
+}
+.editarea .map .mapimgdiv,
+.editarea .map #canvas {
+  background-color: #fff;
+}
+.editarea .map .mapimgdiv,
+.editarea .map #canvas,
+.editarea .map .mapArea {
+  margin-left: auto;
+  margin-right: auto;
+  width: 800px;
+  height: 600px;
+  overflow: hidden;
+  box-shadow: 0px 1px 5px #aaa;
+}
+.editarea .map .workflowPart {
+  text-align: center;
+  margin: auto;
+  width: 800px;
+  margin-top: 5px;
+}
+.editarea .map .workflowPart > div {
+  margin-left: 2px;
+  margin-right: 2px;
+  display: inline-block;
+  background-color: #ddd;
+  border-radius: 2px;
+  padding: 2px;
+  cursor: pointer;
+}
+.editarea .map .workflowspace {
+  width: 800px;
+  height: 600px;
+  border: 1px solid #29b39c;
+  border-radius: 7px;
+  text-align: left;
+  margin: auto;
+  margin-top: 5px;
+}
+.editarea .map .workflowspace .workflowCanvas {
+  position: absolute;
+  margin: 0;
+  border-radius: 7px;
+}
+.editarea .map .workflowspace .part {
+  position: absolute;
+  margin-left: 30px;
+  margin-top: 5px;
+  border: 1px solid #333;
+  text-align: center;
+  background-color: #dddddd;
+}
+.editarea .map .workflowspace .part select {
+  width: 87px;
+  border: none !important;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.editarea .map .workflowspace .part select .judge {
+  background-color: #ddd;
+}
+.editarea .map .workflowspace .part select .workflow {
+  background-color: #aaa;
+}
+.editarea .map .workflowspace p {
+  line-height: 0;
+  cursor: pointer;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  position: absolute;
+}
+.editarea .map .workflowspace p:hover {
+  color: #29b23c;
+}
+.editarea .map .workflowspace .sePart .up,
+.editarea .map .workflowspace .ioPart .up,
+.editarea .map .workflowspace .sPart .up {
+  margin-top: 0px;
+  margin-left: 45px;
+}
+.editarea .map .workflowspace .sePart .left,
+.editarea .map .workflowspace .ioPart .left,
+.editarea .map .workflowspace .sPart .left {
+  margin-top: 20px;
+  margin-left: -5px;
+}
+.editarea .map .workflowspace .sePart .right,
+.editarea .map .workflowspace .ioPart .right,
+.editarea .map .workflowspace .sPart .right {
+  margin-top: -20px;
+  margin-left: 94px;
+}
+.editarea .map .workflowspace .sePart .down,
+.editarea .map .workflowspace .ioPart .down,
+.editarea .map .workflowspace .sPart .down {
+  margin-top: -1px;
+  margin-left: 45px;
+}
+.editarea .map .workflowspace .jPart .up {
+  margin-top: 0px;
+  margin-left: -4px;
+}
+.editarea .map .workflowspace .jPart .left {
+  margin-top: 88px;
+  margin-left: -4px;
+}
+.editarea .map .workflowspace .jPart .right {
+  margin-top: -90px;
+  margin-left: 84px;
+}
+.editarea .map .workflowspace .jPart .down {
+  margin-top: 0px;
+  margin-left: 85px;
+}
+.editarea .map .workflowspace .jPart {
+  width: 90px;
+  height: 90px;
+  line-height: 90px;
+  -webkit-transform: rotateX(60deg) rotateZ(45deg);
+  -o-transform: rotateX(60deg) rotateZ(45deg);
+  -moz-transform: rotateX(60deg) rotateZ(45deg);
+  transform: rotateX(60deg) rotateZ(45deg);
+}
+.editarea .map .workflowspace .jPart > * {
+  -webkit-transform: rotateZ(-45deg) scaleY(2);
+  -o-transform: rotateZ(-45deg) scaleY(2);
+  -moz-transform: rotateZ(-45deg) scaleY(2);
+  transform: rotateZ(-45deg) scaleY(2);
+}
+.editarea .map .workflowspace .sePart {
+  width: 100px;
+  height: 40px;
+  line-height: 40px;
+  border-radius: 40px;
+}
+.editarea .map .workflowspace .ioPart {
+  width: 100px;
+  height: 40px;
+  line-height: 40px;
+  -webkit-transform: skew(-40deg);
+  -o-transform: skew(-40deg);
+  -moz-transform: skew(-40deg);
+  transform: skew(-40deg);
+}
+.editarea .map .workflowspace .ioPart > * {
+  -webkit-transform: skew(40deg);
+  -o-transform: skew(40deg);
+  -moz-transform: skew(40deg);
+  transform: skew(40deg);
+}
+.editarea .map .workflowspace .sPart {
+  line-height: 40px;
+  width: 100px;
+  height: 40px;
+}
+.editarea .map #canvas,
+.editarea .map .mapArea {
+  position: absolute;
+}
+.editarea .map .mapArea .mapBlock {
+  animation: none;
+  -moz-animation: none;
+  -webkit-animation: none;
+  -o-animation: none;
+  float: left;
+  background-color: #aaa;
+  opacity: 0.3;
+  border: 1px solid #fff;
+}
+.editarea .map .mapArea .mapBlock:hover {
+  opacity: 0.8;
+}
+.editarea .map .mapArea .selected {
+  color: #fff;
+  opacity: 0.8 !important;
+}
+.editarea .map .mapArea .selectedNo:before {
+  content: '无';
+}
+.editarea .map .mapArea .selectedHave:before {
+  content: '有';
+}
+.editarea .map .mapArea .selectedNone:before {
+  content: '禁';
+}
+.editarea .map .mapArea .selectedEffect {
+  background-color: #cc2 !important;
+  opacity: 0.8 !important;
+}
+.editarea .map .message,
+.editarea .map .makeSure,
+.editarea .map .cellName {
+  margin: auto;
+  text-align: center;
+}
+.editarea .map .message input,
+.editarea .map .makeSure input,
+.editarea .map .cellName input {
+  width: 120px;
+}
+.editarea .map .chooseType {
+  width: 80px;
+}
+.editarea .map .cellName {
+  display: inline-block;
+}
+.editarea .map .editbox {
+  text-align: left;
+  margin: auto;
+  width: 70px;
+  height: 13px;
+  line-height: 13px;
+}
+.editarea .map .editbox > * {
+  display: inline-block;
+}
+.editarea .map .editbox .editboxinput {
+  position: absolute;
+  width: 50px;
+}
+.editarea .map .editbox .editboxselect {
+  position: absolute;
+  width: 70px;
+}
+.editarea .map .selectAttr {
+  margin: auto;
+  text-align: center;
+  width: 800px;
+}
+.editarea .map .selectAttr p {
+  margin: auto;
+}
+.editarea .map .selectAttr .attr {
+  margin-top: 5px;
+}
+.editarea .map .selectAttr select {
+  width: 80px;
+}
+.editarea .map .selectAttr select .judge {
+  background-color: #ddd;
+}
+.editarea .map .selectAttr > div > * {
+  display: inline-block;
+}
+.editarea .map .selectAttr > div > * > * {
+  display: inline-block;
+}
+.editarea .map .attribute {
+  margin: auto;
+  text-align: center;
+}
+.editarea .map .attribute ul {
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.editarea .map .attribute ul li p {
+  margin: auto;
+}
+.editarea .map .attribute ul li {
+  color: #444;
+  margin-left: 10px;
+  margin-right: 10px;
+  padding: 10px 5px;
+  display: inline-block;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: 1px solid #777;
+}
+.editarea .map .attribute ul li:hover {
+  color: #23a;
+  cursor: pointer;
+}
+.editarea .map .attribute .selected {
+  border-radius: 5px;
+  border: 1px solid #3b3;
+}
+.editarea .map .checkOption {
+  text-align: center;
+  margin: auto;
+  width: 800px;
+}
+.editarea .map .checkOption p {
+  display: inline-block;
+}
+.editarea .map .chooseAction {
+  margin: auto;
+  text-align: center;
+  width: 800px;
+}
+.editarea .map .chooseAction .actionList {
+  width: 150px;
+}
+.editarea .map .chooseAction p {
+  margin: auto;
+  display: inline-block;
+}
+.editarea .map .chooseAction .cellAttr {
+  display: inline-block;
+}
+.editarea .map .chooseAction .cellAttr > * {
+  width: 80px;
+  display: inline-block;
+}
