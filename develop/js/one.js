@@ -78,10 +78,10 @@ goog.scope(function() {
       }
     }
     if(!s) {
-      if(this.attribute_[dataModel.attributeSet.others]) {
+      if(!this.attribute_[dataModel.attributeSet.others]) {
         this.attribute_[dataModel.attributeSet.others] = {};
       }
-      if(this.attrLink_[dataModel.attributeSet.others]) {
+      if(!this.attrLink_[dataModel.attributeSet.others]) {
         this.attrLink_[dataModel.attributeSet.others] = {};
       }
       this.attribute_[dataModel.attributeSet.others][key] = val;

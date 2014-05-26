@@ -47,6 +47,9 @@ goog.scope(function() {
     world[posY][posX].setAttribute(dataModel.attributeSet.status, 'moving');
     var ll = 0.05 * speed;
     var step = function() {
+      if(!tmp) {
+        return;
+      }
       var nowX = tmp.getAttribute(dataModel.attributeSet.posX);
       var nowY = tmp.getAttribute(dataModel.attributeSet.posY);
       var change = false;

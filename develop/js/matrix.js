@@ -188,7 +188,7 @@ goog.scope(function() {
       if(node.index != order.endIndex) {
         clock = window.setTimeout(function() {
           workflowPipe();
-        }, 20);
+        }, 5);
       }
     }
     workflowPipe();
@@ -525,6 +525,12 @@ goog.scope(function() {
             var y = result.nodes.y + father.eventMap[i].pos[1];
             this.realWorld_[y][x] = null;
           }
+        } else {
+          if(data.firstNode == '任意') {
+            this.realWorld_[result.nodes.y][result.nodes.x] = null;
+          } else if(data.firstNode == '任意2') {
+            this.realWorld_[result.nodes.ny][result.nodes.nx] = null;
+          }
         }
         break;
       case '创建':
@@ -540,6 +546,10 @@ goog.scope(function() {
             }
           } else {
             dataSet.push(data.firstNode);
+          }
+          if(data.firstNode == '任意2' || data.firstNode == '同一2') {
+            x = result.nodes.nx;
+            y = result.nodes.ny;
           }
           var len = dataSet.length;
           this.realWorld_[y][x] = actionModel.CreateOne(
