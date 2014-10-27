@@ -1,3 +1,6 @@
 *.swp
 *.swo
 *.soy.js
+node_modules
+assets
+npm-debug.log
